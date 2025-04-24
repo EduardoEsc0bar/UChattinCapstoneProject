@@ -7,12 +7,7 @@ module org.example.uchattincapstoneproject {
     requires java.sql;
     requires java.net.http;
     requires jbcrypt;
-    requires org.apache.qpid.proton.j;
-    requires java.desktop;
-    requires json.smart;
-    requires org.json;
-    requires com.azure.security.keyvault.secrets;
-    requires com.azure.identity;
+    requires com.fasterxml.jackson.databind;
 
     // Export the model package
     exports org.example.uchattincapstoneproject.model;
@@ -21,5 +16,6 @@ module org.example.uchattincapstoneproject {
     exports org.example.uchattincapstoneproject.viewModel;
 
     // Open packages to javafx.fxml
+    opens org.example.uchattincapstoneproject to javafx.fxml;
     opens org.example.uchattincapstoneproject.viewModel to javafx.fxml;
 }

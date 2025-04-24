@@ -1,4 +1,4 @@
 package org.example.uchattincapstoneproject.viewModel;
 
-public class MainViewController {
+public class GridViewController {
 }

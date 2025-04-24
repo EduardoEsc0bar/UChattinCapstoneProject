@@ -1,17 +1,15 @@
 package org.example.uchattincapstoneproject.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreType;
-
 import java.util.HashMap;
 import java.util.Map;
 
 public class Avatar {
     private String style;
-    private DiceBearAPI diceBearAPI;
+    private Map<String, String> options;
 
-    public Avatar(String style, DiceBearAPI diceBearAPI) {
+    public Avatar(String style){
         this.style = style;
-        this.diceBearAPI = diceBearAPI;
+        this.options = new HashMap<>();
     }
 
     public String getStyle() {
@@ -22,14 +20,24 @@ public class Avatar {
         this.style = style;
     }
 
-
-    public String getAvatarURL(){
-       try{
-           return diceBearAPI.generateAvatarURL(style, new HashMap<>());
-       }catch(Exception e){
-           System.err.println("Error generating avatar URL: "+ e.getMessage());
-           return null;
-       }
+    public Map<String, String> getOptions() {
+        return options;
     }
 
+    public void setOptions(String category, String value) {
+        options.put(category, value);
+    }
+
+    public void removeOptions(String category) {
+        options.remove(category);
+    }
+
+    public String getAvatarURL(DiceBearAPI diceBearAPI) throws Exception {
+        return diceBearAPI.generateAvatarURL(style, options);
+    }
+
+    @Override
+    public String toString() {
+        return "avatar [style=" + style + ", options=" + options + "]";
+    }
 }

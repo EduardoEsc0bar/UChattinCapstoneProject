@@ -1,20 +1,15 @@
 package org.example.uchattincapstoneproject.model;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
+import java.net.URI;
 import java.net.http.HttpClient;
+import java.net.http.HttpResponse;
+import java.net.http.HttpRequest;
 import java.util.List;
 import java.util.Map;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.JsonNode;
-import javafx.scene.image.Image;
-
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
 
 public class DiceBearAPI {
-    private final HttpClient httpClient = HttpClient.newHttpClient();
     //get available styles
     public List<String> getAvailableStyles(){
         return List.of("adventurer", "bottts", "adventurer-neutral", "avataaars", "avataaars-neutral", "big-ears",
@@ -25,85 +20,70 @@ public class DiceBearAPI {
     }
 
     //generate style url
-    public String generateAvatarURL(String style, Map<String, String> options) {
-        try{
-            StringBuilder url = new StringBuilder("https://api.dicebear.com/9.x/" + style + "/png?seed=randomname&size=128");
-            for(Map.Entry<String, String> entry : options.entrySet()) {
-                url.append("&").append(URLEncoder.encode("options[" + entry.getKey() + "]", "UTF-8"))
-                        .append("=").append(URLEncoder.encode(entry.getValue(), "UTF-8"));
-            }
-            System.out.println("generated avatar URL: " + url);
-            return url.toString();
-        }catch(Exception e){
-            System.err.println("error generating avatar URL: " + e.getMessage());
-            return null;
+    public String generateAvatarURL(String style, Map<String, String> options) throws Exception{
+        StringBuilder url = new StringBuilder("https://api.dicebear.com/9.x/" + style + "/svg?");
+        for(Map.Entry<String, String> entry : options.entrySet()){
+            url.append(entry.getKey()).append("=").append(entry.getValue()).append("&");
         }
+        return url.toString();
     }
 
-
     // fetch schema for options
-    public Image fetchAvatar(String style){
-        try{
-            String avatarurl = "https://api.dicebear.com/9.x/" + style + "/png?seed=randomname&size=128"; //check if its schema
-            System.out.println("fetching options from avatarurl: " + avatarurl);
+    public String fetchOptions(String style) throws Exception{
+        String url = "https://api.dicebear.com/9.x/" + style + "/schema";
 
-            URL url = new URL(avatarurl);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
-            connection.setRequestProperty("User-Agent", "Mozilla/5.0");
-            connection.setRequestProperty("Accept", "image/png");
-            connection.setDoInput(true);
-            connection.connect();
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url)).GET().build();
 
-            InputStream stream = connection.getInputStream();
-            return new Image(stream);
-        }catch(Exception e){
-            System.err.println("API request failed: " + e);
-            return null;
-        }
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        return response.body();
     }
 
     //parse schema for options
-    public Map<String, List<String>> parseOptions(String jsonSchema){
+    public Map<String, List<String>> parseOptions(String jsonSchema) throws Exception{
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode root = mapper.readTree(jsonSchema);
+        JsonNode properties = root.path("properties");
+
         Map<String, List<String>> categoryOptions = new HashMap<>();
-        try{
-            ObjectMapper mapper = new ObjectMapper();
-            JsonNode root = mapper.readTree(jsonSchema);
-            JsonNode properties = root.path("extra");
+        Iterator<Map.Entry<String, JsonNode>> fields = properties.fields();
 
-            if(properties.isMissingNode()){
-                System.out.println("Error, no custom options found");
-                return categoryOptions;
-            }
-            Iterator<Map.Entry<String, JsonNode>> fields = properties.fields();
+        while(fields.hasNext()){
+            Map.Entry<String, JsonNode> field = fields.next();
+            String category = field.getKey();
 
-            while(fields.hasNext()){
-                Map.Entry<String, JsonNode> field = fields.next();
-                String category = field.getKey();
-
-                List<String> options = new ArrayList<>();
-                JsonNode enumVals = field.getValue().path("options");
-                if(enumVals.isArray()){
-                    for(JsonNode val : enumVals){
-                        options.add(val.asText());
-                    }
+            List<String> options = new ArrayList<>();
+            JsonNode enumVals = field.getValue().path("enum");
+            if(enumVals.isArray()){
+                for(JsonNode val : enumVals){
+                    options.add(val.asText());
                 }
-                categoryOptions.put(category, options); //add category and its options
             }
-            System.out.println("parsed categoryOptions: " + categoryOptions);
-        }catch(Exception e){
-            System.err.println("API request failed: " + e.getMessage());
+            categoryOptions.put(category, options); //add category and its options
         }
         return categoryOptions; //return all categories and options
 
     }
 
+    //make sure options are valid before building avatar
+    public boolean validateOptions(String category, String option, Map<String, List<String>> categoryOptions) throws Exception{
+        List<String> validOptions = categoryOptions.get(category);
+        return validOptions != null && validOptions.contains(option);
+    }
 
     //generate preview of avatar
     public String generatePreviewURL(String style, String category, String options){
-        String previewURL = "https://api.dicebear.com/9.x/" + style + "/svg?options[" + category + "]=" + options;
-        System.out.println("generated preview URL: " + previewURL);
-        return previewURL;
+        return "https://api.dicebear.com/9.x/" + style + "/svg?options[" + category + "]=" + options;
     }
+
+    //combine all selections
+    public Map<String, String> combineOptions(Map<String, String> selectedOptions){
+        Map<String, String> combinedOptions = new HashMap<>();
+        for(Map.Entry<String, String> enrty : selectedOptions.entrySet()){
+            combinedOptions.put(enrty.getKey(), enrty.getValue());
+        }
+        return combinedOptions;
+    }
+
 
 }

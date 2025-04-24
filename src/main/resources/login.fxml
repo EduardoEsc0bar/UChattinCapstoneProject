@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.TilePane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.farmingdale.comunication.capstone.project.viewModel.LogInController">
+   <children>
+      <StackPane fx:id="LoginScreenStackPane" prefHeight="400.0" prefWidth="600.0">
+         <children>
+            <Pane fx:id="createAvatarPane" prefHeight="345.0" prefWidth="600.0" visible="false">
+               <children>
+                  <SplitPane dividerPositions="0.3862876254180602" layoutY="-1.0" prefHeight="317.0" prefWidth="600.0">
+                    <items>
+                      <AnchorPane fx:id="displayAvatarPane" minHeight="0.0" minWidth="0.0" prefHeight="343.0" prefWidth="249.0">
+                           <children>
+                              <ImageView fx:id="avatarImageView" fitHeight="281.0" fitWidth="186.0" layoutX="21.0" layoutY="17.0" pickOnBounds="true" preserveRatio="true" />
+                           </children>
+                        </AnchorPane>
+                      <AnchorPane fx:id="customizationPane" minHeight="0.0" minWidth="0.0" prefHeight="343.0" prefWidth="371.0">
+                           <children>
+                              <StackPane fx:id="customizationStackPane" layoutX="-1.0" prefHeight="315.0" prefWidth="364.0">
+                                 <children>
+                                    <TilePane fx:id="avatarStyleTP" hgap="10.0" prefHeight="200.0" prefWidth="200.0" vgap="10.0" />
+                                    <TilePane fx:id="hairTP" hgap="10.0" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" vgap="10.0" />
+                                    <TilePane fx:id="clothingTP" hgap="10.0" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" vgap="10.0" />
+                                    <TilePane fx:id="facialFeaturesTP" hgap="10.0" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" vgap="10.0" />
+                                    <TilePane fx:id="skinTP" hgap="10.0" layoutX="10.0" layoutY="10.0" prefHeight="296.0" prefWidth="364.0" vgap="10.0" />
+                                    <TilePane fx:id="accessoriesTP" hgap="10.0" layoutX="10.0" layoutY="10.0" prefHeight="296.0" prefWidth="364.0" vgap="10.0" />
+                                    <TilePane fx:id="backgroundTP" hgap="10.0" layoutX="10.0" layoutY="10.0" prefHeight="296.0" prefWidth="364.0" vgap="10.0" />
+                                 </children>
+                              </StackPane>
+                           </children>
+                        </AnchorPane>
+                    </items>
+                  </SplitPane>
+                  <Pane layoutY="316.0" prefHeight="84.0" prefWidth="600.0">
+                     <children>
+                        <Button fx:id="avatarStyleButton" layoutY="4.0" mnemonicParsing="false" text="Avatar Styles">
+                           <font>
+                              <Font name="Monospaced Regular" size="13.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="hairButton" layoutY="42.0" mnemonicParsing="false" text="Hair">
+                           <font>
+                              <Font name="Monospaced Regular" size="13.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="skinButton" layoutX="69.0" layoutY="42.0" mnemonicParsing="false" text="Skin">
+                           <font>
+                              <Font name="Monospaced Regular" size="13.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="clothingButton" layoutX="134.0" layoutY="4.0" mnemonicParsing="false" text="Clothing">
+                           <font>
+                              <Font name="Monospaced Regular" size="13.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="accessoriesButton" layoutX="248.0" layoutY="42.0" mnemonicParsing="false" text="Accessories">
+                           <font>
+                              <Font name="Monospaced Regular" size="13.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="facialFeaturesButton" layoutX="232.0" layoutY="4.0" mnemonicParsing="false" text="Facial Features">
+                           <font>
+                              <Font name="Monospaced Regular" size="13.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="backgroundButton" layoutX="134.0" layoutY="42.0" mnemonicParsing="false" text="Background">
+                           <font>
+                              <Font name="Monospaced Regular" size="13.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="saveAvatarButton" layoutX="476.0" layoutY="16.0" mnemonicParsing="false" text="Save Avatar">
+                           <font>
+                              <Font name="Monospaced Regular" size="13.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="resetAvatarButton" layoutX="499.0" layoutY="42.0" mnemonicParsing="false" text="Reset">
+                           <font>
+                              <Font name="Monospaced Regular" size="13.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </Pane>
+               </children>
+            </Pane>
+            <Pane fx:id="createAccountPane" prefHeight="140.0" prefWidth="175.0" visible="false">
+               <children>
+                  <Label layoutX="147.0" layoutY="14.0" text="Create an Account">
+                     <font>
+                        <Font name="Monospaced Bold" size="30.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="51.0" layoutY="332.0" text="Create Username:">
+                     <font>
+                        <Font name="Monospaced Regular" size="14.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="49.0" layoutY="360.0" text="Create Password:">
+                     <font>
+                        <Font name="Monospaced Regular" size="14.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="51.0" layoutY="178.0" prefHeight="16.0" prefWidth="59.0" text="Gender:">
+                     <font>
+                        <Font name="Monospaced Regular" size="14.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="51.0" layoutY="65.0" text="First Name:">
+                     <font>
+                        <Font name="Monospaced Regular" size="14.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="52.0" layoutY="94.0" text="Last Name:">
+                     <font>
+                        <Font name="Monospaced Regular" size="14.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="52.0" layoutY="250.0" text="Date of Birth:">
+                     <font>
+                        <Font name="Monospaced Regular" size="14.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="52.0" layoutY="279.0" text="Phone number:">
+                     <font>
+                        <Font name="Monospaced Regular" size="14.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="firstNameTF" layoutX="193.0" layoutY="61.0" prefHeight="25.0" prefWidth="155.0" promptText="required">
+                     <font>
+                        <Font name="Monospaced Regular" size="13.0" />
+                     </font>
+                  </TextField>
+                  <ComboBox fx:id="genderCB" layoutX="193.0" layoutY="173.0" prefHeight="16.0" prefWidth="123.0" />
+                  <TextField fx:id="lastNameTF" layoutX="193.0" layoutY="89.0" prefHeight="25.0" prefWidth="155.0" promptText="required">
+                     <font>
+                        <Font name="Monospaced Regular" size="13.0" />
+                     </font>
+                  </TextField>
+                  <TextField fx:id="dobTF" layoutX="193.0" layoutY="245.0" prefHeight="25.0" prefWidth="155.0" promptText="mm/dd/yyyy">
+                     <font>
+                        <Font name="Monospaced Regular" size="13.0" />
+                     </font>
+                  </TextField>
+                  <Label layoutX="52.0" layoutY="211.0" text="Pronouns: ">
+                     <font>
+                        <Font name="Monospaced Regular" size="14.0" />
+                     </font>
+                  </Label>
+                  <ComboBox fx:id="pronounsCB" layoutX="193.0" layoutY="206.0" prefHeight="16.0" prefWidth="123.0" />
+                  <Label layoutX="55.0" layoutY="138.0" text="Email:">
+                     <font>
+                        <Font name="Monospaced Regular" size="14.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="preferredNameTF" layoutX="371.0" layoutY="89.0" prefHeight="25.0" prefWidth="155.0" promptText="preferred name (optional)">
+                     <font>
+                        <Font name="Monospaced Regular" size="13.0" />
+                     </font>
+                  </TextField>
+                  <TextField fx:id="phoneNumberTF" layoutX="193.0" layoutY="274.0" prefHeight="25.0" prefWidth="155.0" promptText="000-000-0000">
+                     <font>
+                        <Font name="Monospaced Regular" size="13.0" />
+                     </font>
+                  </TextField>
+                  <TextField fx:id="createUsernameTF" layoutX="204.0" layoutY="327.0" prefHeight="25.0" prefWidth="155.0" promptText="required">
+                     <font>
+                        <Font name="Monospaced Regular" size="13.0" />
+                     </font>
+                  </TextField>
+                  <TextField fx:id="createPasswordTF" layoutX="204.0" layoutY="355.0" prefHeight="25.0" prefWidth="155.0" promptText="required">
+                     <font>
+                        <Font name="Monospaced Regular" size="13.0" />
+                     </font>
+                  </TextField>
+                  <Button fx:id="toCreateAvatarButton" layoutX="426.0" layoutY="349.0" mnemonicParsing="false" onAction="#goToAvatarPane" text="Next">
+                     <font>
+                        <Font name="Monospaced Regular" size="12.0" />
+                     </font>
+                  </Button>
+                  <TextField fx:id="specifyGenderTF" layoutX="349.0" layoutY="173.0" prefHeight="25.0" prefWidth="155.0" promptText="specify">
+                     <font>
+                        <Font name="Monospaced Regular" size="13.0" />
+                     </font>
+                  </TextField>
+                  <TextField fx:id="specifyPronounsTF" layoutX="349.0" layoutY="206.0" prefHeight="25.0" prefWidth="155.0" promptText="specify">
+                     <font>
+                        <Font name="Monospaced Regular" size="13.0" />
+                     </font>
+                  </TextField>
+                  <TextField fx:id="emailTF" layoutX="193.0" layoutY="133.0" prefHeight="25.0" prefWidth="155.0" promptText="required">
+                     <font>
+                        <Font name="Monospaced Regular" size="13.0" />
+                     </font>
+                  </TextField>
+               </children>
+            </Pane>
+            <Pane fx:id="forgotPasswordPane" prefHeight="200.0" prefWidth="200.0" visible="false">
+               <children>
+                  <Label layoutX="180.0" layoutY="28.0" text="Create New Password">
+                     <font>
+                        <Font name="Monospaced Bold" size="20.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="120.0" layoutY="130.0" text="New Password:">
+                     <font>
+                        <Font name="Monospaced Regular" size="13.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="120.0" layoutY="163.0" text="Confirm Password: ">
+                     <font>
+                        <Font name="Monospaced Regular" size="13.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="enterNewPasswordTF" layoutX="248.0" layoutY="126.0" prefHeight="24.0" prefWidth="169.0" promptText="enter new password">
+                     <font>
+                        <Font name="Monospaced Regular" size="13.0" />
+                     </font>
+                  </TextField>
+                  <TextField fx:id="confirmPasswordTF" layoutX="260.0" layoutY="159.0" prefHeight="24.0" prefWidth="169.0" promptText="retype new password">
+                     <font>
+                        <Font name="Monospaced Regular" size="13.0" />
+                     </font>
+                  </TextField>
+                  <Button fx:id="confirmPasswordButton" layoutX="223.0" layoutY="219.0" mnemonicParsing="false" text="Confirm Password">
+                     <font>
+                        <Font name="Monospaced Regular" size="13.0" />
+                     </font>
+                  </Button>
+               </children>
+            </Pane>
+            <Pane fx:id="LoginScreenPane" prefHeight="400.0" prefWidth="469.0">
+               <children>
+                  <Label layoutX="113.0" layoutY="14.0" text="Welcome to UChattin">
+                     <font>
+                        <Font name="Monospaced Bold" size="30.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="257.0" layoutY="50.0" text="Log In">
+                     <font>
+                        <Font name="Monospaced Regular" size="24.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="147.0" layoutY="163.0" text="Username:">
+                     <font>
+                        <Font name="Monospaced Bold" size="16.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="147.0" layoutY="211.0" text="Password:">
+                     <font>
+                        <Font name="Monospaced Bold" size="16.0" />
+                     </font>
+                  </Label>
+                  <Button fx:id="logInButton" layoutX="366.0" layoutY="241.0" mnemonicParsing="false" text="Log in">
+                     <font>
+                        <Font name="Monospaced Regular" size="12.0" />
+                     </font>
+                  </Button>
+                  <TextField fx:id="usernameTextField" layoutX="273.0" layoutY="161.0" prefHeight="25.0" prefWidth="178.0" promptText="Enter username or email">
+                     <font>
+                        <Font name="Monospaced Regular" size="12.0" />
+                     </font>
+                  </TextField>
+                  <TextField fx:id="passwordTextField" layoutX="273.0" layoutY="208.0" prefHeight="25.0" prefWidth="178.0" promptText="Enter password">
+                     <font>
+                        <Font name="Monospaced Regular" size="12.0" />
+                     </font>
+                  </TextField>
+                  <Button fx:id="forgotPasswordButton" layoutX="153.0" layoutY="241.0" mnemonicParsing="false" text="Forgot Password?">
+                     <font>
+                        <Font name="Monospaced Regular" size="12.0" />
+                     </font>
+                  </Button>
+                  <Button id="exit-button" fx:id="exitButton" layoutX="562.0" layoutY="20.0" mnemonicParsing="false" onAction="#exitButtonClicked" text="X" />
+                  <Button fx:id="createAccountButton" layoutX="192.0" layoutY="285.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="228.0" text="Create an Account">
+                     <font>
+                        <Font name="Monospaced Regular" size="12.0" />
+                     </font>
+                  </Button>
+               </children>
+            </Pane>
+         </children>
+      </StackPane>
+   </children>
+</AnchorPane>

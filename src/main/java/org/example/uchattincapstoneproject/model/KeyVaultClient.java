@@ -9,17 +9,6 @@ import com.azure.core.http.netty.NettyAsyncHttpClientBuilder;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.util.logging.Logger;
-
-/**
- * KeyVaultClient is a utility class to retrieve secrets from Azure Key Vault using a bearer token.
- *
- * <p>It uses an HTTP client to make REST API calls to Azure Key Vault and parse the JSON response
- * to extract the value of the requested secret.</p>
- *
- * <p><strong>Warning:</strong> Storing access tokens in code is insecure. In production environments,
- * consider using Managed Identities or a secure credential store.</p>
- */
 public class KeyVaultClient {
     private static final String KEY_VAULT_URL = "https://communicationkeysvault.vault.azure.net/";
 
@@ -29,12 +18,7 @@ public class KeyVaultClient {
     // Create an HTTP client
     private static final HttpClient httpClient = new NettyAsyncHttpClientBuilder().build();
     private static final ObjectMapper objectMapper = new ObjectMapper();
-    /**
-     * Retrieves a secret value from Azure Key Vault by its name.
-     *
-     * @param secretName the name of the secret stored in Azure Key Vault
-     * @return the value of the secret if found, or null if an error occurs
-     */
+
     public static String getSecret(String secretName) {
         try {
             System.out.println("Attempting to get secret: " + secretName);
@@ -72,5 +56,4 @@ public class KeyVaultClient {
             return null;
         }
     }
-    private static final Logger logger = Logger.getLogger(KeyVaultClient.class.getName());
 }
