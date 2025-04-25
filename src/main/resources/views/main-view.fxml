@@ -211,7 +211,7 @@
                         </ImageView>
                      </children>
                   </Pane>
-                  <Pane fx:id="favoritesPane" prefHeight="200.0" prefWidth="200.0">
+                  <Pane fx:id="favoritesPane" prefHeight="200.0" prefWidth="200.0" visible="false">
                      <children>
                         <ImageView fx:id="favoriteContactsIV" fitHeight="115.0" fitWidth="129.0" layoutX="62.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
                            <image>

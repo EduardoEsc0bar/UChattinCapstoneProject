@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.TilePane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.farmingdale.comunication.capstone.project.viewModel.LogInController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.uchattincapstoneproject.viewModel.LogInController">
    <children>
       <StackPane fx:id="LoginScreenStackPane" prefHeight="400.0" prefWidth="600.0">
          <children>
@@ -238,7 +238,7 @@
                   </Button>
                </children>
             </Pane>
-            <Pane fx:id="LoginScreenPane" prefHeight="400.0" prefWidth="469.0">
+            <Pane fx:id="LoginScreenPane" prefHeight="400.0" prefWidth="469.0" visible="false">
                <children>
                   <Label layoutX="113.0" layoutY="14.0" text="Welcome to UChattin">
                      <font>
