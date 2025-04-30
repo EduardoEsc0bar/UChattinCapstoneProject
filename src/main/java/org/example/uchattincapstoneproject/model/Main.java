@@ -6,8 +6,6 @@ import com.azure.cosmos.models.CosmosItemResponse;
 import com.azure.cosmos.models.PartitionKey;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.microsoft.cognitiveservices.speech.ResultReason;
-import com.microsoft.cognitiveservices.speech.SpeechSynthesisResult;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -22,9 +20,9 @@ public class Main extends Application {
     public void start(Stage stage) throws IOException {
         try{
             System.out.println("attempting to start login screen");
-            FXMLLoader loginLoader = new FXMLLoader(getClass().getResource("/views/login.fxml"));
+            FXMLLoader loginLoader = new FXMLLoader(getClass().getResource("/views/loginScreen.fxml"));
             Parent login = loginLoader.load();
-            System.out.println("login.fxml load successful");
+            System.out.println("loginScreen.fxml load successful");
             Scene scene = new Scene(login, 800, 600);
             stage.setScene(scene);
             stage.setTitle("Login");

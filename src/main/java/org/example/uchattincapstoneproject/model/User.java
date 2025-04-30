@@ -4,6 +4,7 @@ import java.sql.*;
 import java.sql.Connection;
 
 public class User {
+    private int userID;
     private String username;
     private String passwordHash;
     private String firstName;
@@ -15,7 +16,8 @@ public class User {
     private String gender;
     private String preferredName;
 
-    public User(String username, String passwordHash, String firstName, String lastName, String dob, String email, String phoneNumber, String pronouns, String gender, String preferredName) {
+    public User(int userID, String username, String passwordHash, String firstName, String lastName, String dob, String email, String phoneNumber, String pronouns, String gender, String preferredName) {
+        this.userID = userID;
         this.username = username;
         this.passwordHash = passwordHash;
         this.firstName = firstName;
@@ -28,6 +30,7 @@ public class User {
         this.preferredName = preferredName;
     }
 
+    public int getUserID() {return userID;}
     public String getUsername() {
         return username;
     }
@@ -58,6 +61,7 @@ public class User {
     public String getPreferredName() {
         return preferredName;
     }
+    public void setUserID(int userID) {this.userID = userID;}
     public void setUsername(String username) {
         this.username = username;
     }
