@@ -8,6 +8,7 @@ module org.example.uchattincapstoneproject {
     requires java.net.http;
     requires jbcrypt;
     requires com.fasterxml.jackson.databind;
+    requires org.apache.qpid.proton.j;
 
     // Export the model package
     exports org.example.uchattincapstoneproject.model;

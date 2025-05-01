@@ -4,7 +4,7 @@ import java.sql.*;
 import java.sql.Connection;
 
 public class User {
-    private int userID;
+    //private int userID;
     private String username;
     private String passwordHash;
     private String firstName;
@@ -14,10 +14,12 @@ public class User {
     private String phoneNumber;
     private String pronouns;
     private String gender;
+    private String specifiedGender;
+    private String specifiedPronouns;
     private String preferredName;
 
-    public User(int userID, String username, String passwordHash, String firstName, String lastName, String dob, String email, String phoneNumber, String pronouns, String gender, String preferredName) {
-        this.userID = userID;
+    public User(String username, String passwordHash, String firstName, String lastName, String dob, String email, String phoneNumber, String pronouns, String gender, String specifiedGender, String specifiedPronouns, String preferredName) {
+        //this.userID = userID;
         this.username = username;
         this.passwordHash = passwordHash;
         this.firstName = firstName;
@@ -27,10 +29,12 @@ public class User {
         this.phoneNumber = phoneNumber;
         this.pronouns = pronouns;
         this.gender = gender;
+        this.specifiedGender = specifiedGender;
+        this.specifiedPronouns = specifiedPronouns;
         this.preferredName = preferredName;
     }
 
-    public int getUserID() {return userID;}
+    //public int getUserID() {return userID;}
     public String getUsername() {
         return username;
     }
@@ -58,10 +62,12 @@ public class User {
     public String getGender() {
         return gender;
     }
+    public String getSpecifiedGender() {return specifiedGender;}
+    public String getSpecifiedPronouns() {return specifiedPronouns;}
     public String getPreferredName() {
         return preferredName;
     }
-    public void setUserID(int userID) {this.userID = userID;}
+    //public void setUserID(int userID) {this.userID = userID;}
     public void setUsername(String username) {
         this.username = username;
     }
@@ -89,6 +95,8 @@ public class User {
     public void setGender(String gender) {
         this.gender = gender;
     }
+    public void setSpecifiedGender(String specifiedGender) {this.specifiedGender = specifiedGender;}
+    public void setSpecifiedPronouns(String specifiedPronouns) {this.specifiedPronouns = specifiedPronouns;}
     public void setPreferredName(String preferredName) {
         this.preferredName = preferredName;
     }
