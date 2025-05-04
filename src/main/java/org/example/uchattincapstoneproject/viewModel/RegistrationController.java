@@ -176,7 +176,9 @@ public class RegistrationController {
 
     //saves user data to database
     private boolean saveUserToDatabase(User user) {
+        /*
         try (Connection connection = Database.connect()) {
+
             if (connection == null) {
                 System.out.println("registration database connection failed");
                 return false;
@@ -204,6 +206,11 @@ public class RegistrationController {
             e.printStackTrace();
             return false;
         }
+
+         */
+        System.out.println("simulated database savez: " + user.getFirstName() + " " + user.getLastName());
+        return true;
+
     }
 
     //navigates to create avatar screen
