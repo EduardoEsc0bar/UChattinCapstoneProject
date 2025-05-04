@@ -23,6 +23,9 @@ public class LoginController {
     private Button logInButton, forgotPasswordButton, exitButton, createAccountButton;
     private Stage stage;
     private int authenticatedUserID = -1;
+    private String TEST_USERNAME = "testuser";
+    private String TEST_PASSWORD = "testpassword123";
+
     // ---------------------------- END OF UI ELEMENTS --------------------------------------
 
     //initialize login controller
@@ -67,7 +70,7 @@ public class LoginController {
 
     //validate user credentials from database
     private boolean validateDatabaseCredentials(String username, String password) {
-        try(Connection connection = Database.connect()){ //upload database class
+        /*try(Connection connection = Database.connect()){ //upload database class
             if (connection == null) {
                 System.out.println("database connection failed");
                 return false;
@@ -91,6 +94,17 @@ public class LoginController {
             showAlert(Alert.AlertType.ERROR, "Database Error", "An error occurred while validating credentials");
         }
         return false;
+
+         */
+        System.out.println("simulated log in attempt for user " + username);
+        if(TEST_USERNAME.equals(username) && TEST_PASSWORD.equals(password)){
+            authenticatedUserID = 1;
+            System.out.println("user authenticated with id: " + authenticatedUserID);
+            return true;
+        }else{
+            System.out.println("invalid credentials");
+            return false;
+        }
     }
 
     //navigates to main screen

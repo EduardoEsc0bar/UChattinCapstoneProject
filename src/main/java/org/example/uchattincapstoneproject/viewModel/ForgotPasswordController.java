@@ -27,6 +27,9 @@ public class ForgotPasswordController {
     private void initialize() {
         System.out.println("forgotPasswordController initialize");
 
+        //handle reset
+        resetPasswordButton.setOnAction(event -> handlePasswordReset());
+/*
         //handle password confirmation
         String newPassword = enterNewPasswordTF.getText();
         String confirmPassword = confirmPasswordTF.getText();
@@ -36,11 +39,27 @@ public class ForgotPasswordController {
             return;
         }
 
-        if(updatePasswordInDatabase(newPassword){
+        if(updatePasswordInDatabase(newPassword)){
             showAlert(Alert.AlertType.INFORMATION, "Success", "Your new password has been updated");
         }else{
             showAlert(Alert.AlertType.ERROR, "Update failed", "An error occurred while updating password");
         }
+
+ */
+    }
+
+    //validate and update password
+    private void handlePasswordReset() {
+        String newPassword = enterNewPasswordTF.getText().trim();
+        String confirmPassword = confirmPasswordTF.getText().trim();
+
+        //validate input
+        if(!validatePassword(newPassword, confirmPassword)){
+            return;
+        }
+
+        System.out.println("simulated password update: " + newPassword);
+        showAlert(Alert.AlertType.INFORMATION, "Password updated", "Password updated successfully");
     }
 
     //validate new password
@@ -60,9 +79,10 @@ public class ForgotPasswordController {
             return false;
         }
         newPasswordErrorLabel.setText("");
+        confirmPasswordErrorLabel.setText("");
         return true;
     }
-
+/*
     //update password in database
     private boolean updatePasswordInDatabase(String newPassword) {
         try(Connection connection = Database.connect()){
@@ -85,6 +105,8 @@ public class ForgotPasswordController {
             return false;
         }
     }
+
+ */
 
     //mock method get current user id
     private int getCurrentUserID() {

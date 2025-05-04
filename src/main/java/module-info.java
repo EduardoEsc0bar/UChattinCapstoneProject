@@ -9,6 +9,7 @@ module org.example.uchattincapstoneproject {
     requires jbcrypt;
     requires com.fasterxml.jackson.databind;
     requires org.apache.qpid.proton.j;
+    requires java.desktop;
 
     // Export the model package
     exports org.example.uchattincapstoneproject.model;
@@ -17,6 +18,5 @@ module org.example.uchattincapstoneproject {
     exports org.example.uchattincapstoneproject.viewModel;
 
     // Open packages to javafx.fxml
-    opens org.example.uchattincapstoneproject to javafx.fxml;
     opens org.example.uchattincapstoneproject.viewModel to javafx.fxml;
 }
