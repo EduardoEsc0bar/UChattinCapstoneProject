@@ -11,6 +11,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.example.uchattincapstoneproject.model.DB;
 import org.example.uchattincapstoneproject.model.User;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.io.*;
 import java.sql.Connection;
@@ -57,162 +58,37 @@ public class entranceController {
 
         System.out.println("attempting to login user: " + username);
 
-        if(validateDatabaseCredentials(username, password)){
-            try{
+        // Use the same authentication method that worked in DBTest
+        DB dbInstance = DB.getInstance();
+        User authenticatedUser = dbInstance.authenticateUser(username, password);
+
+        if(authenticatedUser != null) {
+            try {
                 showAlert(Alert.AlertType.INFORMATION, "Login Successful", "Welcome " + username + "!");
                 navigateToMainScreen();
-            }catch(Exception e){
+            } catch(Exception e) {
                 e.printStackTrace();
                 showAlert(Alert.AlertType.ERROR, "Navigation Error",
                         "Error navigating to main screen: " + e.getMessage());
             }
-        }else{
+        } else {
             showAlert(Alert.AlertType.ERROR, "Login failed", "Invalid username or password. Please try again.");
         }
     }
 
-    //validate user credentials from database
     private boolean validateDatabaseCredentials(String username, String password) {
-        try {
-            // First try real database authentication
-            Connection connection = DriverManager.getConnection(
-                    "jdbc:mysql://commapp.mysql.database.azure.com:3306/communication_app",
-                    "commapp_db_user", "farm9786$");
+        System.out.println("Attempting login with username: " + username);
 
-            String query = "SELECT * FROM user WHERE username = ?";
-            PreparedStatement statement = connection.prepareStatement(query);
-            statement.setString(1, username);
+        DB dbInstance = DB.getInstance();
+        User authenticatedUser = dbInstance.authenticateUser(username, password);
 
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                String storedPasswordHash = resultSet.getString("password");
-                if (dbInstance.checkPassword(password, storedPasswordHash)) {
-                    // If password matches, build a User object from the result set
-                    authenticatedUserID = resultSet.getInt("id");
-
-                    User authenticatedUser = new User(
-                            resultSet.getString("username"),
-                            storedPasswordHash,
-                            resultSet.getString("first_name"),
-                            resultSet.getString("last_name"),
-                            resultSet.getString("date_of_birth"),
-                            resultSet.getString("email"),
-                            resultSet.getString("phone_number"),
-                            resultSet.getString("pronouns"),
-                            resultSet.getString("gender"),
-                            "", // specified_gender might not exist in DB
-                            "", // specified_pronouns might not exist in DB
-                            resultSet.getString("preferred_name") // might be null
-                    );
-
-                    // Store the authenticated user in DB singleton
-                    dbInstance.setCurrentUser(authenticatedUser);
-                    System.out.println("User authenticated with id: " + authenticatedUserID);
-                    return true;
-                }
-            }
-            connection.close();
-            return false;
-        } catch (SQLException e) {
-            System.err.println("Database error: " + e.getMessage());
-            e.printStackTrace();
-
-            // Try local file authentication as a fallback
-            System.out.println("Database connection failed, trying fallback authentication");
-
-            try {
-                String userHome = System.getProperty("user.home");
-                String filePath = userHome + "/uchattin_users.csv";
-                File file = new File(filePath);
-
-                if (file.exists()) {
-                    BufferedReader reader = new BufferedReader(new FileReader(filePath));
-                    String line;
-
-                    // Skip header line if it exists
-                    line = reader.readLine();
-                    if (line == null || !line.startsWith("username,password")) {
-                        reader.close();
-                        return false;
-                    }
-
-                    System.out.println("Reading users from: " + filePath);
-
-                    while ((line = reader.readLine()) != null) {
-                        String[] parts = line.split(",");
-
-                        if (parts.length >= 2 && parts[0].equals(username)) {
-                            String storedPasswordHash = parts[1];
-                            System.out.println("Found user in file: " + username);
-                            boolean passwordMatches = dbInstance.checkPassword(password, storedPasswordHash);
-
-                            if (passwordMatches) {
-                                System.out.println("Password matches! User authenticated from local file: " + username);
-
-                                // Create user from CSV data
-                                User authenticatedUser = new User(
-                                        parts[0], // username
-                                        storedPasswordHash, // passwordHash
-                                        parts.length > 2 ? parts[2] : "", // firstName
-                                        parts.length > 3 ? parts[3] : "", // lastName
-                                        parts.length > 5 ? parts[5] : "", // dob
-                                        parts.length > 4 ? parts[4] : "", // email
-                                        parts.length > 6 ? parts[6] : "", // phoneNumber
-                                        parts.length > 8 ? parts[8] : "", // pronouns
-                                        parts.length > 7 ? parts[7] : "", // gender
-                                        "", // specifiedGender (not in CSV)
-                                        "", // specifiedPronouns (not in CSV)
-                                        parts.length > 9 ? parts[9] : "" // preferredName
-                                );
-
-                                // Store in DB singleton
-                                dbInstance.setCurrentUser(authenticatedUser);
-                                authenticatedUserID = 1; // Use a placeholder ID
-
-                                reader.close();
-                                return true;
-                            } else {
-                                System.out.println("Password does not match for user: " + username);
-                            }
-                            break; // Username found but password incorrect
-                        }
-                    }
-                    System.out.println("User not found in file: " + username);
-                    reader.close();
-                } else {
-                    System.out.println("User file does not exist at: " + filePath);
-                }
-            } catch (IOException ioEx) {
-                System.err.println("File IO error: " + ioEx.getMessage());
-                ioEx.printStackTrace();
-            }
-
-            // Final fallback to test credentials - useful for demo/development
-            if (TEST_USERNAME.equals(username) && TEST_PASSWORD.equals(password)) {
-                System.out.println("User authenticated with test credentials: " + username);
-                authenticatedUserID = 1;
-
-                // Create a mock user for the test account
-                User mockUser = new User(
-                        username,
-                        dbInstance.hashPassword(password),
-                        "Test",
-                        "User",
-                        "01/01/2000",
-                        "test@example.com",
-                        "555-123-4567",
-                        "They/Them",
-                        "Prefer not to say",
-                        "",
-                        "",
-                        "Test User"
-                );
-                dbInstance.setCurrentUser(mockUser);
-                return true;
-            }
+        if (authenticatedUser != null) {
+            System.out.println("Authentication successful for: " + username);
+            authenticatedUserID = 1; // Or get actual ID
+            return true;
         }
 
-        System.out.println("Invalid credentials");
+        System.out.println("Authentication failed for: " + username);
         return false;
     }
 
