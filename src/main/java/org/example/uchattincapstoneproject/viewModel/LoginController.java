@@ -13,6 +13,9 @@ import java.io.IOException;
 import java.sql.*;
 
 import javafx.util.Duration;
+import org.mindrot.jbcrypt.BCrypt;
+
+
 /**
  * Controller class for managing user login interactions in the JavaFX UI.
  */
@@ -35,6 +38,9 @@ public class LoginController {
     private int authenticatedUserID = -1;
     private String TEST_USERNAME = "testuser";
     private String TEST_PASSWORD = "testpassword123";
+    private static final String DB_URL = "jdbc:mysql://uchattin-csc311.mysql.database.azure.com:3306/uchattin-userinfo";
+    private static final String DB_USER = "username";
+    private static final String DB_PASSWORD = "password";
 
     // ---------------------------- END OF UI ELEMENTS --------------------------------------
 
@@ -58,63 +64,45 @@ public class LoginController {
         String username = usernameTextField.getText();
         String password = passwordTextField.getText();
 
-        if(username.isEmpty() || password.isEmpty()) {
-            showAlert(Alert.AlertType.WARNING, "Login Error", "Please enter all fields");
+        if (username.isEmpty() || password.isEmpty()) {
+            showAlert(Alert.AlertType.WARNING, "Login Error", "Please enter all fields.");
             return;
         }
 
-        System.out.println("attempting to login user: " + username);
+        System.out.println("Attempting login for user: " + username);
 
-        if(validateDatabaseCredentials(username,password)){
-            try{
-                showAlert(Alert.AlertType.INFORMATION, "Login Successful", "Welcome " + username + "!");
-                navigateToMainScreen();
-            }catch(Exception e){
-                e.printStackTrace();
-            }
-
-        }else{
-            showAlert(Alert.AlertType.ERROR, "Login failed", "Please try again");
+        if (validateDatabaseCredentials(username, password)) {
+            showAlert(Alert.AlertType.INFORMATION, "Login Successful", "Welcome " + username + "!");
+            navigateToMainScreen();
+        } else {
+            showAlert(Alert.AlertType.ERROR, "Login Failed", "Incorrect username or password. Please try again.");
         }
     }
 
-    //validate user credentials from database
-    private boolean validateDatabaseCredentials(String username, String password) {
-        /*try(Connection connection = Database.connect()){ //upload database class
-            if (connection == null) {
-                System.out.println("database connection failed");
-                return false;
-            }
-            String query = "SELECT id, password FROM users WHERE username = ? OR email = ?";
-            PreparedStatement statement = connection.prepareStatement(query);
-            statement.setString(1, username);
-            statement.setString(2, username);
 
-            ResultSet resultSet = statement.executeQuery();
-            if(resultSet.next()){
-                String storePasswordHash = resultSet.getString("password");
-                if(HandlePasswordHash.checkPassword(password, storePasswordHash)){
-                    authenticatedUserID = resultSet.getInt("id");
-                    System.out.println("user authentication with id " + authenticatedUserID);
-                    return true;
+    private boolean validateDatabaseCredentials(String username, String password) {
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
+            String query = "SELECT id, password_hash FROM Users WHERE username = ? OR email = ?";
+            try (PreparedStatement statement = connection.prepareStatement(query)) {
+                statement.setString(1, username);
+                statement.setString(2, username);
+
+                ResultSet resultSet = statement.executeQuery();
+                if (resultSet.next()) {
+                    String storedPasswordHash = resultSet.getString("password_hash");
+                    if (BCrypt.checkpw(password, storedPasswordHash)) {
+                        authenticatedUserID = resultSet.getInt("id");
+                        System.out.println("User authenticated with ID: " + authenticatedUserID);
+                        return true;
+                    }
                 }
             }
-        }catch(SQLException e){
+        } catch (SQLException e) {
+            System.err.println("Database error: " + e.getMessage());
             e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Database Error", "An error occurred while validating credentials");
+            showAlert(Alert.AlertType.ERROR, "Database Error", "An error occurred while validating credentials.");
         }
         return false;
-
-         */
-        System.out.println("simulated log in attempt for user " + username);
-        if(TEST_USERNAME.equals(username) && TEST_PASSWORD.equals(password)){
-            authenticatedUserID = 1;
-            System.out.println("user authenticated with id: " + authenticatedUserID);
-            return true;
-        }else{
-            System.out.println("invalid credentials");
-            return false;
-        }
     }
 
     //navigates to main screen

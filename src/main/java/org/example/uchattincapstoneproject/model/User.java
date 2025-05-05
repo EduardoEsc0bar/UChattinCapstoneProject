@@ -302,17 +302,19 @@ public class User {
         try {
             // First, try to connect to the actual database (replace with correct credentials)
             Connection connection = DriverManager.getConnection(
-                    "jdbc:mysql://uchattin-csc311.mysql.database.azure.com:3306/uchattin-userinfo",
-                    "username", "password"); // These are placeholder credentials
+                    "jdbc:mysql://commapp.mysql.database.azure.com:3306/communication_app",
+                    "commapp_db_user", "farm9786$"); // These are placeholder credentials
 
             // Rest of database code...
             connection.close();
+            System.out.println("User successfully registered using database-----------------------------------------------------------------");
             // If successful, return true
             return true;
         } catch (SQLException e) {
             System.err.println("Database connection error: " + e.getMessage());
 
             // If database connection fails, use local file as fallback
+            System.out.println("User registered using local file-----------------------------------------------------------------");
             return saveToLocalFile();
         }
     }
