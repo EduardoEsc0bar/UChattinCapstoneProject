@@ -1,7 +1,10 @@
 package org.example.uchattincapstoneproject.model;
 
+import javafx.scene.paint.Color;
+
 import java.sql.*;
 import java.sql.Connection;
+import java.util.LinkedList;
 
 public class User {
     //private int userID;
@@ -17,6 +20,18 @@ public class User {
     private String specifiedGender;
     private String specifiedPronouns;
     private String preferredName;
+
+    //UPDATES TO ACCOMODATE NEW FUNCTIONS!!!!
+    private Color themeColor;            // From ColorPicker
+    private Avatar avatar;              // Avatar object with style + DiceBearAPI
+    // Accessibility settings
+    private double textSize;            // From adjustTextSizeSlider
+    private double volume;              // From adjustVolumeSlider
+    private String selectedVoice;       // From chooseVoiceCB
+    // Application settings
+    private String appTheme;            // From changeAppThemeCB
+    private boolean notificationsOn;    // From notificationOnRadioButton
+    private String favoritePicture;
 
     public User(String username, String passwordHash, String firstName, String lastName, String dob, String email, String phoneNumber, String pronouns, String gender, String specifiedGender, String specifiedPronouns, String preferredName) {
         //this.userID = userID;
@@ -99,6 +114,55 @@ public class User {
     public void setSpecifiedPronouns(String specifiedPronouns) {this.specifiedPronouns = specifiedPronouns;}
     public void setPreferredName(String preferredName) {
         this.preferredName = preferredName;
+    }
+    // NEW UPDATE FOR NEW FIELDS
+    public Color getThemeColor() {
+        return themeColor;
+    }
+    public void setThemeColor(Color themeColor) {
+        this.themeColor = themeColor;
+    }
+    public Avatar getAvatar() {
+        return avatar;
+    }
+    public void setAvatar(Avatar avatar) {
+        this.avatar = avatar;
+    }
+    public double getTextSize() {
+        return textSize;
+    }
+    public void setTextSize(double textSize) {
+        this.textSize = textSize;
+    }
+    public double getVolume() {
+        return volume;
+    }
+    public void setVolume(double volume) {
+        this.volume = volume;
+    }
+    public String getSelectedVoice() {
+        return selectedVoice;
+    }
+    public void setSelectedVoice(String selectedVoice) {
+        this.selectedVoice = selectedVoice;
+    }
+    public String getAppTheme() {
+        return appTheme;
+    }
+    public void setAppTheme(String appTheme) {
+        this.appTheme = appTheme;
+    }
+    public boolean isNotificationsOn() {
+        return notificationsOn;
+    }
+    public void setNotificationsOn(boolean notificationsOn) {
+        this.notificationsOn = notificationsOn;
+    }
+    public String getFavoritePicture() {
+        return favoritePicture;
+    }
+    public void setFavoritePicture(String favoritePicture) {
+        this.favoritePicture = favoritePicture;
     }
 
     public boolean validate(){
