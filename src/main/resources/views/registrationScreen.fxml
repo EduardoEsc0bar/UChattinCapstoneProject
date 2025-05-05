@@ -99,7 +99,7 @@
                   <Font name="Monospaced Regular" size="13.0" />
                </font>
             </TextField>
-            <Button fx:id="toCreateAvatarButton" layoutX="633.0" layoutY="471.0" mnemonicParsing="false" text="Next">
+            <Button fx:id="toCreateAvatarButton" layoutX="637.0" layoutY="496.0" mnemonicParsing="false" text="Next">
                <font>
                   <Font name="Monospaced Regular" size="16.0" />
                </font>
@@ -119,31 +119,36 @@
                   <Font name="Monospaced Regular" size="13.0" />
                </font>
             </TextField>
-            <Label fx:id="fnErrorLabel" layoutX="255.0" layoutY="86.0" text="Label">
+            <Label fx:id="fnErrorLabel" disable="true" layoutX="255.0" layoutY="86.0" text="Label">
                <font>
                   <Font size="10.0" />
                </font>
             </Label>
-            <Label fx:id="lnErrorLabel" layoutX="255.0" layoutY="131.0" text="Label">
+            <Label fx:id="lnErrorLabel" disable="true" layoutX="255.0" layoutY="131.0" text="Label">
                <font>
                   <Font size="10.0" />
                </font>
             </Label>
-            <Label fx:id="emailErrorLabel" layoutX="255.0" layoutY="173.0" text="Label">
+            <Label fx:id="emailErrorLabel" disable="true" layoutX="255.0" layoutY="173.0" text="Label">
                <font>
                   <Font size="10.0" />
                </font>
             </Label>
-            <Label fx:id="pNumberErrorLabel" layoutX="255.0" layoutY="351.0" text="Label">
+            <Label fx:id="pNumberErrorLabel" disable="true" layoutX="255.0" layoutY="351.0" text="Label">
                <font>
                   <Font size="10.0" />
                </font>
             </Label>
-            <Label fx:id="dobErrorLabel" layoutX="255.0" layoutY="296.0" text="Label">
+            <Label fx:id="dobErrorLabel" disable="true" layoutX="255.0" layoutY="296.0" text="Label">
                <font>
                   <Font size="10.0" />
                </font>
             </Label>
+            <Button fx:id="backBTN" layoutX="46.0" layoutY="496.0" mnemonicParsing="false" onAction="#navigateToEntranceScreen" text="Back">
+               <font>
+                  <Font name="Monospaced Regular" size="16.0" />
+               </font>
+            </Button>
          </children>
       </Pane>
    </children>

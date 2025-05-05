@@ -13,12 +13,22 @@ import java.io.IOException;
 import java.sql.*;
 
 import javafx.util.Duration;
-import org.example.uchattincapstoneproject.model.HandlePasswordHash;
-
+/**
+ * Controller class for managing user login interactions in the JavaFX UI.
+ */
 public class LoginController {
     //--------------------------UI ELEMENTS -----------------------------------------
+    /**
+     * TextField for entering password
+     * TextField for entering username
+     * */
     @FXML
     private TextField usernameTextField, passwordTextField;
+    /**
+     * Button to initiate login
+     * Button to exit program
+     *
+     * */
     @FXML
     private Button logInButton, forgotPasswordButton, exitButton, createAccountButton;
     private Stage stage;

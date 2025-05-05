@@ -1,5 +1,7 @@
 package org.example.uchattincapstoneproject.model;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -8,15 +10,52 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class DB {
+    private static DB instance;  // Singleton instance
+    private static User currentUser;
     final String MYSQL_SERVER_URL = "jdbc:mysql://commapp.mysql.database.azure.com/";
     final String DB_URL = MYSQL_SERVER_URL + "communication_app";
     final String USERNAME = "commapp_db_user";
     final String PASSWORD = "farm9786$";
 
-    public  boolean connectToDatabase() {
+    public void setCurrentUser(User user) {
+        currentUser = user;
+    }
+
+    public User getCurrentUser() {
+        return currentUser;
+    }
+    /**
+     * Private constructor for the DB class.
+     * Prevents instantiation from outside the class.
+     * Used to enforce the Singleton design pattern.
+     */
+    private DB() {
+        // Initialize DB connection or setup here if needed
+    }
+    /**
+     * Returns the singleton instance of the DB class.
+     * Uses double-checked locking to ensure thread-safe lazy initialization.
+     *
+     * @return the single instance of the DB class
+     */
+    public static DB getInstance() {
+        if (instance == null) {
+            synchronized (DB.class) {
+                if (instance == null) {
+                    instance = new DB();
+                }
+            }
+        }
+        return instance;
+    }
+    /**
+     * Connects to the MySQL server and ensures the database and Users table exist.
+     * Also checks if there are any registered users in the Users table.
+     *
+     * @return true if there are registered users in the Users table, false otherwise.
+     */
+    public boolean connectToDatabase() {
         boolean hasRegistredUsers = false;
-
-
         //Class.forName("com.mysql.jdbc.Driver");
         try {
             //First, connect to MYSQL server and create the database if not created
@@ -46,9 +85,12 @@ public class DB {
 
         return hasRegistredUsers;
     }
-
+    /**
+     * Queries and prints information of a user by their username.
+     *
+     * @param username The username of the user to be queried.
+     */
     public  void queryUserByName(String username) {
-
         try {
             Connection conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
             String sql = "SELECT * FROM Users WHERE username = ?";
@@ -69,11 +111,10 @@ public class DB {
             e.printStackTrace();
         }
     }
-
+    /**
+     * Retrieves and prints all users in the Users table.
+     */
     public  void listAllUsers() {
-
-
-
         try {
             Connection conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
             String sql = "SELECT * FROM Users ";
@@ -95,16 +136,23 @@ public class DB {
             e.printStackTrace();
         }
     }
-
-    public  void insertUser(String name, String email, String password_hash, String displayName) {
-
+    /**
+     * Inserts a new user into the Users table.
+     *
+     * @param name          The username of the new user.
+     * @param email         The email address of the new user.
+     * @param passwordPT    hashed password of the new user.
+     * @param displayName   The display name of the new user.
+     */
+    public  void insertUser(String name, String email, String passwordPT, String displayName) {
         try {
+            String passwordHash = hashPassword(passwordPT);
             Connection conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
             String sql = "INSERT INTO Users (username, email, password_hash, displayName) VALUES (?, ?, ?, ?, ?)";
             PreparedStatement preparedStatement = conn.prepareStatement(sql);
             preparedStatement.setString(1, name);
             preparedStatement.setString(2, email);
-            preparedStatement.setString(3, password_hash);
+            preparedStatement.setString(3, passwordHash);
             preparedStatement.setString(4, displayName);
 
             int row = preparedStatement.executeUpdate();
@@ -119,6 +167,78 @@ public class DB {
             e.printStackTrace();
         }
     }
+    /**
+     * Removes a user from the Users table by their username.
+     *
+     * @param username The username of the user to remove.
+     */
+    public void removeUserByUsername(String username) {
+        try {
+            Connection conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
+            String sql = "DELETE FROM Users WHERE username = ?";
+            PreparedStatement preparedStatement = conn.prepareStatement(sql);
+            preparedStatement.setString(1, username);
 
+            int rowsDeleted = preparedStatement.executeUpdate();
 
-}
+            if (rowsDeleted > 0) {
+                System.out.println("User with username '" + username + "' was deleted successfully.");
+            } else {
+                System.out.println("No user found with username '" + username + "'.");
+            }
+
+            preparedStatement.close();
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    /**
+     * Updates the display name of a user by their username.
+     *
+     * @param username       The username of the user whose display name is to be updated.
+     * @param newDisplayName The new display name to assign to the user.
+     */
+    public void updateUserDisplayName(String username, String newDisplayName) {
+        try {
+            Connection conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
+            String sql = "UPDATE Users SET displayName = ? WHERE username = ?";
+            PreparedStatement preparedStatement = conn.prepareStatement(sql);
+            preparedStatement.setString(1, newDisplayName);
+            preparedStatement.setString(2, username);
+
+            int rowsUpdated = preparedStatement.executeUpdate();
+
+            if (rowsUpdated > 0) {
+                System.out.println("Display name for user '" + username + "' was updated successfully.");
+            } else {
+                System.out.println("No user found with username '" + username + "'.");
+            }
+
+            preparedStatement.close();
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+        /**
+         * Hashes a plaintext password using BCrypt.
+         *
+         * @param password The plaintext password.
+         * @return The hashed password.
+         */
+        public String hashPassword(String password) {
+            return BCrypt.hashpw(password, BCrypt.gensalt());
+        }
+
+        /**
+         * Verifies a plaintext password against a hashed password.
+         *
+         * @param password The plaintext password.
+         * @param hashedPassword The hashed password.
+         * @return true if the password matches the hash, false otherwise.
+         */
+        public boolean checkPassword(String password, String hashedPassword) {
+            return BCrypt.checkpw(password, hashedPassword);
+        }
+    }
