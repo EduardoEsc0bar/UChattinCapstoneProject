@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.uchattincapstoneproject.viewModel.SettingsViewController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.uchattincapstoneproject.viewModel.SettingsController">
    <children>
       <StackPane prefHeight="400.0" prefWidth="600.0" />
       <Pane prefHeight="400.0" prefWidth="600.0">
@@ -34,7 +34,7 @@
                            <children>
                               <Pane fx:id="editProfilePane" prefHeight="326.0" prefWidth="600.0">
                                  <children>
-                                    <Button fx:id="updateAvatarButton" layoutX="39.0" layoutY="230.0" mnemonicParsing="false" text="Update Avatar">
+                                    <Button fx:id="updateAvatarButton" layoutX="39.0" layoutY="230.0" mnemonicParsing="false" onAction="#updateAvatarBtnClicked" text="Update Avatar">
                                        <font>
                                           <Font name="Monospaced Regular" size="13.0" />
                                        </font>
@@ -45,8 +45,8 @@
                                           <Font name="Monospaced Regular" size="15.0" />
                                        </font>
                                     </Label>
-                                    <TextField fx:id="editUsernameTextField" layoutX="353.0" layoutY="14.0" prefHeight="25.0" prefWidth="185.0" />
-                                    <Button fx:id="saveAllChangesButton" layoutX="424.0" layoutY="273.0" mnemonicParsing="false" text="Save All Changes">
+                                    <TextField fx:id="eUsernameTF" layoutX="353.0" layoutY="14.0" prefHeight="25.0" prefWidth="185.0" />
+                                    <Button fx:id="saveAllChangesButton" layoutX="424.0" layoutY="273.0" mnemonicParsing="false" onAction="#saveAllChangesBtnClicked" text="Save All Changes">
                                        <font>
                                           <Font name="Monospaced Regular" size="13.0" />
                                        </font>
@@ -56,7 +56,7 @@
                                           <Font name="Monospaced Regular" size="15.0" />
                                        </font>
                                     </Label>
-                                    <TextField fx:id="editProfileNameTF" layoutX="353.0" layoutY="58.0" prefHeight="25.0" prefWidth="185.0" />
+                                    <TextField fx:id="eProfileName" layoutX="353.0" layoutY="58.0" prefHeight="25.0" prefWidth="185.0" />
                                     <Label fx:id="editUsernameLabel11" layoutX="185.0" layoutY="208.0" text="Profile Theme Color">
                                        <font>
                                           <Font name="Monospaced Regular" size="15.0" />
@@ -70,7 +70,7 @@
                                     </Label>
                                     <TextField fx:id="otherGenderSettingsTF" layoutX="466.0" layoutY="94.0" prefHeight="25.0" prefWidth="118.0" promptText="specify" />
                                     <ComboBox fx:id="editGenderSettingsCB" layoutX="300.0" layoutY="94.0" prefWidth="150.0" promptText="Choose your gender" />
-                                    <Label fx:id="editUsernameLabel121" layoutX="185.0" layoutY="134.0" text="Edit Gender">
+                                    <Label fx:id="editUsernameLabel121" layoutX="185.0" layoutY="134.0" text="Edit pronoun">
                                        <font>
                                           <Font name="Monospaced Regular" size="15.0" />
                                        </font>
@@ -97,27 +97,22 @@
                                     <Font name="Monospaced Regular" size="13.0" />
                                  </font>
                               </Label>
-                              <Button fx:id="clearFavotitesButton" layoutX="39.0" layoutY="280.0" mnemonicParsing="false" text="Clear Favorites">
+                              <Button fx:id="clearFavotitesButton" layoutX="39.0" layoutY="280.0" mnemonicParsing="false" onAction="#clearFavoriteBtnClicked" text="Clear Favorites">
                                  <font>
                                     <Font name="Monospaced Bold" size="13.0" />
                                  </font>
                               </Button>
-                              <Button fx:id="favoriteContactsButton" layoutX="24.0" layoutY="20.0" mnemonicParsing="false" text="Favorite Contacts">
+                              <Button fx:id="favoritePhraseBtn" layoutX="24.0" layoutY="64.0" mnemonicParsing="false" onAction="#favoritePhraseBtnClicked" text="Favorite Phrases">
                                  <font>
                                     <Font name="Monospaced Bold" size="15.0" />
                                  </font>
                               </Button>
-                              <Button fx:id="favoritePhrasesButton" layoutX="24.0" layoutY="64.0" mnemonicParsing="false" text="Favorite Phrases">
+                              <Button fx:id="favoritePicturesButton" layoutX="24.0" layoutY="107.0" mnemonicParsing="false" onAction="#favoritePicBtnClicked" text="Favorite Pictures">
                                  <font>
                                     <Font name="Monospaced Bold" size="15.0" />
                                  </font>
                               </Button>
-                              <Button fx:id="favoritePicturesButton" layoutX="24.0" layoutY="107.0" mnemonicParsing="false" text="Favorite Pictures">
-                                 <font>
-                                    <Font name="Monospaced Bold" size="15.0" />
-                                 </font>
-                              </Button>
-                              <Button fx:id="saveManageFavoritesSettingButton" layoutX="204.0" layoutY="280.0" mnemonicParsing="false" text="Save Changes">
+                              <Button fx:id="saveManageFavoritesSettingButton" layoutX="204.0" layoutY="280.0" mnemonicParsing="false" onAction="#saveChangesBtnClicked" text="Save Changes">
                                  <font>
                                     <Font name="Monospaced Bold" size="13.0" />
                                  </font>
@@ -142,8 +137,8 @@
                                           <Font name="Monospaced Bold" size="17.0" />
                                        </font>
                                     </Label>
-                                    <Slider fx:id="adjustVolumeSlider" layoutX="307.0" layoutY="102.0" showTickLabels="true" showTickMarks="true" />
-                                    <Slider fx:id="adjustTextSizeSlider" layoutX="307.0" layoutY="48.0" showTickLabels="true" showTickMarks="true" />
+                                    <Slider fx:id="adjustVolumeSlider" layoutX="241.0" layoutY="102.0" prefHeight="37.0" prefWidth="283.0" showTickLabels="true" showTickMarks="true" />
+                                    <Slider fx:id="adjustTextSizeSlider" layoutX="241.0" layoutY="48.0" prefHeight="37.0" prefWidth="283.0" showTickLabels="true" showTickMarks="true" />
                                     <Label layoutX="52.0" layoutY="163.0" text="Choose voice">
                                        <font>
                                           <Font name="Monospaced Bold" size="17.0" />

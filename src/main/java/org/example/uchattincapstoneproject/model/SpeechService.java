@@ -9,7 +9,9 @@ public class SpeechService {
     private static final String API_KEY = KeyVaultClient.getSecret("Speech-API-KEY"); // Replace with actual logic to retrieve API Key
     private static final String REGION = "eastus";
 
-    private final SpeechSynthesizer synthesizer;
+    private SpeechSynthesizer synthesizer;
+    private SpeechConfig speechConfig;
+
     public SpeechService() throws Exception {
         // Initialize SpeechConfig
         SpeechConfig speechConfig = SpeechConfig.fromSubscription(API_KEY, REGION);
@@ -19,6 +21,12 @@ public class SpeechService {
         synthesizer = new SpeechSynthesizer(speechConfig);
     }
 
+
+    public void setVoice(String voiceName) {
+        // Change the voice based on user selection
+        speechConfig.setSpeechSynthesisVoiceName(voiceName);
+        synthesizer = new SpeechSynthesizer(speechConfig);  // Re-initialize synthesizer with new voice
+    }
     public void synthesizeText(String text) {
         if (text == null || text.isEmpty()) {
             System.out.println("Input text is empty.");
