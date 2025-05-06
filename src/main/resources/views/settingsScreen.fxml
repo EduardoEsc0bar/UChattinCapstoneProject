@@ -8,6 +8,7 @@
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -192,11 +193,19 @@
                            </children></AnchorPane>
                      </content>
                   </Tab>
-                  <Tab fx:id="integrationsTab" closable="false" text="Integrations">
+                  <Tab fx:id="deleteTab" closable="false" text="Delete">
                      <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <Pane layoutX="1.0" layoutY="1.0" prefHeight="325.0" prefWidth="600.0" />
+                              <Pane layoutX="1.0" layoutY="1.0" prefHeight="325.0" prefWidth="600.0">
+                                 <children>
+                                    <Button layoutX="42.0" layoutY="217.0" mnemonicParsing="false" onAction="#deleteBtnClicked" prefHeight="70.0" prefWidth="517.0" style="-fx-background-radius: 100; -fx-background-color: #bc4a4a;" text="Delete Account" textFill="WHITE">
+                                       <font>
+                                          <Font size="36.0" />
+                                       </font>
+                                    </Button>
+                                    <TextArea fx:id="feedbackTA" layoutX="42.0" layoutY="14.0" prefHeight="177.0" prefWidth="520.0" promptText="(Optional) Give us feedback on our application" />
+                                 </children></Pane>
                            </children></AnchorPane>
                      </content>
                   </Tab>

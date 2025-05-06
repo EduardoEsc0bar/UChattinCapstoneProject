@@ -11,9 +11,21 @@ import com.fasterxml.jackson.databind.JsonNode;
 import javafx.scene.image.Image;
 
 import java.util.*;
-
+/**
+ * The {@code DiceBearAPI} class provides functionality for interacting with the DiceBear Avatars API.
+ * It allows users to retrieve avatar styles, generate image URLs with customizable options,
+ * fetch avatar images, parse JSON schema for option categories, and build preview URLs.
+ *
+ * <p>Example usage includes dynamically generating avatars in JavaFX applications or retrieving
+ * customization metadata from the API to build user interfaces.
+ */
 public class DiceBearAPI {
     private final HttpClient httpClient = HttpClient.newHttpClient();
+    /**
+     * Returns a list of available avatar styles supported by the DiceBear API.
+     *
+     * @return a list of avatar style strings
+     */
     //get available styles
     public List<String> getAvailableStyles(){
         return List.of("adventurer", "bottts", "adventurer-neutral", "avataaars", "avataaars-neutral", "big-ears",
@@ -22,7 +34,13 @@ public class DiceBearAPI {
                 "notionists-neutral", "open-peeps", "personas", "pixel-art", "pixel-art-neutral", "rings",
                 "shapes", "thumbs");
     }
-
+    /**
+     * Generates a URL to request a PNG avatar image using a specified style and customization options.
+     *
+     * @param style the avatar style (e.g., "adventurer", "micah")
+     * @param options a map of customization options (e.g., hair, eyes)
+     * @return the complete URL string for the avatar image
+     */
     //generate style url
     public String generateAvatarURL(String style, Map<String, String> options) {
         try{
@@ -39,7 +57,12 @@ public class DiceBearAPI {
         }
     }
 
-
+    /**
+     * Fetches the avatar image from the DiceBear API using a specified style.
+     *
+     * @param style the avatar style to fetch (e.g., "bottts", "avataaars")
+     * @return a JavaFX {@code Image} object of the avatar, or {@code null} if an error occurs
+     */
     // fetch schema for options
     public Image fetchAvatar(String style){
         try{
@@ -61,7 +84,12 @@ public class DiceBearAPI {
             return null;
         }
     }
-
+    /**
+     * Parses a JSON schema string to extract customization option categories and their possible values.
+     *
+     * @param jsonSchema the JSON schema string returned from the DiceBear API
+     * @return a map of categories to lists of valid option values
+     */
     //parse schema for options
     public Map<String, List<String>> parseOptions(String jsonSchema){
         Map<String, List<String>> categoryOptions = new HashMap<>();
@@ -97,7 +125,14 @@ public class DiceBearAPI {
 
     }
 
-
+    /**
+     * Generates a preview URL to visualize a specific category option of an avatar style in SVG format.
+     *
+     * @param style the avatar style
+     * @param category the customization category (e.g., "eyes", "mouth")
+     * @param options the specific option to preview within the category
+     * @return the preview URL string
+     */
     //generate preview of avatar
     public String generatePreviewURL(String style, String category, String options){
         String previewURL = "https://api.dicebear.com/9.x/" + style + "/svg?options[" + category + "]=" + options;

@@ -5,9 +5,12 @@ import javafx.scene.paint.Color;
 import java.sql.*;
 import java.sql.Connection;
 import java.util.LinkedList;
-
+/**
+ * Represents a user of the application, storing profile details,
+ * accessibility settings, and preferences.
+ */
 public class User {
-    //private int userID;
+    //Basic User info
     private String username;
     private String passwordHash;
     private String firstName;
@@ -33,6 +36,9 @@ public class User {
     private boolean notificationsOn;    // From notificationOnRadioButton
     private String favoritePicture;
 
+    /**
+     * Constructs a new User with the provided personal information.
+     */
     public User(String username, String passwordHash, String firstName, String lastName, String dob, String email, String phoneNumber, String pronouns, String gender, String specifiedGender, String specifiedPronouns, String preferredName) {
         //this.userID = userID;
         this.username = username;
@@ -48,7 +54,12 @@ public class User {
         this.specifiedPronouns = specifiedPronouns;
         this.preferredName = preferredName;
     }
-
+    /**
+     * Getters and setters for all user attributes including:
+     * - username, passwordHash, firstName, lastName, dob, email, phoneNumber, pronouns, gender, specifiedGender, specifiedPronouns, and preferredName for personal identification and profile customization;
+     * - themeColor (Color), avatar (Avatar), textSize, volume, selectedVoice, appTheme, notificationsOn, and favoritePicture for user-specific UI/UX and accessibility settings.
+     * These methods allow controlled access and modification of user data and preferences.
+     */
     //public int getUserID() {return userID;}
     public String getUsername() {
         return username;
@@ -164,7 +175,11 @@ public class User {
     public void setFavoritePicture(String favoritePicture) {
         this.favoritePicture = favoritePicture;
     }
-
+    /**
+     * Validates the user's required information fields.
+     *
+     * @return true if all required fields are valid; false otherwise
+     */
     public boolean validate(){
         if(username == null || username.isEmpty() ||
                 passwordHash == null || passwordHash.isEmpty()||
@@ -178,7 +193,11 @@ public class User {
         }
         return true;
     }
-
+    /**
+     * Registers the user in the remote MySQL database.
+     *
+     * @return true if the registration was successful; false otherwise
+     */
     public boolean register(){
         String query = "insert into user(username, password, email, first_name, last_name, gender, pronouns, date_of_birth, phone_number, created_at, last_loggin_in)\n" +
                 "values (?, ?, ?, ?, ?, ?, ?, ?, ?, current_timestamp, current_timestamp);";

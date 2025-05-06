@@ -36,6 +36,11 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
+        User u = new User("joeFarmingdale","farm123$","Joe","Farm","5/5/2005","joe@Farm.edu","(123)456-7891", "He/Him","Male", "Male","He/Him", "Joe");
+//        DB.getInstance().insertUser(u);
+//        u.setFirstName("it was joe before");
+//        DB.getInstance().updateUserDisplayName();
+        //DB.getInstance().removeUserByUsername(u.getUsername());
         launch(args);
     }
 

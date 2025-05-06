@@ -9,6 +9,36 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+/**
+ * Singleton class for managing database interactions in the communication application.
+ * <p>
+ * This class handles connecting to a MySQL database hosted on Azure,
+ * managing users in the "Users" table, and storing the currently authenticated user.
+ * It ensures a single instance of the DB class is used throughout the application
+ * (Singleton Pattern) and provides methods to insert, query, list, update, and delete users.
+ * </p>
+ *
+ * <p>
+ * Key Features:
+ * <ul>
+ *     <li>Thread-safe singleton instantiation</li>
+ *     <li>Automatic database and table creation if not present</li>
+ *     <li>Basic user management (CRUD operations)</li>
+ *     <li>Password hashing before storage</li>
+ * </ul>
+ * </p>
+ *
+ * <p>
+ * Example usage:
+ * <pre>{@code
+ *     DB db = DB.getInstance();
+ *     db.insertUser("jdoe", "jdoe@example.com", "password123", "John Doe");
+ * }</pre>
+ * </p>
+ *
+ * <p><b>Note:</b> This class stores database credentials in plain text and should be
+ * refactored to use secure storage mechanisms such as environment variables or Azure Key Vault in production.</p>
+ */
 public class DB {
     private static DB instance;  // Singleton instance
     private static User currentUser;

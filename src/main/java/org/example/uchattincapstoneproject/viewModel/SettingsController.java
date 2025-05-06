@@ -4,14 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ColorPicker;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.Slider;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -228,8 +221,16 @@ public class SettingsController {
 
         }
     }
+        //---------------------Delete Tab---------------------------------\\
         @FXML
-        private Tab integrationsTab;
+        private TextArea feedbackTA;
+        @FXML
+        private Tab deleteTab;
+        @FXML
+        void deleteBtnClicked(ActionEvent event) {
+
+        }
+
         @FXML
         private Button saveAllChangesButton;
 
