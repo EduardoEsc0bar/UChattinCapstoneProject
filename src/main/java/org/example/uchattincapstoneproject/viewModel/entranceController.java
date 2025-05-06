@@ -1,5 +1,5 @@
 package org.example.uchattincapstoneproject.viewModel;
-/*
+
 import javafx.animation.FadeTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -76,8 +76,8 @@ public class entranceController {
         try {
             // First try real database authentication
             Connection connection = DriverManager.getConnection(
-                    "jdbc:mysql://uchattin-csc311.mysql.database.azure.com:3306/uchattin-userinfo",
-                    "username", "password");
+                    "jdbc:mysql://commapp.mysql.database.azure.com:3306/communication_app",
+                    "commapp_db_user", "farm9786$");
 
             String query = "SELECT * FROM user WHERE username = ?";
             PreparedStatement statement = connection.prepareStatement(query);
@@ -102,8 +102,8 @@ public class entranceController {
                             resultSet.getString("gender"),
                             "", // specified_gender might not exist in DB
                             "", // specified_pronouns might not exist in DB
-                            resultSet.getString("preferred_name"), // might be null
-                            avatarURL);
+                            resultSet.getString("preferred_name") // might be null
+                    );
 
                     // Store the authenticated user in DB singleton
                     dbInstance.setCurrentUser(authenticatedUser);
@@ -162,8 +162,8 @@ public class entranceController {
                                         parts.length > 7 ? parts[7] : "", // gender
                                         "", // specifiedGender (not in CSV)
                                         "", // specifiedPronouns (not in CSV)
-                                        parts.length > 9 ? parts[9] : "", // preferredName
-                                        avatarUrl);
+                                        parts.length > 9 ? parts[9] : "" // preferredName
+                                );
 
                                 // Store in DB singleton
                                 dbInstance.setCurrentUser(authenticatedUser);
@@ -205,8 +205,8 @@ public class entranceController {
                         "Prefer not to say",
                         "",
                         "",
-                        "Test User",
-                        avatarUrl);
+                        "Test User"
+                );
                 dbInstance.setCurrentUser(mockUser);
                 return true;
             }
@@ -350,6 +350,3 @@ public class entranceController {
         alert.showAndWait();
     }
 }
-
- */
-
