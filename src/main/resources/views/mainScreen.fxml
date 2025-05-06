@@ -20,13 +20,13 @@
          <top>
             <Pane fx:id="speechBuilderPane" prefHeight="78.0" prefWidth="800.0" BorderPane.alignment="CENTER">
                <children>
-                  <TextArea fx:id="sentenceBuilderTextArea" editable="false" layoutX="1.0" layoutY="1.0" prefHeight="76.0" prefWidth="675.0" />
-                  <Button fx:id="saveSentenceButton" layoutX="698.0" layoutY="2.0" mnemonicParsing="false" text="Save Phrase">
+                  <TextArea fx:id="sentenceBuilderTextArea" editable="false" layoutX="1.0" layoutY="1.0" prefHeight="76.0" prefWidth="642.0" />
+                  <Button fx:id="saveSentenceButton" layoutX="669.0" layoutY="14.0" mnemonicParsing="false" text="Save Phrase">
                      <font>
-                        <Font name="Monospaced Regular" size="12.0" />
+                        <Font name="Monospaced Bold" size="12.0" />
                      </font>
                   </Button>
-                  <Button fx:id="resetSentenceButton" layoutX="698.0" layoutY="45.0" mnemonicParsing="false" text="Reset">
+                  <Button fx:id="readOutLoudButton" layoutX="669.0" layoutY="41.0" mnemonicParsing="false" text="Read out Loud">
                      <font>
                         <Font name="Monospaced Bold" size="12.0" />
                      </font>
@@ -211,14 +211,9 @@
                         </ImageView>
                      </children>
                   </Pane>
-                  <Pane fx:id="favoritesPane" prefHeight="200.0" prefWidth="200.0" visible="false">
+                  <Pane fx:id="favoritesPane" prefHeight="200.0" prefWidth="200.0">
                      <children>
-                        <ImageView fx:id="favoriteContactsIV" fitHeight="115.0" fitWidth="129.0" layoutX="62.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../imagesIcon/family.png" />
-                           </image>
-                        </ImageView>
-                        <ImageView fx:id="favoritePhrasesIV" fitHeight="115.0" fitWidth="129.0" layoutX="312.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="favoritePhrasesIV" fitHeight="115.0" fitWidth="129.0" layoutX="130.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../imagesIcon/phrase.png" />
                            </image>
@@ -228,12 +223,7 @@
                               <Image url="@../imagesIcon/picture.png" />
                            </image>
                         </ImageView>
-                        <Label layoutX="47.0" layoutY="148.0" text="Favoite Contacts">
-                           <font>
-                              <Font name="Monospaced Bold" size="15.0" />
-                           </font>
-                        </Label>
-                        <Label layoutX="302.0" layoutY="148.0" text="Favoite Phrases">
+                        <Label layoutX="120.0" layoutY="148.0" text="Favoite Phrases">
                            <font>
                               <Font name="Monospaced Bold" size="15.0" />
                            </font>
