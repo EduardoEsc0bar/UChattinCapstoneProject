@@ -22,14 +22,14 @@ public class Main extends Application {
         try{
             System.out.println("attempting to start entrance screen");
             //FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/createAvatarScreen.fxml"));
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/entranceScreen.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/loginScreen.fxml"));
             AnchorPane root = loader.load();
             //System.out.println("createAvatarScreen.fxml load successful");
-            System.out.println("entranceScreen.fxml load successful");
+            System.out.println("loginScreen.fxml load successful");
             Scene scene = new Scene(root, 800, 600);
             stage.setScene(scene);
             //stage.setTitle("Create Avatar");
-            stage.setTitle("Entrance Screen");
+            stage.setTitle("Log in");
             stage.show();
             //System.out.println("create avatar screen displayed");
         }catch (Exception e){
