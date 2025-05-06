@@ -10,6 +10,8 @@ module org.example.uchattincapstoneproject {
     requires com.fasterxml.jackson.databind;
     requires org.apache.qpid.proton.j;
     requires java.desktop;
+    requires json.smart;
+    requires org.json;
 
     // Export the model package
     exports org.example.uchattincapstoneproject.model;

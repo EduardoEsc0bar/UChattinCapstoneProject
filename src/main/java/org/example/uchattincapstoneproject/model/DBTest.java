@@ -5,7 +5,7 @@ import org.example.uchattincapstoneproject.model.User;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-
+/*
 class DBTest {
     public static void main(String[] args) {
         DB database = DB.getInstance();
@@ -18,3 +18,5 @@ class DBTest {
         System.out.println(inserted ? "user inserted successfully" : "user failed to insert user");
     }
 }
+
+ */

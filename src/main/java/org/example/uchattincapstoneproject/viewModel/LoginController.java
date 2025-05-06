@@ -1,4 +1,5 @@
 package org.example.uchattincapstoneproject.viewModel;
+/*
 import javafx.animation.FadeTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -153,3 +154,5 @@ public class LoginController {
         alert.showAndWait();
     }
 }
+
+ */
