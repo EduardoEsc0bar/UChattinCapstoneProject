@@ -1,428 +1,181 @@
 package org.example.uchattincapstoneproject.viewModel;
-
-import javafx.animation.FadeTransition;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import javafx.util.Duration;
-import org.example.uchattincapstoneproject.model.DB;
 import org.example.uchattincapstoneproject.model.User;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
-import java.util.regex.Pattern;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 public class RegistrationController {
-    // FXML annotated fields - exactly as in your FXML
     @FXML
-    public Pane createAccountPane;
+    private TextField firstNameTF, lastNameTF, dobTF, emailTF, preferredNameTF, phoneNumberTF,
+            createUsernameTF, createPasswordTF, specifyGenderTF, specifyPronounsTF, avatarUrlTF;
     @FXML
-    public TextField firstNameTF, lastNameTF, emailTF, dobTF, preferredNameTF, phoneNumberTF, createUsernameTF, createPasswordTF, specifyGenderTF, specifyPronounsTF;
+    private ComboBox<String> genderCB, pronounsCB;
     @FXML
-    public ComboBox<String> genderCB, pronounsCB;
+    private Button toCreateAvatarButton;
     @FXML
-    public Button toCreateAvatarButton, backBTN;
-    @FXML
-    public Label fnErrorLabel, lnErrorLabel, emailErrorLabel, pNumberErrorLabel, dobErrorLabel;
+    private Label fnErrorLabel, lnErrorLabel, dobErrorLabel, pNumberErrorLabel, emailErrorLabel;
 
-    // Non-FXML fields
-    private DB dbInstance;
-    private static final String EMAIL_PATTERN = "^[A-Za-z0-9+_.-]+@(.+)$";
-    private static final String PHONE_PATTERN = "^(\\+\\d{1,3}( )?)?((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4}$";
-    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+    private Stage stage;
+    private static final String DB_URL = "jdbc:mysql://uchattin-csc311.mysql.database.azure.com:3306/uchattin-userinfo";
+    private static final String DB_USER = "username";
+    private static final String DB_PASSWORD = "password";
 
     @FXML
     public void initialize() {
-        System.out.println("Registration controller initialized");
+        System.out.println("Registration Controller initialized.");
 
-        // Initialize DB instance
-        dbInstance = DB.getInstance();
+        stage = (Stage) toCreateAvatarButton.getScene().getWindow();
+        toCreateAvatarButton.setOnAction(e -> {
+            if (validateAllInputs()) {
+                System.out.println("Validation complete.");
+                handleRegistration();
+            }
+        });
 
-        // Set up ComboBoxes
-        setupComboBoxes();
+        genderCB.getItems().addAll("Male", "Female", "Non-binary", "Other");
+        pronounsCB.getItems().addAll("He/Him/His", "She/Her/Hers", "They/Them/Theirs", "Other");
 
-        // Enable error labels but clear their text
-        enableAndClearErrorLabels();
-
-        // Set up button actions
-        // backBTN already has its action set in FXML
-        toCreateAvatarButton.setOnAction(this::handleRegistration);
-
-        // Set up text field listeners for validation
-        setupTextFieldListeners();
+        genderCB.setOnAction(event -> toggleSpecifyFields());
+        pronounsCB.setOnAction(event -> toggleSpecifyFields());
     }
 
-    private void setupComboBoxes() {
-        // Set up gender ComboBox
-        ObservableList<String> genderOptions = FXCollections.observableArrayList(
-                "Male", "Female", "Non-binary", "Prefer not to say", "Specify"
-        );
-        genderCB.setItems(genderOptions);
-        genderCB.getSelectionModel().selectFirst();
-
-        // Set up pronouns ComboBox
-        ObservableList<String> pronounOptions = FXCollections.observableArrayList(
-                "He/Him", "She/Her", "They/Them", "Prefer not to say", "Specify"
-        );
-        pronounsCB.setItems(pronounOptions);
-        pronounsCB.getSelectionModel().selectFirst();
-
-        // Add listeners to show/hide specify text fields
-        genderCB.valueProperty().addListener((obs, oldVal, newVal) -> {
-            specifyGenderTF.setVisible("Specify".equals(newVal));
-            specifyGenderTF.setManaged("Specify".equals(newVal));
-        });
-
-        pronounsCB.valueProperty().addListener((obs, oldVal, newVal) -> {
-            specifyPronounsTF.setVisible("Specify".equals(newVal));
-            specifyPronounsTF.setManaged("Specify".equals(newVal));
-        });
-
-        // Initially hide specify fields
-        specifyGenderTF.setVisible(false);
-        specifyGenderTF.setManaged(false);
-        specifyPronounsTF.setVisible(false);
-        specifyPronounsTF.setManaged(false);
+    private void toggleSpecifyFields() {
+        specifyGenderTF.setDisable(!"Other".equals(genderCB.getValue()));
+        specifyPronounsTF.setDisable(!"Other".equals(pronounsCB.getValue()));
     }
 
-    private void setupTextFieldListeners() {
-        // First name validation
-        firstNameTF.focusedProperty().addListener((obs, oldVal, newVal) -> {
-            if (!newVal) { // when focus lost
-                validateFirstName();
-            }
-        });
-
-        // Last name validation
-        lastNameTF.focusedProperty().addListener((obs, oldVal, newVal) -> {
-            if (!newVal) { // when focus lost
-                validateLastName();
-            }
-        });
-
-        // Email validation
-        emailTF.focusedProperty().addListener((obs, oldVal, newVal) -> {
-            if (!newVal) { // when focus lost
-                validateEmail();
-            }
-        });
-
-        // Phone number validation
-        phoneNumberTF.focusedProperty().addListener((obs, oldVal, newVal) -> {
-            if (!newVal) { // when focus lost
-                validatePhoneNumber();
-            }
-        });
-
-        // Date of birth validation
-        dobTF.focusedProperty().addListener((obs, oldVal, newVal) -> {
-            if (!newVal) { // when focus lost
-                validateDateOfBirth();
-            }
-        });
-    }
-
-    private void enableAndClearErrorLabels() {
-        fnErrorLabel.setDisable(false);
-        lnErrorLabel.setDisable(false);
-        emailErrorLabel.setDisable(false);
-        pNumberErrorLabel.setDisable(false);
-        dobErrorLabel.setDisable(false);
-
-        fnErrorLabel.setText("");
-        lnErrorLabel.setText("");
-        emailErrorLabel.setText("");
-        pNumberErrorLabel.setText("");
-        dobErrorLabel.setText("");
-    }
 
     private boolean validateFirstName() {
-        if (firstNameTF.getText().trim().isEmpty()) {
-            fnErrorLabel.setText("First name is required");
+        String firstName = firstNameTF.getText().trim();
+        if (firstName.isEmpty() || !firstName.matches("[a-zA-Z]{2,25}$")) {
+            showAlert(Alert.AlertType.WARNING, "Input Error", "First name must be between 2-25 letters.");
             return false;
         }
-        fnErrorLabel.setText("");
         return true;
     }
 
+
     private boolean validateLastName() {
-        if (lastNameTF.getText().trim().isEmpty()) {
-            lnErrorLabel.setText("Last name is required");
+        String lastName = lastNameTF.getText().trim();
+        if (lastName.isEmpty() || !lastName.matches("[a-zA-Z]{2,25}$")) {
+            showAlert(Alert.AlertType.WARNING, "Input Error", "Last name must be between 2-25 letters.");
             return false;
         }
-        lnErrorLabel.setText("");
         return true;
     }
+
+
+    private boolean validateDOB() {
+        String dob = dobTF.getText().trim();
+        if (!dob.matches("(0[1-9]|1[0-2])/(0[1-9]|[1-2][0-9]|3[0-1])/([0-9]{4})")) {
+            showAlert(Alert.AlertType.WARNING, "Input Error", "Date of birth must be in MM/DD/YYYY format.");
+            return false;
+        }
+        return true;
+    }
+
 
     private boolean validateEmail() {
         String email = emailTF.getText().trim();
-        if (email.isEmpty()) {
-            emailErrorLabel.setText("Email is required");
+        if (!email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$")) {
+            showAlert(Alert.AlertType.WARNING, "Input Error", "Please enter a valid email address.");
             return false;
         }
-
-        if (!Pattern.matches(EMAIL_PATTERN, email)) {
-            emailErrorLabel.setText("Invalid email format");
-            return false;
-        }
-
-        emailErrorLabel.setText("");
         return true;
     }
 
     private boolean validatePhoneNumber() {
-        String phoneNumber = phoneNumberTF.getText().trim();
-        if (!phoneNumber.isEmpty() && !Pattern.matches(PHONE_PATTERN, phoneNumber)) {
-            pNumberErrorLabel.setText("Invalid phone number format");
+        String phone = phoneNumberTF.getText().trim();
+        if (!phone.matches("\\d{3}-\\d{3}-\\d{4}$")) {
+            showAlert(Alert.AlertType.WARNING, "Input Error", "Phone number must be in XXX-XXX-XXXX format.");
             return false;
         }
-
-        pNumberErrorLabel.setText("");
         return true;
     }
 
-    private boolean validateDateOfBirth() {
+    private boolean validateAllInputs() {
+        return validateFirstName() & validateLastName() & validateDOB() & validateEmail() & validatePhoneNumber();
+    }
+
+    private void handleRegistration() {
+        String firstName = firstNameTF.getText().trim();
+        String lastName = lastNameTF.getText().trim();
         String dob = dobTF.getText().trim();
-        if (dob.isEmpty()) {
-            dobErrorLabel.setText("Date of birth is required");
-            return false;
-        }
-
-        try {
-            LocalDate date = LocalDate.parse(dob, DATE_FORMATTER);
-            LocalDate now = LocalDate.now();
-
-            if (date.isAfter(now)) {
-                dobErrorLabel.setText("Date of birth cannot be in the future");
-                return false;
-            }
-
-            dobErrorLabel.setText("");
-            return true;
-        } catch (DateTimeParseException e) {
-            dobErrorLabel.setText("Invalid date format. Use MM/DD/YYYY");
-            return false;
-        }
-    }
-
-    private boolean validateUsername() {
+        String email = emailTF.getText().trim();
+        String preferredName = preferredNameTF.getText().trim();
+        String phoneNumber = phoneNumberTF.getText().trim();
+        String gender = genderCB.getValue();
+        String pronouns = pronounsCB.getValue();
         String username = createUsernameTF.getText().trim();
-        if (username.isEmpty()) {
-            showAlert(Alert.AlertType.WARNING, "Validation Error", "Username is required");
-            return false;
-        }
+        String password = createPasswordTF.getText().trim();
+        int avatarID = 0;
 
-        if (username.length() < 4) {
-            showAlert(Alert.AlertType.WARNING, "Validation Error", "Username must be at least 4 characters");
-            return false;
-        }
+        // Hash password securely
+        String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
 
-        return true;
-    }
+        // Store user in database
+        User newUser = new User(username, hashedPassword, firstName, lastName, dob, email, phoneNumber, pronouns,
+                gender, preferredName, avatarID);
 
-    private boolean validatePassword() {
-        String password = createPasswordTF.getText();
-        if (password.isEmpty()) {
-            showAlert(Alert.AlertType.WARNING, "Validation Error", "Password is required");
-            return false;
-        }
-
-        if (password.length() < 8) {
-            showAlert(Alert.AlertType.WARNING, "Validation Error", "Password must be at least 8 characters");
-            return false;
-        }
-
-        return true;
-    }
-
-    @FXML
-    private void handleRegistration(ActionEvent event) {
-        // Validate all required fields
-        boolean isFirstNameValid = validateFirstName();
-        boolean isLastNameValid = validateLastName();
-        boolean isEmailValid = validateEmail();
-        boolean isPhoneValid = validatePhoneNumber();
-        boolean isDobValid = validateDateOfBirth();
-        boolean isUsernameValid = validateUsername();
-        boolean isPasswordValid = validatePassword();
-
-        if (isFirstNameValid && isLastNameValid && isEmailValid && isPhoneValid &&
-                isDobValid && isUsernameValid && isPasswordValid) {
-
-            try {
-                // Get all field values
-                String firstName = firstNameTF.getText().trim();
-                String lastName = lastNameTF.getText().trim();
-                String email = emailTF.getText().trim();
-                String phoneNumber = phoneNumberTF.getText().trim();
-                String dob = dobTF.getText().trim();
-                String username = createUsernameTF.getText().trim();
-                String password = createPasswordTF.getText();
-                String preferredName = preferredNameTF.getText().trim();
-
-                // Handle gender selection
-                String gender = genderCB.getValue();
-                String specifiedGender = "";
-                if ("Specify".equals(gender)) {
-                    specifiedGender = specifyGenderTF.getText().trim();
-                    if (specifiedGender.isEmpty()) {
-                        showAlert(Alert.AlertType.WARNING, "Validation Error", "Please specify your gender or select an option from the dropdown");
-                        return;
-                    }
-                }
-
-                // Handle pronouns selection
-                String pronouns = pronounsCB.getValue();
-                String specifiedPronouns = "";
-                if ("Specify".equals(pronouns)) {
-                    specifiedPronouns = specifyPronounsTF.getText().trim();
-                    if (specifiedPronouns.isEmpty()) {
-                        showAlert(Alert.AlertType.WARNING, "Validation Error", "Please specify your pronouns or select an option from the dropdown");
-                        return;
-                    }
-                }
-
-                // Hash the password
-                String passwordHash = dbInstance.hashPassword(password);
-
-                // Create the user object
-                User newUser = new User(
-                        username,
-                        passwordHash,
-                        firstName,
-                        lastName,
-                        dob,
-                        email,
-                        phoneNumber,
-                        pronouns,
-                        gender,
-                        specifiedGender,
-                        specifiedPronouns,
-                        preferredName
-                );
-
-                // Register the user in the database
-                if (newUser.register()) {
-                    // Store current user in DB singleton for later use
-                    dbInstance.setCurrentUser(newUser);
-
-                    // Show success message
-                    showAlert(Alert.AlertType.INFORMATION, "Registration Successful",
-                            "Your account has been created successfully. Please proceed to create your avatar.");
-
-                    // Navigate to the create avatar screen
-                    navigateToCreateAvatarScreen();
-                } else {
-                    showAlert(Alert.AlertType.ERROR, "Registration Failed",
-                            "There was an error registering your account. The username or email might already be in use.");
-                }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                showAlert(Alert.AlertType.ERROR, "Registration Error",
-                        "There was an error during registration: " + e.getMessage());
-            }
+        if (saveUserToDatabase(newUser)) {
+            showAlert(Alert.AlertType.INFORMATION, "Registration Successful!", "Your account has been created.");
+            navigateToCreateAvatar();
         } else {
-            showAlert(Alert.AlertType.WARNING, "Validation Error",
-                    "Please fix the errors in the form before proceeding.");
+            showAlert(Alert.AlertType.ERROR, "Registration Failed", "An error occurred while saving your information.");
         }
     }
 
-    private void navigateToCreateAvatarScreen() {
+    private boolean saveUserToDatabase(User user) {
+        String query = "INSERT INTO Users (username, password_hash, first_name, last_name, dob, email, phone_number, "
+                + "pronouns, gender, specified_pronouns, preferred_name, avatar_id, created_at, last_login) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)";
+
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            statement.setString(1, user.getUsername());
+            statement.setString(2, user.getPasswordHash());
+            statement.setString(3, user.getFirstName());
+            statement.setString(4, user.getLastName());
+            statement.setString(5, user.getDob());
+            statement.setString(6, user.getEmail());
+            statement.setString(7, user.getPhoneNumber());
+            statement.setString(8, user.getPronouns());
+            statement.setString(9, user.getGender());
+            statement.setString(10, user.getPreferredName());
+            statement.setInt(11, user.getAvatarID());
+
+            return statement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("Error inserting user into database.");
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    private void navigateToCreateAvatar() {
         try {
-            System.out.println("Navigating to avatar creation screen");
-            FadeTransition fadeout = new FadeTransition(Duration.seconds(1));
-            fadeout.setFromValue(1.0);
-            fadeout.setToValue(0.0);
-            fadeout.setNode(createAccountPane);
-            fadeout.setOnFinished(event -> {
-                try {
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/createAvatarScreen.fxml"));
-                    AnchorPane createAvatarScreen = loader.load();
-
-                    // Get the controller and pass the current user
-                    CreateAvatarController avatarController = loader.getController();
-
-                    // Check if the controller has the setUser method
-                    try {
-                        avatarController.setUser(dbInstance.getCurrentUser());
-                    } catch (Exception e) {
-                        System.err.println("Warning: Could not set user on CreateAvatarController: " + e.getMessage());
-                        // Continue anyway - the user is already stored in DB singleton
-                    }
-
-                    Scene createAvatarScene = new Scene(createAvatarScreen, 800, 600);
-                    Stage stage = (Stage) toCreateAvatarButton.getScene().getWindow();
-                    stage.setScene(createAvatarScene);
-                    stage.setTitle("Create Your Avatar");
-
-                    FadeTransition fadeIn = new FadeTransition(Duration.seconds(1));
-                    fadeIn.setFromValue(0.0);
-                    fadeIn.setToValue(1.0);
-                    fadeIn.setNode(createAvatarScreen);
-                    fadeIn.play();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    showAlert(Alert.AlertType.ERROR, "Navigation Error",
-                            "An error occurred while navigating to the avatar creation screen: " + e.getMessage());
-                }
-            });
-            fadeout.play();
-        } catch (Exception e) {
+            System.out.println("Navigating to Create Avatar screen.");
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/createAvatarScreen.fxml"));
+            AnchorPane avatarScreen = loader.load();
+            stage.setScene(new Scene(avatarScreen, 800, 600));
+        } catch (IOException e) {
             e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Navigation Error",
-                    "An error occurred while preparing to navigate to the avatar creation screen: " + e.getMessage());
+            showAlert(Alert.AlertType.ERROR, "Navigation Error", "An error occurred while navigating to Create Avatar.");
         }
     }
 
-    //navigating to entrance screen
-    @FXML
-    public void navigateToEntranceScreen(ActionEvent actionEvent) {
-        try{
-            System.out.println("navigating to entrance scene");
-            FadeTransition fadeout = new FadeTransition(Duration.seconds(1));
-            fadeout.setFromValue(1.0);
-            fadeout.setToValue(0.0);
-            fadeout.setNode(createAccountPane);
-            fadeout.setOnFinished(event -> {
-                try{
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/entranceScreen.fxml"));
-                    AnchorPane entranceScreen = loader.load();
-                    Scene entranceScene = new Scene(entranceScreen, 800, 600);
-                    Stage stage = (Stage) backBTN.getScene().getWindow();
-                    stage.setScene(entranceScene);
-                    stage.setTitle("Welcome to UChattIn");
-
-                    FadeTransition fadein = new FadeTransition(Duration.seconds(1));
-                    fadein.setFromValue(0.0);
-                    fadein.setToValue(1.0);
-                    fadein.setNode(entranceScreen);
-                    fadein.play();
-                }catch(IOException e){
-                    e.printStackTrace();
-                    showAlert(Alert.AlertType.ERROR, "Navigation Error",
-                            "An error occurred while navigating to the entrance screen: " + e.getMessage());
-                }
-            });
-            fadeout.play();
-        }catch(Exception e){
-            e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Navigation Error",
-                    "An error occurred while preparing to navigate to the entrance screen: " + e.getMessage());
-        }
-    }
-
-    //display alerts
-    private void showAlert(Alert.AlertType alertType, String title, String message){
+    private void showAlert(Alert.AlertType alertType, String title, String message) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
         alert.setContentText(message);

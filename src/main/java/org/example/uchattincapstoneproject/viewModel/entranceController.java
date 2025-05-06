@@ -1,5 +1,5 @@
 package org.example.uchattincapstoneproject.viewModel;
-
+/*
 import javafx.animation.FadeTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -102,8 +102,8 @@ public class entranceController {
                             resultSet.getString("gender"),
                             "", // specified_gender might not exist in DB
                             "", // specified_pronouns might not exist in DB
-                            resultSet.getString("preferred_name") // might be null
-                    );
+                            resultSet.getString("preferred_name"), // might be null
+                            avatarURL);
 
                     // Store the authenticated user in DB singleton
                     dbInstance.setCurrentUser(authenticatedUser);
@@ -162,8 +162,8 @@ public class entranceController {
                                         parts.length > 7 ? parts[7] : "", // gender
                                         "", // specifiedGender (not in CSV)
                                         "", // specifiedPronouns (not in CSV)
-                                        parts.length > 9 ? parts[9] : "" // preferredName
-                                );
+                                        parts.length > 9 ? parts[9] : "", // preferredName
+                                        avatarUrl);
 
                                 // Store in DB singleton
                                 dbInstance.setCurrentUser(authenticatedUser);
@@ -205,8 +205,8 @@ public class entranceController {
                         "Prefer not to say",
                         "",
                         "",
-                        "Test User"
-                );
+                        "Test User",
+                        avatarUrl);
                 dbInstance.setCurrentUser(mockUser);
                 return true;
             }
@@ -350,3 +350,6 @@ public class entranceController {
         alert.showAndWait();
     }
 }
+
+ */
+

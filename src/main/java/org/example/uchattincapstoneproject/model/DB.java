@@ -2,21 +2,31 @@ package org.example.uchattincapstoneproject.model;
 
 import org.mindrot.jbcrypt.BCrypt;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.security.SecureRandom;
+import java.sql.*;
+import java.util.Base64;
 
 public class DB {
     private static DB instance;  // Singleton instance
     private static User currentUser;
-    final String MYSQL_SERVER_URL = "jdbc:mysql://commapp.mysql.database.azure.com/";
+    final String MYSQL_SERVER_URL = "jdbc:mysql://commapp.mysql.database.azure.com:3306/";
     final String DB_URL = MYSQL_SERVER_URL + "communication_app";
     final String USERNAME = "commapp_db_user";
     final String PASSWORD = "farm9786$";
 
+
+    public boolean testDatabaseConnection(){
+        try(Connection connection = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD)){
+            if(connection != null){
+                System.out.println("connection established");
+                return true;
+            }
+        }catch (SQLException e){
+            System.err.println("connection failed " + e.getMessage());
+            e.printStackTrace();
+        }
+        return false;
+    }
     public void setCurrentUser(User user) {
         currentUser = user;
     }
@@ -139,32 +149,91 @@ public class DB {
     /**
      * Inserts a new user into the Users table.
      *
-     * @param name          The username of the new user.
-     * @param email         The email address of the new user.
-     * @param passwordPT    hashed password of the new user.
-     * @param displayName   The display name of the new user.
      */
-    public  void insertUser(String name, String email, String passwordPT, String displayName) {
-        try {
-            String passwordHash = hashPassword(passwordPT);
-            Connection conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
-            String sql = "INSERT INTO Users (username, email, password_hash, displayName) VALUES (?, ?, ?, ?, ?)";
-            PreparedStatement preparedStatement = conn.prepareStatement(sql);
-            preparedStatement.setString(1, name);
-            preparedStatement.setString(2, email);
-            preparedStatement.setString(3, passwordHash);
-            preparedStatement.setString(4, displayName);
+    public boolean insertUser(User user) {
+        String sql = "INSERT INTO Users (username, password_hash, first_name, last_name, dob, email, phone_number, gender, specified_pronouns, preferred_name, avatar_id) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NULL)";
 
-            int row = preparedStatement.executeUpdate();
+        try (Connection conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
+             PreparedStatement statement = conn.prepareStatement(sql)) {
 
-            if (row > 0) {
-                System.out.println("A new user was inserted successfully.");
-            }
+            // Secure password hashing
+            String hashedPassword = hashPassword(user.getPasswordHash());
 
-            preparedStatement.close();
-            conn.close();
+            // Set user details in the database
+            statement.setString(1, user.getUsername());
+            statement.setString(2, hashedPassword);
+            statement.setString(3, user.getFirstName());
+            statement.setString(4, user.getLastName());
+            statement.setString(5, user.getDob());
+            statement.setString(6, user.getEmail());
+            statement.setString(7, user.getPhoneNumber());
+            statement.setString(8, user.getGender());
+            statement.setString(9, user.getPronouns());
+            statement.setString(10, user.getPreferredName());
+
+            return statement.executeUpdate() > 0;
         } catch (SQLException e) {
+            System.err.println("Error inserting user.");
             e.printStackTrace();
+            return false;
+        }
+    }
+
+    //store avatar in database
+    public int storeAvatarInDatabase(String avatarURL) {
+        String sql = "INSERT INTO Avatars (avatar_url) VALUES (?)";
+
+        try (Connection conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
+             PreparedStatement statement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            statement.setString(1, avatarURL);
+            int affectedRows = statement.executeUpdate();
+
+            if (affectedRows > 0) {
+                ResultSet generatedKeys = statement.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    return generatedKeys.getInt(1); //Return the new avatar ID
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error inserting avatar.");
+            e.printStackTrace();
+        }
+        return -1; // return -1 if insertion fails
+    }
+
+    public boolean updateUserAvatar(String username, int avatarId) {
+        String sql = "UPDATE Users SET avatar_id = ? WHERE username = ?";
+
+        try (Connection conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
+             PreparedStatement statement = conn.prepareStatement(sql)) {
+
+            statement.setInt(1, avatarId);
+            statement.setString(2, username);
+
+            return statement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("Error updating user avatar.");
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean updateUserDetails(String username, String field, String value) {
+        String sql = "UPDATE Users SET " + field + " = ? WHERE username = ?";
+
+        try (Connection conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
+             PreparedStatement statement = conn.prepareStatement(sql)) {
+
+            statement.setString(1, value);
+            statement.setString(2, username);
+
+            return statement.executeUpdate() > 0; //Returns true if update successful
+        } catch (SQLException e) {
+            System.err.println("Error updating user: " + field);
+            e.printStackTrace();
+            return false;
         }
     }
     /**
@@ -221,24 +290,118 @@ public class DB {
             e.printStackTrace();
         }
     }
-        /**
-         * Hashes a plaintext password using BCrypt.
-         *
-         * @param password The plaintext password.
-         * @return The hashed password.
-         */
-        public String hashPassword(String password) {
-            return BCrypt.hashpw(password, BCrypt.gensalt());
-        }
 
-        /**
-         * Verifies a plaintext password against a hashed password.
-         *
-         * @param password The plaintext password.
-         * @param hashedPassword The hashed password.
-         * @return true if the password matches the hash, false otherwise.
-         */
-        public boolean checkPassword(String password, String hashedPassword) {
-            return BCrypt.checkpw(password, hashedPassword);
+    //check if user is registered
+    public boolean isUserRegistered(String username, String email) {
+        String sql = "SELECT COUNT(*) FROM Users WHERE username = ? OR email = ?";
+
+        try(Connection conn = DriverManager.getConnection(DB_URL,USERNAME,PASSWORD);
+        PreparedStatement statement = conn.prepareStatement(sql)){
+            statement.setString(1, username);
+            statement.setString(2, email);
+
+            ResultSet rS = statement.executeQuery();
+            if(rS.next()){
+                int count = rS.getInt(1);
+                return count > 0;
+            }
+        }catch (SQLException e) {
+            System.err.println("Database error while checking for user");
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    /**
+     *
+     * Hashes a plaintext password using BCrypt.
+     *
+     * @param password The plaintext password.
+     * @return The hashed password.
+     */
+    public String hashPassword(String password) {
+        return BCrypt.hashpw(password, BCrypt.gensalt());
+    }
+
+    /**
+     * Verifies a plaintext password against a hashed password.
+     *
+     * @param password The plaintext password.
+     * @param hashedPassword The hashed password.
+     * @return true if the password matches the hash, false otherwise.
+     */
+    public boolean checkPassword(String password, String hashedPassword) {
+        return BCrypt.checkpw(password, hashedPassword);
+    }
+
+
+    public String generateResetToken() {
+        byte[] randomBytes = new byte[32];
+        new SecureRandom().nextBytes(randomBytes);
+        return Base64.getUrlEncoder().withoutPadding().encodeToString(randomBytes);
+    }
+
+    public boolean storeResetToken(String username) {
+        String sql = "INSERT INTO PasswordResets (user_id, reset_token, expires_at) VALUES ((SELECT id FROM Users WHERE username = ?), ?, ?)";
+
+        try (Connection conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
+             PreparedStatement statement = conn.prepareStatement(sql)) {
+
+            String resetToken = generateResetToken();
+            Timestamp expiresAt = new Timestamp(System.currentTimeMillis() + (15 * 60 * 1000)); // Expires in 15 minutes
+
+            statement.setString(1, username);
+            statement.setString(2, resetToken);
+            statement.setTimestamp(3, expiresAt);
+
+            return statement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("Error storing reset token.");
+            e.printStackTrace();
+            return false;
         }
     }
+
+    public boolean verifyResetToken(String token) {
+        String sql = "SELECT user_id FROM PasswordResets WHERE reset_token = ? AND expires_at > NOW()";
+
+        try (Connection conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
+             PreparedStatement statement = conn.prepareStatement(sql)) {
+
+            statement.setString(1, token);
+            ResultSet resultSet = statement.executeQuery();
+
+            return resultSet.next(); // Token is valid
+        } catch (SQLException e) {
+            System.err.println("Error verifying reset token.");
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean updatePassword(String resetToken, String newPassword) {
+        if (!verifyResetToken(resetToken)) {
+            System.err.println("Invalid or expired reset token.");
+            return false;
+        }
+
+        String sql = "UPDATE Users SET password_hash = ? WHERE id = (SELECT user_id FROM PasswordResets WHERE reset_token = ?)";
+
+        try (Connection conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
+             PreparedStatement statement = conn.prepareStatement(sql)) {
+
+            String hashedPassword = BCrypt.hashpw(newPassword, BCrypt.gensalt());
+
+            statement.setString(1, hashedPassword);
+            statement.setString(2, resetToken);
+
+            return statement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("Error updating password.");
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+
+}
