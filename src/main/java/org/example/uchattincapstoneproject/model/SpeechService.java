@@ -10,6 +10,7 @@ public class SpeechService {
 
     // Getting API Key from Azure Key Vault
     private static final String API_KEY = "8rvZvwIhkqJJeFuPeQR5XNdGJDCnw5y7HOkZE1U0y2dvvsL54VojJQQJ99BDACYeBjFXJ3w3AAAYACOGaMA1"; // Replace with actual logic to retrieve API Key
+
     private static final String REGION = "eastus";
     private SpeechSynthesizer synthesizer;
     private SpeechConfig speechConfig;
