@@ -1,7 +1,11 @@
 package org.example.uchattincapstoneproject.viewModel;
 
+import javafx.animation.FadeTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
@@ -10,9 +14,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.TilePane;
+import javafx.stage.Stage;
+import javafx.util.Duration;
 import org.example.uchattincapstoneproject.model.ArasaacService;
 import org.example.uchattincapstoneproject.model.SpeechService;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
@@ -22,7 +29,8 @@ public class MainViewController {
     @FXML
     private TextArea sentenceBuilderTextArea;
     @FXML
-    private Button saveSentenceButton, readOutLoudButton, toggleThemeQuickAccessButton, goToProfileQuickAccessButton;
+    private Button saveSentenceButton, readOutLoudButton, toggleThemeQuickAccessButton, goToProfileQuickAccessButton,
+    backToDirectoryPaneButton;
     @FXML
     private ImageView feelings, food, animals, activities, shapesAndColor, pronouns, emergency, transportation
             ,accessibility, hobbies, places, weather, time, selfAdvocacy;
@@ -40,11 +48,15 @@ public class MainViewController {
 
     @FXML
     private void initialize() {
+        showPane(directoryPane); //initially show directory pane
         try {
             speechService = new SpeechService(); //Initialize speech service
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        categoriesIV.setOnMouseClicked(event -> showPane(mainCategoriesTilePane));
+        settingsIV.setOnMouseClicked(event -> navigateToSettingsScreen());
 
         feelings.setOnMouseClicked(event -> fetchCategoryData("Feelings"));
         hobbies.setOnMouseClicked(event -> fetchCategoryData("Hobbies"));
@@ -66,6 +78,41 @@ public class MainViewController {
     public void setUsername(String username){
         this.username = username;
     }
+
+    private void showPane(Pane pane) {
+        directoryPane.setVisible(pane == directoryPane);
+        mainCategoriesTilePane.setVisible(pane == mainCategoriesTilePane);
+        backToDirectoryPaneButton.setVisible(pane == directoryPane);
+    }
+
+
+    private void navigateToSettingsScreen() {
+        try {
+            Parent settingsRoot = FXMLLoader.load(getClass().getResource("/views/settingsScreen.fxml"));
+            Scene currentScene = settingsIV.getScene();
+
+            //Fade out effect
+            FadeTransition fadeOut = new FadeTransition(Duration.seconds(0.5), currentScene.getRoot());
+            fadeOut.setFromValue(1);
+            fadeOut.setToValue(0);
+            fadeOut.setOnFinished(event -> {
+                currentScene.setRoot(settingsRoot);
+
+                //Fade in effect after switching scenes
+                FadeTransition fadeIn = new FadeTransition(Duration.seconds(0.5), settingsRoot);
+                fadeIn.setFromValue(0);
+                fadeIn.setToValue(1);
+                fadeIn.play();
+            });
+
+            fadeOut.play();
+
+        } catch (IOException e) {
+            System.err.println("Error loading settings screen.");
+            e.printStackTrace();
+        }
+    }
+
 
     private void fetchCategoryData(String category) {
         String pictogramResponse = arasaacService.fetchPictograms(category); //Fetch phrases & images
