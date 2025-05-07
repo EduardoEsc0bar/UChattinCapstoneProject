@@ -1,5 +1,6 @@
 package org.example.uchattincapstoneproject.viewModel;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -11,6 +12,9 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.TilePane;
 import org.example.uchattincapstoneproject.model.ArasaacService;
 import org.example.uchattincapstoneproject.model.SpeechService;
+
+import java.io.InputStream;
+import java.net.URL;
 
 public class MainViewController {
     @FXML
@@ -65,34 +69,54 @@ public class MainViewController {
 
     private void fetchCategoryData(String category) {
         String pictogramResponse = arasaacService.fetchPictograms(category); //Fetch phrases & images
+        System.out.println("api response for category: " + category);
         populateTilePane(pictogramResponse);
     }
-
     private void populateTilePane(String pictograms) {
         communicationTilePane.getChildren().clear();
+        System.out.println("Updating TilePane with pictograms...");
+
         String[] pictogramList = pictograms.split("\n");
+        int loadedCount = 0;
 
         for (String item : pictogramList) {
-            String[] parts = item.split(":");
-            String label = parts[0]; //extracts associated word
-            String imageURL = parts[1]; //extract pictogram url
+            String[] parts = item.split(":", 2);
 
-            ImageView imageView = new ImageView(new Image(imageURL));
-            imageView.setFitWidth(100);
-            imageView.setFitHeight(100);
+            if (parts.length < 2) continue;
 
-            Label wordLabel = new Label(label); //displays text below image
-            wordLabel.setStyle("-fx-font-size: 16; -fx-text-fill: black; -fx-font-family: monospaced");
+            String phrase = parts[0].trim();
+            String imageUrl = parts[1].trim();
 
-            Button phraseButton = new Button(label);
-            phraseButton.setOnAction(event -> {
-                addWordToSentence(label);
-                speakPhrase();
-            });
+            if (imageUrl.isEmpty() || !imageUrl.startsWith("https://static.arasaac.org/pictograms/")) continue;
 
-            communicationTilePane.getChildren().addAll(imageView, phraseButton);
+            Button pictogramButton = new Button(phrase);
+            pictogramButton.setPrefSize(100, 100);
+
+            try {
+                Image pictoImage = new Image(imageUrl, 100, 100, true, true, false);
+                if (pictoImage.isError()) continue;
+
+                ImageView imageView = new ImageView(pictoImage);
+                imageView.setFitHeight(100);
+                imageView.setFitWidth(100);
+
+                pictogramButton.setGraphic(imageView);
+                pictogramButton.setOnAction(event -> {
+                    addWordToSentence(phrase);
+                    speechService.synthesizeText(phrase);
+                });
+
+                communicationTilePane.getChildren().add(pictogramButton);
+                loadedCount++;
+
+            } catch (Exception e) {
+                System.out.println("Failed to load pictogram: " + phrase);
+            }
         }
+
+        System.out.println("Loaded " + loadedCount + " pictograms into the TilePane.");
     }
+
 
     private void addWordToSentence(String phrase) {
         sentenceBuilderTextArea.appendText(phrase + " ");
@@ -106,29 +130,54 @@ public class MainViewController {
         }
     }
 
-    public static void main(String[] args) throws Exception {
-        ArasaacService arasaacService = new ArasaacService();
-        SpeechService service = new SpeechService();
+    public static void main(String[] args) {
+        try {
+            // Initialize services
+            ArasaacService arasaacService = new ArasaacService();
+            SpeechService service = new SpeechService();
 
-        String testPictogram = arasaacService.fetchPictograms("Feelings");
-        System.out.println("arasaac pictogram response: " + testPictogram);
+            // Fetch test pictograms
+            String testPictogramData = arasaacService.fetchPictograms("feelings");
+            System.out.println("Test Pictogram Response: \n" + testPictogramData);
 
-        //extract speech synthesis
-        if(!testPictogram.isEmpty()){
-            String[] pictogramList = testPictogram.split("\n");
-
-            if(pictogramList.length > 0){
-                String firstPictogram = pictogramList[0];
-                String[] parts = firstPictogram.split(":");
-                String label = parts[0]; //extract associated word
-
-                System.out.println("Speaking: " + label);
-                service.synthesizeText(label);
-            }else{
-                System.out.println("No pictogram found");
+            // Check if response is valid
+            if (testPictogramData == null || testPictogramData.isEmpty()) {
+                System.out.println("No pictograms found for the category.");
+                return;
             }
+
+            // Process pictogram data
+            String[] pictogramList = testPictogramData.split("\n");
+
+            if (pictogramList.length == 0) {
+                System.out.println("No pictograms available after parsing.");
+                return;
+            }
+
+            // Extract first pictogram's phrase
+            String firstPictogram = pictogramList[0];
+            String[] parts = firstPictogram.split(":");
+
+            if (parts.length < 2) {
+                System.out.println("Invalid pictogram format: " + firstPictogram);
+                return;
+            }
+
+            String label = parts[0];  // Extract associated word
+            String imageUrl = parts[1]; // Extract associated image
+
+            // Print extracted details
+            System.out.println("First Pictogram Phrase: " + label);
+            System.out.println("Image URL: " + imageUrl);
+
+            // Test Speech Synthesis
+            service.synthesizeText(label);
+        } catch (Exception e) {
+            System.err.println("Error during execution: " + e.getMessage());
+            e.printStackTrace();
         }
     }
-
 }
+
+
 

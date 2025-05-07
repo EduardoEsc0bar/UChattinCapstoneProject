@@ -14,19 +14,19 @@
 <?import javafx.scene.layout.TilePane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.uchattincapstoneproject.viewModel.MainViewController">
+<AnchorPane prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.uchattincapstoneproject.viewModel.MainViewController">
    <children>
-      <BorderPane layoutX="2.0" layoutY="1.0" prefHeight="600.0" prefWidth="800.0">
+      <BorderPane layoutY="6.0" prefHeight="792.0" prefWidth="1000.0">
          <top>
             <Pane fx:id="speechBuilderPane" prefHeight="78.0" prefWidth="800.0" BorderPane.alignment="CENTER">
                <children>
-                  <TextArea fx:id="sentenceBuilderTextArea" editable="false" layoutX="1.0" layoutY="1.0" prefHeight="76.0" prefWidth="642.0" />
-                  <Button fx:id="saveSentenceButton" layoutX="669.0" layoutY="14.0" mnemonicParsing="false" text="Save Phrase">
+                  <TextArea fx:id="sentenceBuilderTextArea" editable="false" layoutX="1.0" layoutY="1.0" prefHeight="76.0" prefWidth="813.0" />
+                  <Button fx:id="saveSentenceButton" layoutX="865.0" layoutY="14.0" mnemonicParsing="false" text="Save Phrase">
                      <font>
                         <Font name="Monospaced Bold" size="12.0" />
                      </font>
                   </Button>
-                  <Button fx:id="readOutLoudButton" layoutX="669.0" layoutY="41.0" mnemonicParsing="false" text="Read out Loud">
+                  <Button fx:id="readOutLoudButton" layoutX="865.0" layoutY="39.0" mnemonicParsing="false" text="Read out Loud">
                      <font>
                         <Font name="Monospaced Bold" size="12.0" />
                      </font>
@@ -35,89 +35,89 @@
             </Pane>
          </top>
          <center>
-            <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <StackPane prefHeight="317.0" prefWidth="887.0" BorderPane.alignment="CENTER">
                <children>
-                  <ScrollPane fx:id="communicationScrollPane" prefHeight="369.0" prefWidth="800.0">
+                  <ScrollPane fx:id="communicationScrollPane" prefHeight="317.0" prefWidth="889.0">
                      <content>
-                        <TilePane fx:id="communicationTilePane" hgap="5.0" prefHeight="315.0" prefWidth="797.0" vgap="5.0" visible="false" />
+                        <TilePane fx:id="communicationTilePane" hgap="5.0" prefHeight="468.0" prefWidth="997.0" vgap="5.0" />
                      </content>
                   </ScrollPane>
                </children>
             </StackPane>
          </center>
          <bottom>
-            <StackPane prefHeight="164.0" prefWidth="800.0" BorderPane.alignment="CENTER">
+            <StackPane prefHeight="238.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
                <children>
-                  <TilePane fx:id="mainCategoriesTilePane" hgap="15.0" prefHeight="164.0" prefWidth="800.0" vgap="5.0" visible="false">
+                  <TilePane fx:id="mainCategoriesTilePane" hgap="15.0" prefHeight="194.0" prefWidth="800.0" vgap="5.0">
                      <children>
-                        <ImageView fx:id="emotions" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="feelings" fitHeight="120.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../imagesIcon/emotions.png" />
                            </image>
                         </ImageView>
-                        <ImageView fx:id="food" fitHeight="100.0" fitWidth="100.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="food" fitHeight="120.0" fitWidth="120.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../imagesIcon/food.png" />
                            </image>
                         </ImageView>
-                        <ImageView fx:id="animals" fitHeight="100.0" fitWidth="100.0" layoutX="137.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="animals" fitHeight="120.0" fitWidth="120.0" layoutX="137.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../imagesIcon/animals.png" />
                            </image>
                         </ImageView>
-                        <ImageView fx:id="activities" fitHeight="100.0" fitWidth="100.0" layoutX="264.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="activities" fitHeight="120.0" fitWidth="120.0" layoutX="264.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../imagesIcon/activities.png" />
                            </image>
                         </ImageView>
-                        <ImageView fx:id="shapesAndColor" fitHeight="100.0" fitWidth="100.0" layoutX="391.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="shapesAndColor" fitHeight="120.0" fitWidth="120.0" layoutX="391.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../imagesIcon/colorsAndShapes.png" />
                            </image>
                         </ImageView>
-                        <ImageView fx:id="pronouns" fitHeight="100.0" fitWidth="100.0" layoutX="518.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="pronouns" fitHeight="120.0" fitWidth="120.0" layoutX="518.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../imagesIcon/pronouns.png" />
                            </image>
                         </ImageView>
-                        <ImageView fx:id="emergency" fitHeight="100.0" fitWidth="100.0" layoutX="645.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="emergency" fitHeight="120.0" fitWidth="120.0" layoutX="645.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../imagesIcon/emergency.png" />
                            </image>
                         </ImageView>
-                        <ImageView fx:id="transportation" fitHeight="100.0" fitWidth="100.0" layoutX="10.0" layoutY="118.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="transportation" fitHeight="120.0" fitWidth="120.0" layoutX="10.0" layoutY="118.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../imagesIcon/car.png" />
                            </image>
                         </ImageView>
-                        <ImageView fx:id="accessibility" fitHeight="100.0" fitWidth="100.0" layoutX="137.0" layoutY="118.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="accessibility" fitHeight="120.0" fitWidth="120.0" layoutX="137.0" layoutY="118.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../imagesIcon/beNice.png" />
                            </image>
                         </ImageView>
-                        <ImageView fx:id="hobbies" fitHeight="100.0" fitWidth="100.0" layoutX="264.0" layoutY="118.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="hobbies" fitHeight="120.0" fitWidth="120.0" layoutX="264.0" layoutY="118.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../imagesIcon/hobbies.png" />
                            </image>
                         </ImageView>
-                        <ImageView fx:id="places" fitHeight="100.0" fitWidth="100.0" layoutX="391.0" layoutY="118.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../imagesIcon/places.png" />
-                           </image>
-                        </ImageView>
-                        <ImageView fx:id="weather" fitHeight="100.0" fitWidth="100.0" layoutX="518.0" layoutY="118.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="weather" fitHeight="120.0" fitWidth="120.0" layoutX="518.0" layoutY="118.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../imagesIcon/weather.png" />
                            </image>
                         </ImageView>
-                        <ImageView fx:id="time" fitHeight="100.0" fitWidth="100.0" layoutX="645.0" layoutY="118.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="time" fitHeight="120.0" fitWidth="120.0" layoutX="645.0" layoutY="118.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../imagesIcon/time.png" />
                            </image>
                         </ImageView>
-                        <ImageView fx:id="selfAdvocacy" fitHeight="100.0" fitWidth="100.0" layoutX="585.0" layoutY="115.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="selfAdvocacy" fitHeight="120.0" fitWidth="120.0" layoutX="585.0" layoutY="115.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../imagesIcon/self-advocacy.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="places" fitHeight="120.0" fitWidth="120.0" layoutX="391.0" layoutY="118.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../imagesIcon/places.png" />
                            </image>
                         </ImageView>
                      </children>
@@ -211,7 +211,7 @@
                         </ImageView>
                      </children>
                   </Pane>
-                  <Pane fx:id="favoritesPane" prefHeight="200.0" prefWidth="200.0">
+                  <Pane fx:id="favoritesPane" prefHeight="200.0" prefWidth="200.0" visible="false">
                      <children>
                         <ImageView fx:id="favoritePhrasesIV" fitHeight="115.0" fitWidth="129.0" layoutX="130.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
                            <image>
