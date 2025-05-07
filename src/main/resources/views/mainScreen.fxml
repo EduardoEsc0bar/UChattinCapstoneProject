@@ -120,58 +120,63 @@
                               <Image url="@../imagesIcon/places.png" />
                            </image>
                         </ImageView>
+                        <Button fx:id="backToDirectoryPaneButton" mnemonicParsing="false" prefHeight="15.0" prefWidth="98.0" text="Go Back">
+                           <font>
+                              <Font name="Monospaced Regular" size="15.0" />
+                           </font>
+                        </Button>
                      </children>
                   </TilePane>
                   <Pane fx:id="directoryPane" prefHeight="181.0" prefWidth="800.0" visible="false">
                      <children>
-                        <ImageView fx:id="categoriesIV" fitHeight="90.0" fitWidth="90.0" layoutX="14.0" layoutY="20.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="categoriesIV" fitHeight="120.0" fitWidth="120.0" layoutX="31.0" layoutY="33.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../imagesIcon/categories.png" />
                            </image>
                         </ImageView>
-                        <ImageView fx:id="favoritesIV" fitHeight="90.0" fitWidth="90.0" layoutX="180.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="favoritesIV" fitHeight="120.0" fitWidth="120.0" layoutX="244.0" layoutY="33.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../imagesIcon/favorite.png" />
                            </image>
                         </ImageView>
-                        <ImageView fx:id="keyboardIV" fitHeight="90.0" fitWidth="90.0" layoutX="366.0" layoutY="20.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="keyboardIV" fitHeight="120.0" fitWidth="120.0" layoutX="440.0" layoutY="33.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../imagesIcon/keyboard-icon.jpeg" />
                            </image>
                         </ImageView>
-                        <ImageView fx:id="quickAccessIV" fitHeight="90.0" fitWidth="90.0" layoutX="542.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="quickAccessIV" fitHeight="120.0" fitWidth="120.0" layoutX="640.0" layoutY="33.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../imagesIcon/quick-access-icon.jpeg" />
                            </image>
                         </ImageView>
-                        <ImageView fx:id="settingsIV" fitHeight="90.0" fitWidth="90.0" layoutX="696.0" layoutY="20.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="settingsIV" fitHeight="120.0" fitWidth="120.0" layoutX="852.0" layoutY="33.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../imagesIcon/settings.png" />
                            </image>
                         </ImageView>
-                        <Label layoutX="20.0" layoutY="119.0" text="Categories">
+                        <Label layoutX="43.0" layoutY="163.0" text="Categories">
                            <font>
-                              <Font name="Monospaced Bold" size="13.0" />
+                              <Font name="Monospaced Bold" size="16.0" />
                            </font>
                         </Label>
-                        <Label layoutX="200.0" layoutY="119.0" text="Favorites">
+                        <Label layoutX="277.0" layoutY="163.0" text="Favorites">
                            <font>
-                              <Font name="Monospaced Bold" size="13.0" />
+                              <Font name="Monospaced Bold" size="16.0" />
                            </font>
                         </Label>
-                        <Label layoutX="380.0" layoutY="119.0" text="Keyboard">
+                        <Label layoutX="469.0" layoutY="163.0" text="Keyboard">
                            <font>
-                              <Font name="Monospaced Bold" size="13.0" />
+                              <Font name="Monospaced Bold" size="16.0" />
                            </font>
                         </Label>
-                        <Label layoutX="540.0" layoutY="119.0" text="Quick Access">
+                        <Label layoutX="653.0" layoutY="163.0" text="Quick Access">
                            <font>
-                              <Font name="Monospaced Bold" size="13.0" />
+                              <Font name="Monospaced Bold" size="16.0" />
                            </font>
                         </Label>
-                        <Label layoutX="710.0" layoutY="119.0" text="Settings">
+                        <Label layoutX="881.0" layoutY="163.0" text="Settings">
                            <font>
-                              <Font name="Monospaced Bold" size="13.0" />
+                              <Font name="Monospaced Bold" size="16.0" />
                            </font>
                         </Label>
                      </children>
