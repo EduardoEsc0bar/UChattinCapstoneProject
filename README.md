@@ -2,7 +2,7 @@ uChattin – A Non-Verbal Communication App
 **Capstone Project – CSC311: Advanced Programming**  
 **Farmingdale State College**
 
-📱 Overview
+Overview
 **uChattin** is a desktop-based communication application built to support non-verbal individuals in expressing themselves effectively. 
 The app features a customizable image grid interface, enabling users to construct sentences through image selection. 
 These sentences are then spoken aloud using ARAsaac Text to Speech technology, giving a voice to those who need it.
