@@ -37,6 +37,7 @@ public class MainViewController {
 
     private final ArasaacService arasaacService = new ArasaacService();
     private SpeechService speechService;
+    private int userID;
 
     @FXML
     private void initialize() {
@@ -65,6 +66,11 @@ public class MainViewController {
 
     public void setUsername(String username){
         this.username = username;
+        Label welcomeLabel = new Label("Welcome " + username + "!");
+    }
+
+    public void setUserID(int userID) {
+        this.userID = userID;
     }
 
     private void fetchCategoryData(String category) {
