@@ -1,4 +1,5 @@
 package org.example.uchattincapstoneproject.viewModel;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -19,7 +20,7 @@ public class ForgotPasswordController {
     @FXML
     private TextField enterNewPasswordTF, confirmPasswordTF;
     @FXML
-    private Button resetPasswordButton;
+    private Button resetPasswordButton, backToEntranceButton;
     @FXML
     private Label confirmPasswordErrorLabel, newPasswordErrorLabel;
     private Stage stage;
@@ -29,6 +30,7 @@ public class ForgotPasswordController {
     private void initialize() {
         System.out.println("ForgotPasswordController initialized.");
         resetPasswordButton.setOnAction(event -> handlePasswordReset());
+        backToEntranceButton.setOnAction(event -> UIUtilities.navigateToScreen("/views/entranceScreen.fxml", resetPasswordButton.getScene(), false));
     }
 
 
@@ -44,6 +46,10 @@ public class ForgotPasswordController {
         // Update password in database
         if (updatePasswordInDatabase(newPassword)) {
             showAlert(Alert.AlertType.INFORMATION, "Password Updated", "Password updated successfully.");
+            Platform.runLater(()->{
+                UIUtilities.navigateToScreen("/views/entranceScreen.fxml", resetPasswordButton.getScene(), false);
+            });
+
         } else {
             showAlert(Alert.AlertType.ERROR, "Update Failed", "An error occurred while updating the password.");
         }

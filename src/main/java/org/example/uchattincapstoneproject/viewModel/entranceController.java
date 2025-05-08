@@ -1,12 +1,17 @@
 package org.example.uchattincapstoneproject.viewModel;
 
 import javafx.animation.FadeTransition;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.example.uchattincapstoneproject.model.DB;
@@ -22,11 +27,17 @@ import java.sql.SQLException;
 
 public class entranceController {
     @FXML
-    public TextField usernameField, passwordField; // Changed from PasswordField to TextField to match FXML
+    private TextField usernameField, passwordField; // Changed from PasswordField to TextField to match FXML
     @FXML
-    public Button logInBTN, createAccountBTN;
+    private Button logInBTN, createAccountBTN;
     @FXML
-    public Hyperlink forgotPasswordBTN;
+    private Hyperlink forgotPasswordBTN;
+    @FXML
+    private AnchorPane root;
+    @FXML
+    private ImageView communicationIV;
+    @FXML
+    private Pane contentPane;
 
     private int authenticatedUserID = -1;
     private String TEST_USERNAME = "testuser";
@@ -42,8 +53,19 @@ public class entranceController {
 
         //button actions
         logInBTN.setOnAction((ActionEvent event) -> handleLogin());
-        forgotPasswordBTN.setOnAction((ActionEvent event) -> navigateToForgotPassword());
-        createAccountBTN.setOnAction((ActionEvent event) -> navigateToRegistration());
+        forgotPasswordBTN.setOnAction((ActionEvent event) -> UIUtilities.navigateToScreen("/views/forgotPasswordScreen.fxml", root.getScene(), true));
+        createAccountBTN.setOnAction((ActionEvent event) -> UIUtilities.navigateToScreen("/views/registrationScreen.fxml", root.getScene(), false));
+
+        //set logo
+        Image logo = new Image(getClass().getResource("/imagesIcon/communication.png").toExternalForm());
+
+        //bind content pane to stay centered
+        Platform.runLater(()->{
+            UIUtilities.centerContent(root, contentPane); //force center in startup
+            root.widthProperty().addListener((observable, oldValue, newValue) -> UIUtilities.centerContent(root, contentPane));
+            root.heightProperty().addListener((observable,oldValue, newValue) -> UIUtilities.centerContent(root, contentPane));
+
+        });
     }
 
     @FXML
@@ -65,7 +87,14 @@ public class entranceController {
         if(authenticatedUser != null) {
             try {
                 showAlert(Alert.AlertType.INFORMATION, "Login Successful", "Welcome " + username + "!");
-                navigateToMainScreen();
+                Platform.runLater(()->{
+                    if(root.getScene() == null) {
+                        UIUtilities.navigateToScreen("/views/mainScreen.fxml", root.getScene(), false);
+                    }else{
+                        System.out.println("scene not initialized");
+                    }
+                });
+
             } catch(Exception e) {
                 e.printStackTrace();
                 showAlert(Alert.AlertType.ERROR, "Navigation Error",
