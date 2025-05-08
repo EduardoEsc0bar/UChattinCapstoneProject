@@ -21,19 +21,14 @@ public class Main extends Application {
     public void start(Stage stage) throws IOException {
         try{
             System.out.println("attempting to start entrance screen");
-            //FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/createAvatarScreen.fxml"));
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/entranceScreen.fxml"));
             AnchorPane root = loader.load();
-            //System.out.println("createAvatarScreen.fxml load successful");
             System.out.println("entranceScreen.fxml load successful");
-            Scene scene = new Scene(root, 800, 600);
+            Scene scene = new Scene(root, 1000, 800);
             stage.setScene(scene);
-            //stage.setTitle("Create Avatar");
             stage.setTitle("Entrance Screen");
             stage.show();
-            //System.out.println("create avatar screen displayed");
         }catch (Exception e){
-            //System.out.println("Error initializing log in screen");
             System.out.println("Error initializing entrance screen");
             e.printStackTrace();
         }

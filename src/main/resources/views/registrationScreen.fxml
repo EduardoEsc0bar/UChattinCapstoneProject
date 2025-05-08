@@ -4,151 +4,133 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.uchattincapstoneproject.viewModel.RegistrationController">
+<AnchorPane fx:id="root" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.uchattincapstoneproject.viewModel.RegistrationController">
    <children>
-      <Pane fx:id="createAccountPane" layoutX="31.0" layoutY="17.0" prefHeight="566.0" prefWidth="739.0">
+      <Pane fx:id="createAccountPane" layoutX="50.0" layoutY="25.0" prefHeight="750.0" prefWidth="900.0">
          <children>
-            <Label layoutX="195.0" layoutY="14.0" text="Create an Account">
+            <Label layoutX="300.0" layoutY="14.0" text="Create an Account">
                <font>
                   <Font name="Monospaced Bold" size="30.0" />
                </font>
             </Label>
-            <Label layoutX="47.0" layoutY="395.0" text="Create Username:">
+            <Label layoutX="104.0" layoutY="554.0" text="Create Username:">
                <font>
                   <Font name="Monospaced Regular" size="16.0" />
                </font>
             </Label>
-            <Label layoutX="47.0" layoutY="437.0" text="Create Password:">
+            <Label layoutX="104.0" layoutY="592.0" text="Create Password:">
                <font>
                   <Font name="Monospaced Regular" size="16.0" />
                </font>
             </Label>
-            <Label layoutX="47.0" layoutY="198.0" prefHeight="19.0" prefWidth="80.0" text="Gender:">
+            <Label layoutX="104.0" layoutY="281.0" prefHeight="19.0" prefWidth="80.0" text="Gender:">
                <font>
                   <Font name="Monospaced Regular" size="16.0" />
                </font>
             </Label>
-            <Label layoutX="47.0" layoutY="65.0" text="First Name:">
+            <Label layoutX="104.0" layoutY="132.0" text="First Name:">
                <font>
                   <Font name="Monospaced Regular" size="16.0" />
                </font>
             </Label>
-            <Label layoutX="48.0" layoutY="107.0" text="Last Name:">
+            <Label layoutX="104.0" layoutY="185.0" text="Last Name:">
                <font>
                   <Font name="Monospaced Regular" size="16.0" />
                </font>
             </Label>
-            <Label layoutX="47.0" layoutY="274.0" text="Date of Birth:">
+            <Label layoutX="105.0" layoutY="381.0" text="Date of Birth:">
                <font>
                   <Font name="Monospaced Regular" size="16.0" />
                </font>
             </Label>
-            <Label layoutX="48.0" layoutY="329.0" text="Phone Number:">
+            <Label layoutX="104.0" layoutY="433.0" text="Phone Number:">
                <font>
                   <Font name="Monospaced Regular" size="16.0" />
                </font>
             </Label>
-            <TextField fx:id="firstNameTF" layoutX="255.0" layoutY="62.0" prefHeight="25.0" prefWidth="155.0" promptText="required">
+            <TextField fx:id="firstNameTF" layoutX="326.0" layoutY="129.0" prefHeight="25.0" prefWidth="155.0" promptText="required">
                <font>
                   <Font name="Monospaced Regular" size="13.0" />
                </font>
             </TextField>
-            <ComboBox fx:id="genderCB" layoutX="255.0" layoutY="198.0" prefHeight="25.0" prefWidth="155.0" />
-            <TextField fx:id="lastNameTF" layoutX="255.0" layoutY="104.0" prefHeight="25.0" prefWidth="155.0" promptText="required">
+            <ComboBox fx:id="genderCB" layoutX="326.0" layoutY="278.0" prefHeight="25.0" prefWidth="155.0" />
+            <TextField fx:id="lastNameTF" layoutX="326.0" layoutY="182.0" prefHeight="25.0" prefWidth="155.0" promptText="required">
                <font>
                   <Font name="Monospaced Regular" size="13.0" />
                </font>
             </TextField>
-            <TextField fx:id="dobTF" layoutX="255.0" layoutY="271.0" prefHeight="25.0" prefWidth="155.0" promptText="mm/dd/yyyy">
+            <TextField fx:id="dobTF" layoutX="326.0" layoutY="378.0" prefHeight="25.0" prefWidth="155.0" promptText="mm/dd/yyyy">
                <font>
                   <Font name="Monospaced Regular" size="13.0" />
                </font>
             </TextField>
-            <Label layoutX="48.0" layoutY="234.0" text="Pronouns: ">
+            <Label layoutX="104.0" layoutY="328.0" text="Pronouns: ">
                <font>
                   <Font name="Monospaced Regular" size="16.0" />
                </font>
             </Label>
-            <ComboBox fx:id="pronounsCB" layoutX="255.0" layoutY="231.0" prefHeight="25.0" prefWidth="155.0" />
-            <Label layoutX="47.0" layoutY="151.0" text="Email:">
+            <ComboBox fx:id="pronounsCB" layoutX="326.0" layoutY="325.0" prefHeight="25.0" prefWidth="155.0" />
+            <Label layoutX="104.0" layoutY="229.0" text="Email:">
                <font>
                   <Font name="Monospaced Regular" size="16.0" />
                </font>
             </Label>
-            <TextField fx:id="preferredNameTF" layoutX="453.0" layoutY="104.0" prefHeight="25.0" prefWidth="214.0" promptText="preferred name (optional)">
+            <TextField fx:id="preferredNameTF" layoutX="539.0" layoutY="129.0" prefHeight="25.0" prefWidth="214.0" promptText="preferred name (optional)">
                <font>
                   <Font name="Monospaced Regular" size="13.0" />
                </font>
             </TextField>
-            <TextField fx:id="phoneNumberTF" layoutX="255.0" layoutY="326.0" prefHeight="25.0" prefWidth="155.0" promptText="000-000-0000">
+            <TextField fx:id="phoneNumberTF" layoutX="326.0" layoutY="442.0" prefHeight="25.0" prefWidth="155.0" promptText="000-000-0000">
                <font>
                   <Font name="Monospaced Regular" size="13.0" />
                </font>
             </TextField>
-            <TextField fx:id="createUsernameTF" layoutX="255.0" layoutY="392.0" prefHeight="25.0" prefWidth="155.0" promptText="required">
+            <TextField fx:id="createUsernameTF" layoutX="326.0" layoutY="551.0" prefHeight="25.0" prefWidth="155.0" promptText="required">
                <font>
                   <Font name="Monospaced Regular" size="13.0" />
                </font>
             </TextField>
-            <TextField fx:id="createPasswordTF" layoutX="255.0" layoutY="434.0" prefHeight="25.0" prefWidth="155.0" promptText="required">
+            <TextField fx:id="createPasswordTF" layoutX="326.0" layoutY="589.0" prefHeight="25.0" prefWidth="155.0" promptText="required">
                <font>
                   <Font name="Monospaced Regular" size="13.0" />
                </font>
             </TextField>
-            <Button fx:id="toCreateAvatarButton" layoutX="637.0" layoutY="496.0" mnemonicParsing="false" text="Next">
+            <Button fx:id="toCreateAvatarButton" layoutX="743.0" layoutY="678.0" mnemonicParsing="false" text="Next">
                <font>
                   <Font name="Monospaced Regular" size="16.0" />
                </font>
             </Button>
-            <TextField fx:id="specifyGenderTF" layoutX="453.0" layoutY="195.0" prefHeight="25.0" prefWidth="155.0" promptText="specify">
+            <TextField fx:id="specifyGenderTF" layoutX="539.0" layoutY="278.0" prefHeight="25.0" prefWidth="155.0" promptText="specify">
                <font>
                   <Font name="Monospaced Regular" size="13.0" />
                </font>
             </TextField>
-            <TextField fx:id="specifyPronounsTF" layoutX="453.0" layoutY="231.0" prefHeight="25.0" prefWidth="155.0" promptText="specify">
+            <TextField fx:id="specifyPronounsTF" layoutX="539.0" layoutY="325.0" prefHeight="25.0" prefWidth="155.0" promptText="specify">
                <font>
                   <Font name="Monospaced Regular" size="13.0" />
                </font>
             </TextField>
-            <TextField fx:id="emailTF" layoutX="255.0" layoutY="148.0" prefHeight="25.0" prefWidth="155.0" promptText="required">
+            <TextField fx:id="emailTF" layoutX="326.0" layoutY="226.0" prefHeight="25.0" prefWidth="155.0" promptText="required">
                <font>
                   <Font name="Monospaced Regular" size="13.0" />
                </font>
             </TextField>
-            <Label fx:id="fnErrorLabel" disable="true" layoutX="255.0" layoutY="86.0" text="Label">
-               <font>
-                  <Font size="10.0" />
-               </font>
-            </Label>
-            <Label fx:id="lnErrorLabel" disable="true" layoutX="255.0" layoutY="131.0" text="Label">
-               <font>
-                  <Font size="10.0" />
-               </font>
-            </Label>
-            <Label fx:id="emailErrorLabel" disable="true" layoutX="255.0" layoutY="173.0" text="Label">
-               <font>
-                  <Font size="10.0" />
-               </font>
-            </Label>
-            <Label fx:id="pNumberErrorLabel" disable="true" layoutX="255.0" layoutY="351.0" text="Label">
-               <font>
-                  <Font size="10.0" />
-               </font>
-            </Label>
-            <Label fx:id="dobErrorLabel" disable="true" layoutX="255.0" layoutY="296.0" text="Label">
-               <font>
-                  <Font size="10.0" />
-               </font>
-            </Label>
-            <Button fx:id="backBTN" layoutX="46.0" layoutY="496.0" mnemonicParsing="false" onAction="#navigateToEntranceScreen" text="Back">
+            <Button fx:id="backBTN" layoutX="45.0" layoutY="678.0" mnemonicParsing="false" onAction="#navigateToEntranceScreen" text="Back">
                <font>
                   <Font name="Monospaced Regular" size="16.0" />
                </font>
             </Button>
+            <ImageView fx:id="avatarLogo" fitHeight="144.0" fitWidth="141.0" layoutX="703.0" layoutY="519.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../imagesIcon/avatar-logo.png" />
+               </image>
+            </ImageView>
          </children>
       </Pane>
    </children>
