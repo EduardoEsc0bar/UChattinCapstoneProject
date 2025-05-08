@@ -26,7 +26,7 @@ public class Main extends Application {
             AnchorPane root = loader.load();
             //System.out.println("createAvatarScreen.fxml load successful");
             System.out.println("entranceScreen.fxml load successful");
-            Scene scene = new Scene(root, 800, 600);
+            Scene scene = new Scene(root, 1000, 800);
             stage.setScene(scene);
             //stage.setTitle("Create Avatar");
             stage.setTitle("Entrance Screen");
