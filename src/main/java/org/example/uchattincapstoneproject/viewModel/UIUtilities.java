@@ -10,6 +10,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.IOException;
+import java.net.URL;
 
 public class UIUtilities {
 
@@ -39,9 +40,13 @@ public class UIUtilities {
 
     public static void navigateToScreen(String fxmlPath, Scene currentScene, boolean isSmallScreen) {
         try {
+
             FXMLLoader loader = new FXMLLoader(UIUtilities.class.getResource(fxmlPath));
             Parent newRoot = loader.load();
+
+            Scene newScene = new Scene(newRoot);
             Stage stage = (Stage) currentScene.getWindow();
+            stage.setScene(newScene);
 
             //maintain stage dimensions
             if(isSmallScreen){
@@ -52,22 +57,11 @@ public class UIUtilities {
                 stage.setHeight(800);
             }
 
-
             //Fade out effect
-            FadeTransition fadeOut = new FadeTransition(Duration.seconds(0.5), currentScene.getRoot());
-            fadeOut.setFromValue(1.0);
-            fadeOut.setToValue(0.0);
-            fadeOut.setOnFinished(event -> {
-                currentScene.setRoot(newRoot);
-
-                //Fade in effect after switching scenes
-                FadeTransition fadeIn = new FadeTransition(Duration.seconds(0.5), newRoot);
-                fadeIn.setFromValue(0);
-                fadeIn.setToValue(1);
-                fadeIn.play();
-            });
-
-            fadeOut.play();
+            FadeTransition fadeIn = new FadeTransition(Duration.millis(500), newRoot);
+            fadeIn.setFromValue(0.0);
+            fadeIn.setToValue(1.0);
+            fadeIn.play();
         } catch (IOException e) {
             System.err.println("Error loading FXML: " + fxmlPath);
             e.printStackTrace();

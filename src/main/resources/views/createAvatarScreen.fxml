@@ -9,41 +9,46 @@
 <?import javafx.scene.layout.TilePane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.uchattincapstoneproject.viewModel.CreateAvatarController">
+<AnchorPane fx:id="root" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.uchattincapstoneproject.viewModel.CreateAvatarController">
    <children>
-      <Pane fx:id="createAvatarPane" layoutX="14.0" layoutY="13.0" prefHeight="575.0" prefWidth="773.0">
+      <Pane fx:id="createAvatarPane" layoutX="50.0" layoutY="25.0" prefHeight="750.0" prefWidth="900.0">
          <children>
-            <SplitPane dividerPositions="0.37094682230869" layoutY="10.0" prefHeight="495.0" prefWidth="773.0">
+            <SplitPane dividerPositions="0.37094682230869" layoutY="10.0" prefHeight="641.0" prefWidth="900.0">
                <items>
                   <AnchorPane fx:id="customizationPane" minHeight="0.0" minWidth="0.0" prefHeight="343.0" prefWidth="371.0">
                      <children>
-                        <ImageView fx:id="avatarImageView" fitHeight="241.0" fitWidth="228.0" layoutX="23.0" layoutY="32.0" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="avatarImageView" fitHeight="241.0" fitWidth="285.0" layoutX="23.0" layoutY="31.0" pickOnBounds="true" preserveRatio="true" />
                      </children>
                   </AnchorPane>
                   <AnchorPane fx:id="displayAvatarPane" minHeight="0.0" minWidth="0.0" prefHeight="343.0" prefWidth="249.0">
                      <children>
-                        <ScrollPane>
+                        <ScrollPane prefHeight="641.0" prefWidth="562.0">
                            <content>
-                              <TilePane fx:id="avatarStyleTP" hgap="10.0" prefHeight="493.0" prefWidth="482.0" vgap="10.0" />
+                              <TilePane fx:id="avatarStyleTP" hgap="10.0" prefHeight="639.0" prefWidth="559.0" vgap="10.0" />
                            </content>
                         </ScrollPane>
                      </children>
                   </AnchorPane>
                </items>
             </SplitPane>
-            <Pane fx:id="buttonsPane" layoutY="506.0" prefHeight="65.0" prefWidth="773.0">
+            <Pane fx:id="buttonsPane" layoutY="657.0" prefHeight="93.0" prefWidth="900.0">
                <children>
-                  <Button fx:id="avatarStyleButton" layoutX="20.0" layoutY="33.0" mnemonicParsing="false" text="Avatar Styles">
+                  <Button fx:id="saveAvatarButton" layoutX="776.0" layoutY="57.0" mnemonicParsing="false" text="Save Avatar">
                      <font>
                         <Font name="Monospaced Regular" size="13.0" />
                      </font>
                   </Button>
-                  <Button fx:id="saveAvatarButton" layoutX="655.0" layoutY="33.0" mnemonicParsing="false" text="Save Avatar">
+                  <Button fx:id="resetAvatarButton" layoutX="702.0" layoutY="57.0" mnemonicParsing="false" text="Reset">
                      <font>
                         <Font name="Monospaced Regular" size="13.0" />
                      </font>
                   </Button>
-                  <Button fx:id="resetAvatarButton" layoutX="572.0" layoutY="33.0" mnemonicParsing="false" text="Reset">
+                  <Button fx:id="avatarStyleButton" layoutX="569.0" layoutY="57.0" mnemonicParsing="false" text="Avatar Styles">
+                     <font>
+                        <Font name="Monospaced Regular" size="13.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="backToRegistrationButton" layoutX="14.0" layoutY="57.0" mnemonicParsing="false" text="Back">
                      <font>
                         <Font name="Monospaced Regular" size="13.0" />
                      </font>

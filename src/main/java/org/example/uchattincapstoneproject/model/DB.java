@@ -412,13 +412,7 @@ public class DB {
         }
     }
 
-    /**
-     * Authenticates a user by username and password
-     *
-     * @param username Username to check
-     * @param password Plain text password to verify
-     * @return User object if authentication successful, null otherwise
-     */
+
     /**
      * Authenticates a user by username and password
      *
@@ -428,8 +422,8 @@ public class DB {
      */
     public User authenticateUser(String username, String password) {
         try {
-            Connection conn = DriverManager.getConnection(DB_URL + SSL_PARAMS, USERNAME, PASSWORD);
-            String sql = "SELECT * FROM Users WHERE username = ?";
+            Connection conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
+            String sql = "SELECT id, username, password_hash FROM Users WHERE username = ?";
             PreparedStatement statement = conn.prepareStatement(sql);
             statement.setString(1, username);
 
@@ -445,7 +439,7 @@ public class DB {
 
                 try {
                     // First try BCrypt verification
-                    if (checkPassword(password, storedHash)) {
+                    if (BCrypt.checkpw(password.trim(), storedHash.trim())) {
                         System.out.println("Password verified successfully with BCrypt!");
                         passwordVerified = true;
                     } else {
@@ -464,20 +458,7 @@ public class DB {
 
                 if (passwordVerified) {
                     // Build and return User object
-                    User user = new User(
-                            resultSet.getString("username"),
-                            storedHash, // Keep the stored hash
-                            resultSet.getString("first_name"),
-                            resultSet.getString("last_name"),
-                            resultSet.getString("dob"),
-                            resultSet.getString("email"),
-                            resultSet.getString("phone_number"),
-                            resultSet.getString("specified_pronouns"),
-                            resultSet.getString("gender"),
-                            "", // specified gender not stored separately
-                            "", // specified pronouns handled differently
-                            resultSet.getString("preferred_name")
-                    );
+                    User authenticatedUser = new User(resultSet.getString("username"), storedHash);
 
                     // Update last login time
                     String updateSql = "UPDATE Users SET last_login = CURRENT_TIMESTAMP WHERE username = ?";
@@ -489,9 +470,9 @@ public class DB {
                     // Close resources
                     resultSet.close();
                     statement.close();
-                    conn.close();
+                    //conn.close();
 
-                    return user;
+                    return authenticatedUser;
                 }
             } else {
                 System.out.println("No user found with username: " + username);
@@ -500,7 +481,7 @@ public class DB {
             // Close resources
             resultSet.close();
             statement.close();
-            conn.close();
+            //conn.close();
 
         } catch (SQLException e) {
             System.err.println("Database error during authentication: " + e.getMessage());
@@ -564,5 +545,35 @@ public class DB {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public void testSQLQuery(String username) {
+        try (Connection conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD)) {
+            String sql = "SELECT username, password_hash FROM Users WHERE username = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, username);
+
+            ResultSet resultSet = stmt.executeQuery();
+
+            if(!resultSet.next()){
+                System.out.println("no user found with username: " + username);
+            }
+            else{
+                do{
+                    System.out.println("user found: " + resultSet.getString("username"));
+                    System.out.println("stored password: " + resultSet.getString("password_hash"));
+                }  while (resultSet.next());
+            }
+            resultSet.close();
+            stmt.close();
+        } catch (SQLException e) {
+            System.err.println("SQL Query Error: " + e.getMessage());
+        }
+    }
+
+    public static void main(String[] args){
+        DB db = DB.getInstance();
+
+        db.testSQLQuery("anniep8");
     }
 }
