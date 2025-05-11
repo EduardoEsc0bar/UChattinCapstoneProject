@@ -40,7 +40,7 @@ public class User {
     private static final String DB_USERNAME = "username"; // Replace with actual DB username
     private static final String DB_PASSWORD = "password"; // Replace with actual DB password
 
-    public User(String username, String passwordHash, String firstName, String lastName, String dob, String email, String phoneNumber, String pronouns, String gender, String specifiedGender, String specifiedPronouns, String preferredName) {
+    public User(String firstName, String lastName, String preferredName, String dob, String email, String phoneNumber, String pronouns, String gender, String specifiedGender, String specifiedPronouns, String username, String passwordHash) {
         //this.userID = userID;
         this.username = username;
         this.passwordHash = passwordHash;
@@ -61,6 +61,12 @@ public class User {
         this.selectedVoice = "Default";
         this.appTheme = "Light";
         this.notificationsOn = true;
+    }
+
+    //User constructor
+    User(String username, String passwordHash){
+        this.username = username;
+        this.passwordHash = passwordHash;
     }
 
     //public int getUserID() {return userID;}

@@ -86,7 +86,7 @@
                   <Font name="Monospaced Regular" size="13.0" />
                </font>
             </TextField>
-            <TextField fx:id="phoneNumberTF" layoutX="326.0" layoutY="442.0" prefHeight="25.0" prefWidth="155.0" promptText="000-000-0000">
+            <TextField fx:id="phoneNumberTF" layoutX="326.0" layoutY="430.0" prefHeight="25.0" prefWidth="155.0" promptText="000-000-0000">
                <font>
                   <Font name="Monospaced Regular" size="13.0" />
                </font>
@@ -101,7 +101,7 @@
                   <Font name="Monospaced Regular" size="13.0" />
                </font>
             </TextField>
-            <Button fx:id="toCreateAvatarButton" layoutX="743.0" layoutY="678.0" mnemonicParsing="false" text="Next">
+            <Button fx:id="toCreateAvatarButton" layoutX="743.0" layoutY="678.0" mnemonicParsing="false" onAction="#navigateToAvatarSelection" text="Next">
                <font>
                   <Font name="Monospaced Regular" size="16.0" />
                </font>
