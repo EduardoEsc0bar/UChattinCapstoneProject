@@ -24,7 +24,7 @@
                   <Font name="Monospaced Regular" size="16.0" />
                </font>
             </Label>
-            <Label layoutX="104.0" layoutY="592.0" text="Create Password:">
+            <Label layoutX="104.0" layoutY="605.0" text="Create Password:">
                <font>
                   <Font name="Monospaced Regular" size="16.0" />
                </font>
@@ -54,13 +54,13 @@
                   <Font name="Monospaced Regular" size="16.0" />
                </font>
             </Label>
-            <TextField fx:id="firstNameTF" layoutX="326.0" layoutY="129.0" prefHeight="25.0" prefWidth="155.0" promptText="required">
+            <TextField fx:id="firstNameTF" layoutX="326.0" layoutY="129.0" prefHeight="25.0" prefWidth="155.0" promptText="2-25 characters">
                <font>
                   <Font name="Monospaced Regular" size="13.0" />
                </font>
             </TextField>
-            <ComboBox fx:id="genderCB" layoutX="326.0" layoutY="278.0" prefHeight="25.0" prefWidth="155.0" />
-            <TextField fx:id="lastNameTF" layoutX="326.0" layoutY="182.0" prefHeight="25.0" prefWidth="155.0" promptText="required">
+            <ComboBox fx:id="genderCB" layoutX="326.0" layoutY="278.0" prefHeight="25.0" prefWidth="155.0" promptText="Select One" />
+            <TextField fx:id="lastNameTF" layoutX="326.0" layoutY="182.0" prefHeight="25.0" prefWidth="155.0" promptText="2-25 characters">
                <font>
                   <Font name="Monospaced Regular" size="13.0" />
                </font>
@@ -75,7 +75,7 @@
                   <Font name="Monospaced Regular" size="16.0" />
                </font>
             </Label>
-            <ComboBox fx:id="pronounsCB" layoutX="326.0" layoutY="325.0" prefHeight="25.0" prefWidth="155.0" />
+            <ComboBox fx:id="pronounsCB" layoutX="326.0" layoutY="325.0" prefHeight="25.0" prefWidth="155.0" promptText="Select One" />
             <Label layoutX="104.0" layoutY="229.0" text="Email:">
                <font>
                   <Font name="Monospaced Regular" size="16.0" />
@@ -91,12 +91,12 @@
                   <Font name="Monospaced Regular" size="13.0" />
                </font>
             </TextField>
-            <TextField fx:id="createUsernameTF" layoutX="326.0" layoutY="551.0" prefHeight="25.0" prefWidth="155.0" promptText="required">
+            <TextField fx:id="createUsernameTF" layoutX="326.0" layoutY="551.0" prefHeight="25.0" prefWidth="155.0" promptText="2-25 characters">
                <font>
                   <Font name="Monospaced Regular" size="13.0" />
                </font>
             </TextField>
-            <TextField fx:id="createPasswordTF" layoutX="326.0" layoutY="589.0" prefHeight="25.0" prefWidth="155.0" promptText="required">
+            <TextField fx:id="createPasswordTF" layoutX="326.0" layoutY="602.0" prefHeight="25.0" prefWidth="155.0" promptText="8+ chars, 1 uppercase, 1 lowercase, 1 number, 1 special char">
                <font>
                   <Font name="Monospaced Regular" size="13.0" />
                </font>
@@ -116,7 +116,7 @@
                   <Font name="Monospaced Regular" size="13.0" />
                </font>
             </TextField>
-            <TextField fx:id="emailTF" layoutX="326.0" layoutY="226.0" prefHeight="25.0" prefWidth="155.0" promptText="required">
+            <TextField fx:id="emailTF" layoutX="326.0" layoutY="226.0" prefHeight="25.0" prefWidth="155.0" promptText="must be valid email">
                <font>
                   <Font name="Monospaced Regular" size="13.0" />
                </font>
@@ -131,6 +131,66 @@
                   <Image url="@../imagesIcon/avatar-logo.png" />
                </image>
             </ImageView>
+            <Label fx:id="fNameErrorLabel" layoutX="326.0" layoutY="154.0">
+               <font>
+                  <Font name="Monospaced Regular" size="10.0" />
+               </font>
+            </Label>
+            <Label fx:id="lNameErrorLabel" layoutX="326.0" layoutY="207.0">
+               <font>
+                  <Font name="Monospaced Regular" size="10.0" />
+               </font>
+            </Label>
+            <Label fx:id="emailErrorLabel" layoutX="326.0" layoutY="251.0">
+               <font>
+                  <Font name="Monospaced Regular" size="10.0" />
+               </font>
+            </Label>
+            <Label fx:id="genderErrorLabel" layoutX="326.0" layoutY="303.0">
+               <font>
+                  <Font name="Monospaced Regular" size="10.0" />
+               </font>
+            </Label>
+            <Label fx:id="pronounsErrorLabel" layoutX="326.0" layoutY="350.0">
+               <font>
+                  <Font name="Monospaced Regular" size="10.0" />
+               </font>
+            </Label>
+            <Label fx:id="dobErrorLabel" layoutX="326.0" layoutY="403.0">
+               <font>
+                  <Font name="Monospaced Regular" size="10.0" />
+               </font>
+            </Label>
+            <Label fx:id="pNumberErrorLabel" layoutX="326.0" layoutY="455.0">
+               <font>
+                  <Font name="Monospaced Regular" size="10.0" />
+               </font>
+            </Label>
+            <Label fx:id="usernameErrorLabel" layoutX="326.0" layoutY="576.0">
+               <font>
+                  <Font name="Monospaced Regular" size="10.0" />
+               </font>
+            </Label>
+            <Label fx:id="passwordErrorLabel" layoutX="326.0" layoutY="627.0">
+               <font>
+                  <Font name="Monospaced Regular" size="10.0" />
+               </font>
+            </Label>
+            <Label fx:id="specifiedPErrorLabel" layoutX="539.0" layoutY="350.0">
+               <font>
+                  <Font name="Monospaced Regular" size="10.0" />
+               </font>
+            </Label>
+            <Label fx:id="specifiedGErrorLabel" layoutX="539.0" layoutY="303.0">
+               <font>
+                  <Font name="Monospaced Regular" size="10.0" />
+               </font>
+            </Label>
+            <Label fx:id="preferredNameErrorLabel" layoutX="539.0" layoutY="154.0">
+               <font>
+                  <Font name="Monospaced Regular" size="10.0" />
+               </font>
+            </Label>
          </children>
       </Pane>
    </children>
