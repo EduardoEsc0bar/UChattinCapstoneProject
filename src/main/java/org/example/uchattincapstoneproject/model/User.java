@@ -10,18 +10,19 @@ import java.util.regex.Pattern;
 
 public class User {
     //private int userID;
-    private String username;
-    private String passwordHash;
     private String firstName;
     private String lastName;
-    private String dob;
-    private String email;
+    private String preferredName;
     private String phoneNumber;
-    private String pronouns;
+    private String email;
+    private String dob;
     private String gender;
     private String specifiedGender;
+    private String pronouns;
     private String specifiedPronouns;
-    private String preferredName;
+    private String username;
+    private String passwordHash;
+    private String avatarURL;
 
     //UPDATES TO ACCOMODATE NEW FUNCTIONS!!!!
     private Color themeColor;            // From ColorPicker
@@ -40,7 +41,8 @@ public class User {
     private static final String DB_USERNAME = "username"; // Replace with actual DB username
     private static final String DB_PASSWORD = "password"; // Replace with actual DB password
 
-    public User(String firstName, String lastName, String preferredName, String dob, String email, String phoneNumber, String pronouns, String gender, String specifiedGender, String specifiedPronouns, String username, String passwordHash) {
+    public User(String firstName, String lastName, String preferredName,String phoneNumber, String email, String dob,
+                 String gender, String specifiedGender, String pronouns, String specifiedPronouns, String username, String passwordHash) {
         //this.userID = userID;
         this.username = username;
         this.passwordHash = passwordHash;
@@ -101,6 +103,14 @@ public class User {
     public String getSpecifiedPronouns() {return specifiedPronouns;}
     public String getPreferredName() {
         return preferredName;
+    }
+
+    public String getAvatarURL() {
+        return avatarURL;
+    }
+
+    public void setAvatarURL(String avatarURL) {
+        this.avatarURL = avatarURL;
     }
     //public void setUserID(int userID) {this.userID = userID;}
     public void setUsername(String username) {

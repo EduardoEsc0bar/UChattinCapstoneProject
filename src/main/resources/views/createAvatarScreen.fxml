@@ -18,6 +18,11 @@
                   <AnchorPane fx:id="customizationPane" minHeight="0.0" minWidth="0.0" prefHeight="343.0" prefWidth="371.0">
                      <children>
                         <ImageView fx:id="avatarImageView" fitHeight="241.0" fitWidth="285.0" layoutX="23.0" layoutY="31.0" pickOnBounds="true" preserveRatio="true" />
+                        <Button fx:id="profilePicButton" layoutX="82.0" layoutY="296.0" mnemonicParsing="false" text="Add Profile Picture">
+                           <font>
+                              <Font name="Monospaced Regular" size="13.0" />
+                           </font>
+                        </Button>
                      </children>
                   </AnchorPane>
                   <AnchorPane fx:id="displayAvatarPane" minHeight="0.0" minWidth="0.0" prefHeight="343.0" prefWidth="249.0">

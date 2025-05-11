@@ -12,6 +12,7 @@ import java.sql.Statement;
 public class DB {
     private static DB instance;  // Singleton instance
     private static User currentUser;
+    private static Avatar currentAvatar;
 
     // Azure MySQL connection details
     final String MYSQL_SERVER_URL = "jdbc:mysql://commapp.mysql.database.azure.com:3306/";
@@ -26,6 +27,14 @@ public class DB {
 
     public User getCurrentUser() {
         return currentUser;
+    }
+
+    public void setCurrentAvatar(Avatar avatar) {
+        this.currentAvatar = avatar;
+    }
+
+    public Avatar getCurrentAvatar() {
+        return currentAvatar;
     }
 
     /**
