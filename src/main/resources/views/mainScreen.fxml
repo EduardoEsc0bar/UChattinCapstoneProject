@@ -53,11 +53,11 @@
          <bottom>
             <StackPane prefHeight="238.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
                <children>
-                  <Pane fx:id="directoryPane" prefHeight="181.0" prefWidth="800.0">
+                  <Pane fx:id="directoryPane" prefHeight="181.0" prefWidth="800.0" visible="false">
                      <children>
                         <ImageView fx:id="categoriesIV" fitHeight="120.0" fitWidth="120.0" layoutX="31.0" layoutY="33.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../imagesIcon/categories.png" />
+                              <Image url="@../imagesIcon/category.png" />
                            </image>
                         </ImageView>
                         <ImageView fx:id="favoritesIV" fitHeight="120.0" fitWidth="120.0" layoutX="244.0" layoutY="33.0" pickOnBounds="true" preserveRatio="true">
@@ -67,12 +67,12 @@
                         </ImageView>
                         <ImageView fx:id="keyboardIV" fitHeight="120.0" fitWidth="120.0" layoutX="440.0" layoutY="33.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../imagesIcon/keyboard-icon.jpeg" />
+                              <Image url="@../imagesIcon/keyboard.png" />
                            </image>
                         </ImageView>
                         <ImageView fx:id="quickAccessIV" fitHeight="120.0" fitWidth="120.0" layoutX="640.0" layoutY="33.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../imagesIcon/quick-access-icon.jpeg" />
+                              <Image url="@../imagesIcon/quick-access.png" />
                            </image>
                         </ImageView>
                         <ImageView fx:id="settingsIV" fitHeight="120.0" fitWidth="120.0" layoutX="852.0" layoutY="33.0" pickOnBounds="true" preserveRatio="true">
@@ -137,7 +137,7 @@
                         </Button>
                         <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="825.0" layoutY="16.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../imagesIcon/thatWasQuickIcon.jpeg" />
+                              <Image url="@../imagesIcon/thatWasQuick.jpeg" />
                            </image>
                         </ImageView>
                         <Button fx:id="backToDirectoryButton2" layoutX="855.0" layoutY="180.0" mnemonicParsing="false" text="Go Back">
@@ -147,24 +147,14 @@
                         </Button>
                      </children>
                   </Pane>
-                  <Pane fx:id="favoritesPane" prefHeight="200.0" prefWidth="200.0" visible="false">
+                  <Pane fx:id="favoritesPane" prefHeight="200.0" prefWidth="200.0">
                      <children>
-                        <ImageView fx:id="favoritePhrasesIV" fitHeight="115.0" fitWidth="129.0" layoutX="130.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="favoritePhrasesIV" fitHeight="115.0" fitWidth="129.0" layoutX="442.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../imagesIcon/phrase.png" />
+                              <Image url="@../imagesIcon/heart.png" />
                            </image>
                         </ImageView>
-                        <ImageView fx:id="favoritePictogramsIV" fitHeight="115.0" fitWidth="129.0" layoutX="603.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../imagesIcon/picture.png" />
-                           </image>
-                        </ImageView>
-                        <Label layoutX="120.0" layoutY="148.0" text="Favoite Phrases">
-                           <font>
-                              <Font name="Monospaced Bold" size="15.0" />
-                           </font>
-                        </Label>
-                        <Label layoutX="579.0" layoutY="148.0" text="Favoite Pictograms">
+                        <Label layoutX="432.0" layoutY="152.0" text="Favoite Phrases">
                            <font>
                               <Font name="Monospaced Bold" size="15.0" />
                            </font>
