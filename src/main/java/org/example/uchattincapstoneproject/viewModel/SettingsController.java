@@ -1,5 +1,6 @@
 package org.example.uchattincapstoneproject.viewModel;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,11 +13,13 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.example.uchattincapstoneproject.model.DB;
 import org.example.uchattincapstoneproject.model.User;
+import org.example.uchattincapstoneproject.model.Util;
 
 import java.io.File;
 
 public class SettingsController {
-    DB db;
+    DB db = DB.getInstance();
+    Util utilities = Util.getInstance();
     User currentUser;
 
     //---------------------Edit Profile Tab---------------------------------\\
@@ -42,7 +45,6 @@ public class SettingsController {
     void saveAllChangesBtnClicked(ActionEvent event) {
         String username = eUsernameTF.getText();
         String displayName = eProfileName.getText();
-        DB db = DB.getInstance();
         db.updateUserDisplayName(username, displayName);
     }
     /**
@@ -228,9 +230,22 @@ public class SettingsController {
         private Tab deleteTab;
         @FXML
         void deleteBtnClicked(ActionEvent event) {
-
+            String username = utilities.getCurrentUser().getUsername();
+            try {
+                boolean isDeleted = DB.getInstance().deleteUser(username);
+                if (!isDeleted) {
+                    System.out.println("Delete Confirmed for: " + username);
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Account has been deleted");
+                    alert.setHeaderText(null);
+                    alert.setContentText("The account was successfully deleted. The application will close.");
+                    alert.showAndWait();
+                    Platform.exit();
+                }
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }
-
         @FXML
         private Button saveAllChangesButton;
 

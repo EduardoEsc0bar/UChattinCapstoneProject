@@ -11,7 +11,7 @@ public class TestApp extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         // Load the FXML file for the avatar selection screen
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/mainScreen.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/settingsScreen.fxml"));
         Parent root = loader.load();
 
         // Set the scene and show the window
@@ -22,6 +22,10 @@ public class TestApp extends Application {
     }
 
     public static void main(String[] args) {
+        DB db = DB.getInstance();
+        User u = db.queryUserByName("ANDREW");
+        Util.getInstance().setCurrentUser(u);
+
         launch(args);
     }
 }
