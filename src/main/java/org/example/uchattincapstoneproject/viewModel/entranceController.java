@@ -17,6 +17,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.example.uchattincapstoneproject.model.DB;
 import org.example.uchattincapstoneproject.model.User;
+import org.example.uchattincapstoneproject.model.Util;
 
 import java.io.*;
 
@@ -29,6 +30,7 @@ public class entranceController {
     @FXML private ImageView communicationIV, visibilityOn, visibilityOff;
     @FXML private Pane contentPane;
 
+    Util utilities = Util.getInstance();
     private DB dbInstance;
     final String DB_URL = "jdbc:mysql://commapp.mysql.database.azure.com:3306/communication_app";
     final String USERNAME = "commapp_db_user";
@@ -94,6 +96,7 @@ public class entranceController {
 
         if(authenticatedUser != null) {
             showAlert(Alert.AlertType.INFORMATION, "Login Successful", "Welcome " + username + "!");
+            utilities.setCurrentUser(authenticatedUser);
             navigateToMainScreen();
         }else{
             System.out.println("authentication failed");
