@@ -23,7 +23,7 @@ import org.example.uchattincapstoneproject.model.User;
 import java.io.File;
 
 public class SettingsController {
-    DB db;
+    DB db = DB.getInstance();
     User currentUser;
 
     //---------------------Edit Profile Tab---------------------------------\\
@@ -49,7 +49,6 @@ public class SettingsController {
     void saveAllChangesBtnClicked(ActionEvent event) {
         String username = eUsernameTF.getText();
         String displayName = eProfileName.getText();
-        DB db = DB.getInstance();
         db.updateUserDisplayName(username, displayName);
     }
     /**
@@ -225,7 +224,6 @@ public class SettingsController {
 //            if (currentUser.getAvatarImage() != null) {
 //                currentAvatarImageView.setImage(currentUser.getAvatarImage());
 //            }
-
         }
     }
         @FXML
