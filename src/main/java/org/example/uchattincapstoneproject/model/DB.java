@@ -580,6 +580,27 @@ public class DB {
         }
     }
 
+    public boolean deleteUser(String username) {
+        try(Connection conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD)){
+            String sql = "DELETE FROM users WHERE username = ?";
+            try(PreparedStatement stmt = conn.prepareStatement(sql)){
+                stmt.setString(1, username);
+
+                int Rowsaffected = stmt.executeUpdate();
+                System.out.println("Rowaffected: " + Rowsaffected);
+                if(Rowsaffected == 0) {
+                    System.out.println("No user deleted. It may not exist: " + username);
+                }
+                return Rowsaffected > 0;
+            }
+        }catch(SQLException e){
+            System.err.println("fallback deleting user(SQL error): " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
     public static void main(String[] args){
         DB db = DB.getInstance();
 
