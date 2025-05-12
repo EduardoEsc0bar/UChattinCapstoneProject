@@ -5,14 +5,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
 import org.example.uchattincapstoneproject.model.DB;
 import org.example.uchattincapstoneproject.model.User;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -20,14 +20,21 @@ import java.time.format.DateTimeParseException;
 
 public class RegistrationController {
 
-    @FXML private TextField firstNameTF, lastNameTF, preferredNameTF, phoneNumberTF, emailTF, specifyGenderTF, specifyPronounsTF, createUsernameTF, createPasswordTF;
-    @FXML private ComboBox<String> pronounsCB, genderCB;
-    @FXML private Button toCreateAvatarButton, backBTN;
-    @FXML private AnchorPane root;
-    @FXML private Pane createAccountPane;
-    @FXML private Label fNameErrorLabel, lNameErrorLabel, emailErrorLabel, genderErrorLabel, pronounsErrorLabel, dobErrorLabel,pNumberErrorLabel,
-            usernameErrorLabel, passwordErrorLabel, specifiedPErrorLabel, specifiedGErrorLabel,preferredNameErrorLabel;
-    @FXML private DatePicker dateOfBirthDatePicker;
+    @FXML
+    private TextField firstNameTF, lastNameTF, preferredNameTF, phoneNumberTF, emailTF, specifyGenderTF, specifyPronounsTF, createUsernameTF, createPasswordTF;
+    @FXML
+    private ComboBox<String> pronounsCB, genderCB;
+    @FXML
+    private Button toCreateAvatarButton, backBTN;
+    @FXML
+    private AnchorPane root;
+    @FXML
+    private Pane createAccountPane;
+    @FXML
+    private Label fNameErrorLabel, lNameErrorLabel, emailErrorLabel, genderErrorLabel, pronounsErrorLabel, dobErrorLabel, pNumberErrorLabel,
+            usernameErrorLabel, passwordErrorLabel, specifiedPErrorLabel, specifiedGErrorLabel, preferredNameErrorLabel;
+    @FXML
+    private DatePicker dateOfBirthDatePicker;
 
     private static final DateTimeFormatter DOB_FORMATTER = DateTimeFormatter.ofPattern("MM-dd-yyyy");
     private static final String FN_NAME_PATTERN = "^[a-zA-Z]{2,25}$"; //First name: 2-25 letters
@@ -35,7 +42,6 @@ public class RegistrationController {
     private static final String EMAIL_PATTERN = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$"; //Validates any email
     private static final String USERNAME_PATTERN = "^[a-zA-Z0-9]{2,25}$"; //Username: 2-25 characters, only letters & numbers
     private static final String PASSWORD_PATTERN = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$"; //Password: 8+ chars, 1 uppercase, 1 lowercase, 1 number, 1 special char
-    private static final String DOB_PATTERN = "^(0[1-9]|1[0-2])/(0[1-9]|[1-2][0-9]|3[0-1])/([0-9]{4})$"; //DOB in MM/DD/YYYY format
     private static final String PHONE_PATTERN = "^\\d{3}-\\d{3}-\\d{4}$"; //Phone number in XXX-XXX-XXXX format
 
     private static final String DB_URL = "jdbc:mysql://commapp.mysql.database.azure.com:3306/communication_app";
@@ -51,7 +57,7 @@ public class RegistrationController {
         dbInstance = DB.getInstance();
         //keep user inputs in text box
         User stored = dbInstance.getCurrentUser();
-        if(stored == null){
+        if (stored == null) {
             System.out.println("no stored user found, creating one");
             stored = new User("", "", "", "", "", "", "", "", "", "", "", "");
             dbInstance.setCurrentUser(stored);
@@ -66,7 +72,9 @@ public class RegistrationController {
             System.err.println("Invalid DOB format in stored user: " + stored.getDob());
         }
 
-        if(stored != null) {
+        DatePickerConfigurator.configureDatePicker(dateOfBirthDatePicker);
+
+        if (stored != null) {
             firstNameTF.setText(stored.getFirstName());
             lastNameTF.setText(stored.getLastName());
             preferredNameTF.setText(stored.getPreferredName());
@@ -96,28 +104,28 @@ public class RegistrationController {
 
         setupValidationObservers();
 
-        // Ensure content stays centered dynamically
         Platform.runLater(() -> {
             UIUtilities.centerContent(root, createAccountPane);
             root.widthProperty().addListener((obs, oldVal, newVal) -> UIUtilities.centerContent(root, createAccountPane));
             root.heightProperty().addListener((obs, oldVal, newVal) -> UIUtilities.centerContent(root, createAccountPane));
         });
+        PhoneNumberFormatter.formatPhoneNumber(phoneNumberTF);
     }
 
     //handles selection validation for CB
     private void handleComboBoxSelection(ComboBox<String> cB, TextField tF, Label l, String ruleMessage) {
-        if(cB.getValue() == null || cB.getValue().isEmpty()) {
+        if (cB.getValue() == null || cB.getValue().isEmpty()) {
             l.setText(ruleMessage);
             l.setVisible(true);
-        }else{
+        } else {
             l.setVisible(false);
             tF.setVisible(cB.getValue().equals("Other"));
         }
 
-        if(cB.getValue().equals("Other") && (tF.getText().trim().isEmpty())) {
+        if (cB.getValue().equals("Other") && (tF.getText().trim().isEmpty())) {
             l.setText("Please specify your choice");
             l.setVisible(true);
-        }else{
+        } else {
             l.setVisible(false);
         }
     }
@@ -138,48 +146,48 @@ public class RegistrationController {
 
         //Make sure edits update stored values immediately
         firstNameTF.textProperty().addListener((obs, oldVal, newVal) -> {
-            if(dbInstance.getCurrentUser() != null) dbInstance.getCurrentUser().setFirstName(newVal);
+            if (dbInstance.getCurrentUser() != null) dbInstance.getCurrentUser().setFirstName(newVal);
         });
 
         lastNameTF.textProperty().addListener((obs, oldVal, newVal) -> {
-            if(dbInstance.getCurrentUser()!= null) dbInstance.getCurrentUser().setLastName(newVal);
+            if (dbInstance.getCurrentUser() != null) dbInstance.getCurrentUser().setLastName(newVal);
         });
 
         emailTF.textProperty().addListener((obs, oldVal, newVal) -> {
-            if(dbInstance.getCurrentUser() != null) dbInstance.getCurrentUser().setEmail(newVal);
+            if (dbInstance.getCurrentUser() != null) dbInstance.getCurrentUser().setEmail(newVal);
         });
 
         phoneNumberTF.textProperty().addListener((obs, oldVal, newVal) -> {
-            if(dbInstance.getCurrentUser() != null) dbInstance.getCurrentUser().setPhoneNumber(newVal);
+            if (dbInstance.getCurrentUser() != null) dbInstance.getCurrentUser().setPhoneNumber(newVal);
         });
 
 
         createUsernameTF.textProperty().addListener((obs, oldVal, newVal) -> {
-            if(dbInstance.getCurrentUser() != null) dbInstance.getCurrentUser().setUsername(newVal);
+            if (dbInstance.getCurrentUser() != null) dbInstance.getCurrentUser().setUsername(newVal);
         });
 
         createPasswordTF.textProperty().addListener((obs, oldVal, newVal) -> {
-            if(dbInstance.getCurrentUser() != null) dbInstance.getCurrentUser().setPasswordHash(newVal);
+            if (dbInstance.getCurrentUser() != null) dbInstance.getCurrentUser().setPasswordHash(newVal);
         });
 
         genderCB.valueProperty().addListener((obs, oldVal, newVal) -> {
-           if(dbInstance.getCurrentUser() != null) {
-               dbInstance.getCurrentUser().setGender(newVal.equals("Other") ? specifyGenderTF.getText().trim() : newVal);
-           }
+            if (dbInstance.getCurrentUser() != null) {
+                dbInstance.getCurrentUser().setGender(newVal.equals("Other") ? specifyGenderTF.getText().trim() : newVal);
+            }
         });
 
         pronounsCB.valueProperty().addListener((obs, oldVal, newVal) -> {
-            if(dbInstance.getCurrentUser() != null) {
+            if (dbInstance.getCurrentUser() != null) {
                 dbInstance.getCurrentUser().setPronouns(newVal.equals("Other") ? specifyPronounsTF.getText().trim() : newVal);
             }
         });
 
         specifyGenderTF.textProperty().addListener((obs, oldVal, newVal) -> {
-            if(dbInstance.getCurrentUser() != null) dbInstance.getCurrentUser().setSpecifiedGender(newVal);
+            if (dbInstance.getCurrentUser() != null) dbInstance.getCurrentUser().setSpecifiedGender(newVal);
         });
 
         specifyPronounsTF.textProperty().addListener((obs, oldVal, newVal) -> {
-            if(dbInstance.getCurrentUser() != null) dbInstance.getCurrentUser().setSpecifiedPronouns(newVal);
+            if (dbInstance.getCurrentUser() != null) dbInstance.getCurrentUser().setSpecifiedPronouns(newVal);
         });
     }
 
@@ -194,7 +202,7 @@ public class RegistrationController {
 
     @FXML
     private void navigateToAvatarSelection() {
-        try{
+        try {
             System.out.println("Navigating to Avatar Selection...");
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/createAvatarScreen.fxml"));
@@ -204,7 +212,7 @@ public class RegistrationController {
 
             //pass or retrieve stored data
             User userData = collectUserData();
-            if(userData != null) {
+            if (userData != null) {
                 dbInstance.setCurrentUser(userData);
                 System.out.println("stored user before navigation");
                 System.out.println("username: " + userData.getUsername());
@@ -226,7 +234,7 @@ public class RegistrationController {
         }
     }
 
-    private User collectUserData(){
+    private User collectUserData() {
 
 
         LocalDate dobValue = dateOfBirthDatePicker.getValue();
@@ -238,13 +246,13 @@ public class RegistrationController {
         dobErrorLabel.setVisible(false);
         String formattedDOB = DOB_FORMATTER.format(dobValue);
 
-        if(genderCB.getValue() == null || genderCB.getValue().isEmpty()) {
+        if (genderCB.getValue() == null || genderCB.getValue().isEmpty()) {
             genderErrorLabel.setText("Must select a gender");
             genderErrorLabel.setVisible(true);
             return null;
         }
 
-        if(pronounsCB.getValue() == null || pronounsCB.getValue().isEmpty()) {
+        if (pronounsCB.getValue() == null || pronounsCB.getValue().isEmpty()) {
             pronounsErrorLabel.setText("Must select pronouns");
             pronounsErrorLabel.setVisible(true);
             return null;
@@ -278,7 +286,7 @@ public class RegistrationController {
 
 
     @FXML
-    private void navigateToEntranceScreen(){
+    private void navigateToEntranceScreen() {
         System.out.println("Navigating to Entrance Screen...");
         UIUtilities.navigateToScreen("/views/entranceScreen.fxml", root.getScene(), false);
     }
@@ -291,4 +299,97 @@ public class RegistrationController {
         alert.showAndWait();
     }
 
+    private static class PhoneNumberFormatter {
+
+        public static void formatPhoneNumber(TextField phoneNumberField) {
+            phoneNumberField.addEventFilter(KeyEvent.KEY_TYPED, event -> {
+                String text = phoneNumberField.getText();
+                if (text.length() > 12) {
+                    event.consume();
+                }
+            });
+            phoneNumberField.textProperty().addListener((observable, oldValue, newValue) -> {
+                String digitsOnly = newValue.replaceAll("\\D", "");
+                if (digitsOnly.length() > 10) {
+                    digitsOnly = digitsOnly.substring(0, 10);
+                }
+
+                String formatted = digitsOnly;
+                if (digitsOnly.length() > 3) {
+                    formatted = digitsOnly.substring(0, 3) + "-" + digitsOnly.substring(3);
+                }
+                if (digitsOnly.length() > 6) {
+                    formatted = formatted.substring(0, 7) + "-" + formatted.substring(7);
+                }
+                phoneNumberField.setText(formatted);
+                phoneNumberField.positionCaret(formatted.length());
+            });
+        }
+    }
+    private static class DatePickerConfigurator {
+        private static final String DATE_PATTERN = "MM/dd/yyyy";
+        private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern(DATE_PATTERN);
+
+        public static void configureDatePicker(DatePicker datePicker) {
+            datePicker.setPromptText(DATE_PATTERN.toLowerCase());
+
+            // Set up the converter
+            datePicker.setConverter(new StringConverter<>() {
+                @Override
+                public String toString(LocalDate date) {
+                    return date != null ? DATE_FORMATTER.format(date) : "";
+                }
+
+                @Override
+                public LocalDate fromString(String text) {
+                    if (text == null || text.trim().isEmpty()) return null;
+                    try {
+                        return LocalDate.parse(text, DATE_FORMATTER);
+                    } catch (DateTimeParseException e) {
+                        return null;
+                    }
+                }
+            });
+
+            TextField editor = datePicker.getEditor();
+            editor.setOnKeyTyped(event -> {
+                String character = event.getCharacter();
+                if (!character.matches("[0-9]")) {
+                    event.consume();
+                }
+            });
+
+            editor.textProperty().addListener((obs, oldText, newText) -> {
+                String digits = newText.replaceAll("[^\\d]", "");
+
+                // Limit to 8 digits max
+                if (digits.length() > 8) {
+                    digits = digits.substring(0, 8);
+                }
+                StringBuilder formatted = new StringBuilder();
+                for (int i = 0; i < digits.length(); i++) {
+                    formatted.append(digits.charAt(i));
+                    if (i == 1 || i == 3) {
+                        formatted.append('/');
+                    }
+                }
+
+                String finalText = formatted.toString();
+                if (!finalText.equals(newText)) {
+                    editor.setText(finalText);
+                    editor.positionCaret(finalText.length());
+                }
+                if (finalText.length() == 10) {
+                    try {
+                        LocalDate parsedDate = LocalDate.parse(finalText, DATE_FORMATTER);
+                        datePicker.setValue(parsedDate);
+                    } catch (DateTimeParseException e) {
+                        editor.setStyle("-fx-text-inner-color: red;");
+                    }
+                } else {
+                    editor.setStyle("-fx-text-inner-color: black;");
+                }
+            });
+        }
+    }
 }
