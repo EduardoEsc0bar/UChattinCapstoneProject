@@ -13,18 +13,23 @@ import org.example.uchattincapstoneproject.model.User;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 
 public class RegistrationController {
 
-    @FXML private TextField firstNameTF, lastNameTF, preferredNameTF, phoneNumberTF, emailTF, specifyGenderTF, dobTF, specifyPronounsTF, createUsernameTF, createPasswordTF;
+    @FXML private TextField firstNameTF, lastNameTF, preferredNameTF, phoneNumberTF, emailTF, specifyGenderTF, specifyPronounsTF, createUsernameTF, createPasswordTF;
     @FXML private ComboBox<String> pronounsCB, genderCB;
     @FXML private Button toCreateAvatarButton, backBTN;
     @FXML private AnchorPane root;
     @FXML private Pane createAccountPane;
     @FXML private Label fNameErrorLabel, lNameErrorLabel, emailErrorLabel, genderErrorLabel, pronounsErrorLabel, dobErrorLabel,pNumberErrorLabel,
             usernameErrorLabel, passwordErrorLabel, specifiedPErrorLabel, specifiedGErrorLabel,preferredNameErrorLabel;
+    @FXML private DatePicker dateOfBirthDatePicker;
 
+    private static final DateTimeFormatter DOB_FORMATTER = DateTimeFormatter.ofPattern("MM-dd-yyyy");
     private static final String FN_NAME_PATTERN = "^[a-zA-Z]{2,25}$"; //First name: 2-25 letters
     private static final String LN_NAME_PATTERN = "^[a-zA-Z]{2,25}$"; //Last name: 2-25 letters
     private static final String EMAIL_PATTERN = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$"; //Validates any email
@@ -52,12 +57,21 @@ public class RegistrationController {
             dbInstance.setCurrentUser(stored);
         }
 
+        try {
+            if (stored.getDob() != null && !stored.getDob().isEmpty()) {
+                LocalDate parsedDate = LocalDate.parse(stored.getDob(), DOB_FORMATTER);
+                dateOfBirthDatePicker.setValue(parsedDate);
+            }
+        } catch (DateTimeParseException e) {
+            System.err.println("Invalid DOB format in stored user: " + stored.getDob());
+        }
+
         if(stored != null) {
             firstNameTF.setText(stored.getFirstName());
             lastNameTF.setText(stored.getLastName());
             preferredNameTF.setText(stored.getPreferredName());
             emailTF.setText(stored.getEmail());
-            dobTF.setText(stored.getDob());
+            dateOfBirthDatePicker.getValue();
             phoneNumberTF.setText(stored.getPhoneNumber());
             genderCB.setValue(stored.getGender());
             pronounsCB.setValue(stored.getPronouns());
@@ -115,7 +129,11 @@ public class RegistrationController {
         setupValidationListener(emailTF, EMAIL_PATTERN, emailErrorLabel, "must be a valid email address");
         setupValidationListener(createUsernameTF, USERNAME_PATTERN, usernameErrorLabel, "2-25 characters, only letters & numbers");
         setupValidationListener(createPasswordTF, PASSWORD_PATTERN, passwordErrorLabel, "8+ chars, 1 uppercase, 1 lowercase, 1 number, 1 special char");
-        setupValidationListener(dobTF, DOB_PATTERN, dobErrorLabel, "must be format mm/dd/yyyy");
+        dateOfBirthDatePicker.valueProperty().addListener((obs, oldVal, newVal) -> {
+            if (dbInstance.getCurrentUser() != null && newVal != null) {
+                dbInstance.getCurrentUser().setDob(DOB_FORMATTER.format(newVal));
+            }
+        });
         setupValidationListener(phoneNumberTF, PHONE_PATTERN, pNumberErrorLabel, "must be format 000-000-0000");
 
         //Make sure edits update stored values immediately
@@ -135,9 +153,6 @@ public class RegistrationController {
             if(dbInstance.getCurrentUser() != null) dbInstance.getCurrentUser().setPhoneNumber(newVal);
         });
 
-        dobTF.textProperty().addListener((obs, oldVal, newVal) -> {
-            if(dbInstance.getCurrentUser() != null) dbInstance.getCurrentUser().setDob(newVal);
-        });
 
         createUsernameTF.textProperty().addListener((obs, oldVal, newVal) -> {
             if(dbInstance.getCurrentUser() != null) dbInstance.getCurrentUser().setUsername(newVal);
@@ -214,10 +229,14 @@ public class RegistrationController {
     private User collectUserData(){
 
 
-        String formattedDOB = validateAndFormatDOB(dobTF.getText().trim());
-        if(formattedDOB == null || formattedDOB.isEmpty()) {
+        LocalDate dobValue = dateOfBirthDatePicker.getValue();
+        if (dobValue == null) {
+            dobErrorLabel.setText("Date of birth must be selected");
+            dobErrorLabel.setVisible(true);
             return null;
         }
+        dobErrorLabel.setVisible(false);
+        String formattedDOB = DOB_FORMATTER.format(dobValue);
 
         if(genderCB.getValue() == null || genderCB.getValue().isEmpty()) {
             genderErrorLabel.setText("Must select a gender");
@@ -255,19 +274,6 @@ public class RegistrationController {
         //if user already exist, retrieve stored data
         dbInstance.setCurrentUser(updatedUser);
         return updatedUser;
-    }
-
-    //convert dob from mm/dd/yyyy to yyyy-mm-dd for sql
-    private String validateAndFormatDOB(String dob){
-        try{
-            SimpleDateFormat input = new SimpleDateFormat("MM/dd/yyyy");
-            SimpleDateFormat output = new SimpleDateFormat("yyyy-MM-dd");
-            return output.format(input.parse(dob));
-        } catch (ParseException e){
-            dobErrorLabel.setText("Use format MM/DD/YYYY");
-            dobErrorLabel.setVisible(true);
-            return null;
-        }
     }
 
 
