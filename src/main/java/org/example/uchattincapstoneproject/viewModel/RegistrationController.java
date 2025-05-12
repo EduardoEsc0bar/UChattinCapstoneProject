@@ -36,7 +36,7 @@ public class RegistrationController {
     @FXML
     private DatePicker dateOfBirthDatePicker;
 
-    private static final DateTimeFormatter DOB_FORMATTER = DateTimeFormatter.ofPattern("MM-dd-yyyy");
+    private static final DateTimeFormatter DOB_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private static final String FN_NAME_PATTERN = "^[a-zA-Z]{2,25}$"; //First name: 2-25 letters
     private static final String LN_NAME_PATTERN = "^[a-zA-Z]{2,25}$"; //Last name: 2-25 letters
     private static final String EMAIL_PATTERN = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$"; //Validates any email
@@ -235,8 +235,6 @@ public class RegistrationController {
     }
 
     private User collectUserData() {
-
-
         LocalDate dobValue = dateOfBirthDatePicker.getValue();
         if (dobValue == null) {
             dobErrorLabel.setText("Date of birth must be selected");
