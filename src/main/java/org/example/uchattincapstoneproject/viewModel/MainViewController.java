@@ -4,18 +4,14 @@ import javafx.animation.FadeTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.TilePane;
+import javafx.scene.layout.*;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.example.uchattincapstoneproject.model.ArasaacService;
@@ -24,6 +20,8 @@ import org.example.uchattincapstoneproject.model.SpeechService;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class MainViewController {
     @FXML
@@ -47,7 +45,8 @@ public class MainViewController {
     @FXML
     private Slider volumeQuickAccessSlider;
     private String username;
-
+    private static final int MAX_CONCURRENT_LOADS = 3;
+    private int activeLoads = 0;
 
     private final ArasaacService arasaacService = new ArasaacService();
     private SpeechService speechService;
@@ -155,55 +154,72 @@ public class MainViewController {
 
 
     private void fetchCategoryData(String category) {
-        String pictogramResponse = arasaacService.fetchPictograms(category); //Fetch phrases & images
+        String pictogramResponse = arasaacService.fetchPictograms(category);
         System.out.println("api response for category: " + category);
         populateTilePane(pictogramResponse);
     }
+
+
+
     private void populateTilePane(String pictograms) {
         communicationTilePane.getChildren().clear();
         System.out.println("Updating TilePane with pictograms...");
-
-        String[] pictogramList = pictograms.split("\n");
-        int loadedCount = 0;
-
-        for (String item : pictogramList) {
-            String[] parts = item.split(":", 2);
-
-            if (parts.length < 2) continue;
-
-            String phrase = parts[0].trim();
-            String imageUrl = parts[1].trim();
-
-            if (imageUrl.isEmpty() || !imageUrl.startsWith("https://static.arasaac.org/pictograms/")) continue;
-
-            Button pictogramButton = new Button(phrase);
-            pictogramButton.setPrefSize(120, 120);
-
-            try {
-                Image pictoImage = new Image(imageUrl, 120, 120, true, true, false);
-                if (pictoImage.isError()) continue;
-
-                ImageView imageView = new ImageView(pictoImage);
-                imageView.setFitHeight(120);
-                imageView.setFitWidth(120);
-
-                pictogramButton.setGraphic(imageView);
-                pictogramButton.setOnAction(event -> {
-                    addWordToSentence(phrase);
-                    speechService.synthesizeText(phrase);
-                });
-
-                communicationTilePane.getChildren().add(pictogramButton);
-                loadedCount++;
-
-            } catch (Exception e) {
-                System.out.println("Failed to load pictogram: " + phrase);
-            }
+        List<String> sortedPictograms = Arrays.stream(pictograms.split("\n"))
+                .map(line -> new AbstractMap.SimpleEntry<>(
+                        line.split(":", 2)[0].trim().toLowerCase(), line))
+                .sorted(Comparator.comparing(Map.Entry::getKey))
+                .map(Map.Entry::getValue) // return the original line
+                .collect(Collectors.toList());
+        Queue<String> queue = new LinkedList<>(sortedPictograms);
+        for (int i = 0; i < MAX_CONCURRENT_LOADS; i++) {
+            loadNextPictogram(queue);
         }
-
-        System.out.println("Loaded " + loadedCount + " pictograms into the TilePane.");
     }
 
+    private void loadNextPictogram(Queue<String> queue) {
+        if (queue.isEmpty()) return;
+        String item = queue.poll();
+        if (item == null || !item.contains(":")) {
+            loadNextPictogram(queue);
+            return;
+        }
+        String[] parts = item.split(":", 2);
+        String phrase = parts[0].trim();
+        String imageUrl = parts[1].trim();
+        if (imageUrl.isEmpty() || !imageUrl.startsWith("https://static.arasaac.org/pictograms/")) {
+            loadNextPictogram(queue);
+            return;
+        }
+        activeLoads++;
+        Image image = new Image(imageUrl, 120, 120, true, true, true);
+        image.progressProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal.doubleValue() == 1.0) {
+                Platform.runLater(() -> {
+                    ImageView imageView = new ImageView(image);
+                    imageView.setFitHeight(90);
+                    imageView.setFitWidth(90);
+                    Label label = new Label(phrase);
+                    label.setWrapText(true);
+                    label.setTextAlignment(TextAlignment.CENTER);
+                    label.setMaxWidth(100);
+                    label.setAlignment(Pos.CENTER);
+                    VBox vBox = new VBox(5, imageView, label);
+                    vBox.setAlignment(Pos.CENTER);
+                    Button button = new Button();
+                    button.setPrefSize(120, 120);
+                    button.setGraphic(vBox);
+                    button.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+                    button.setOnAction(event -> {
+                        addWordToSentence(phrase);
+                        speechService.synthesizeText(phrase);
+                    });
+                    communicationTilePane.getChildren().add(button);
+                    activeLoads--;
+                    loadNextPictogram(queue); // Continue loading next
+                });
+            }
+        });
+    }
 
     private void addWordToSentence(String phrase) {
         sentenceBuilderTextArea.appendText(phrase + " ");

@@ -12,39 +12,44 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.TilePane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="root" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.uchattincapstoneproject.viewModel.MainViewController">
+<AnchorPane fx:id="root" prefHeight="800.0" prefWidth="1020.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.uchattincapstoneproject.viewModel.MainViewController">
    <children>
-      <BorderPane fx:id="contentPane" layoutY="-2.0" prefHeight="800.0" prefWidth="1000.0">
+      <BorderPane fx:id="contentPane" layoutY="-2.0" prefHeight="800.0" prefWidth="1020.0">
          <top>
             <Pane fx:id="speechBuilderPane" prefHeight="94.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
                <children>
                   <TextArea fx:id="sentenceBuilderTextArea" editable="false" layoutX="14.0" layoutY="13.0" prefHeight="76.0" prefWidth="813.0" />
-                  <Button fx:id="saveSentenceButton" layoutX="865.0" layoutY="14.0" mnemonicParsing="false" text="Save Phrase">
-                     <font>
-                        <Font name="Monospaced Bold" size="12.0" />
-                     </font>
-                  </Button>
-                  <Button fx:id="readOutLoudButton" layoutX="865.0" layoutY="39.0" mnemonicParsing="false" text="Read out Loud">
-                     <font>
-                        <Font name="Monospaced Bold" size="12.0" />
-                     </font>
-                  </Button>
-                  <Button fx:id="resetSentenceButton" layoutX="865.0" layoutY="64.0" mnemonicParsing="false" text="Reset">
-                     <font>
-                        <Font name="Monospaced Bold" size="12.0" />
-                     </font>
-                  </Button>
+                  <VBox alignment="TOP_CENTER" layoutX="826.0" layoutY="10.0" prefHeight="82.0" prefWidth="195.0">
+                     <children>
+                        <Button fx:id="readOutLoudButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="115.0" text="Read out Loud">
+                           <font>
+                              <Font name="Monospaced Bold" size="12.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="saveSentenceButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="115.0" text="Save Phrase">
+                           <font>
+                              <Font name="Monospaced Bold" size="12.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="resetSentenceButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="115.0" text="Reset">
+                           <font>
+                              <Font name="Monospaced Bold" size="12.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </VBox>
                </children>
             </Pane>
          </top>
          <center>
-            <StackPane prefHeight="317.0" prefWidth="887.0" BorderPane.alignment="CENTER">
+            <StackPane prefHeight="467.0" prefWidth="1022.0" BorderPane.alignment="CENTER">
                <children>
-                  <ScrollPane fx:id="communicationScrollPane" prefHeight="317.0" prefWidth="889.0">
+                  <ScrollPane fx:id="communicationScrollPane" hbarPolicy="NEVER" prefHeight="467.0" prefWidth="1024.0">
                      <content>
-                        <TilePane fx:id="communicationTilePane" hgap="5.0" prefHeight="468.0" prefWidth="997.0" vgap="5.0" />
+                        <TilePane fx:id="communicationTilePane" alignment="TOP_CENTER" hgap="5.0" prefHeight="468.0" prefWidth="1020.0" vgap="5.0" />
                      </content>
                   </ScrollPane>
                </children>

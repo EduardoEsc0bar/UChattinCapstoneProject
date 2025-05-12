@@ -5,7 +5,6 @@ import javafx.scene.paint.Color;
 import java.io.*;
 import java.sql.*;
 import java.sql.Connection;
-import java.util.LinkedList;
 import java.util.regex.Pattern;
 
 public class User {
