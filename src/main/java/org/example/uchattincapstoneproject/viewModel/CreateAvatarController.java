@@ -2,6 +2,7 @@ package org.example.uchattincapstoneproject.viewModel;
 
 import javafx.animation.FadeTransition;
 import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -27,15 +28,25 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class CreateAvatarController {
-    @FXML private ImageView avatarImageView;
-    @FXML private TilePane avatarStyleTP;
-    @FXML private Button avatarStyleButton, saveAvatarButton, resetAvatarButton, backToRegistrationButton, profilePicButton;
-    @FXML private AnchorPane root;
-    @FXML private Pane createAvatarPane;
-
+    @FXML
+    private ImageView avatarImageView;
+    @FXML
+    private TilePane avatarStyleTP;
+    @FXML
+    private Button avatarStyleButton, saveAvatarButton, resetAvatarButton, backToRegistrationButton, profilePicButton;
+    @FXML
+    private AnchorPane root;
+    @FXML
+    private Pane createAvatarPane;
+    private Map<String, Image> avatarCache = new HashMap<>();
     private DiceBearAPI diceBearAPI = new DiceBearAPI();
     private Avatar avatar;
     private User user;
@@ -62,11 +73,11 @@ public class CreateAvatarController {
         User stored = dbInstance.getCurrentUser();
         Avatar storedAvatar = dbInstance.getCurrentAvatar();
 
-        if(stored != null) {
+        if (stored != null) {
             setUser(stored);
         }
 
-        if(storedAvatar != null) {
+        if (storedAvatar != null) {
             setAvatar(storedAvatar);
         }
 
@@ -83,6 +94,29 @@ public class CreateAvatarController {
         //resetAvatar();
     }
 
+    public void loadAvatar(String userId, ImageView avatarImageView) {
+        if (avatarCache.containsKey(userId)) {
+            avatarImageView.setImage(avatarCache.get(userId));  // Load from cache
+        } else {
+            Task<Image> loadAvatarTask = new Task<Image>() {
+                @Override
+                protected Image call() throws Exception {
+                    // Simulate image loading (e.g., from file or database)
+                    Thread.sleep(500);  // Simulating delay for network/database
+                    return new Image("file:/path/to/avatar.png", 100, 100, false, true);  // Resize during load
+                }
+            };
+
+            loadAvatarTask.setOnSucceeded(event -> {
+                Image avatarImage = loadAvatarTask.getValue();
+                avatarCache.put(userId, avatarImage);  // Cache the loaded avatar
+                avatarImageView.setImage(avatarImage);  // Set avatar to ImageView
+            });
+
+            new Thread(loadAvatarTask).start();  // Run image loading in background
+        }
+    }
+
     public void setUser(User user) {
         this.user = user;
         System.out.println("User set in CreateAvatarController: " + (user != null ? user.getUsername() : "null"));
@@ -92,12 +126,12 @@ public class CreateAvatarController {
         this.avatar = avatar;
         dbInstance.setCurrentAvatar(avatar);
         dbInstance.getCurrentUser().setAvatarURL(avatar.getAvatarURL());
-        avatarImageView.setImage(new Image(avatar.getAvatarURL()));
-
+        loadAvatar(user.getUsername(), avatarImageView); // Use background loader with caching
         System.out.println("avatar set successfully");
         System.out.println("style: " + avatar.getStyle());
         System.out.println("avatar url: " + avatar.getAvatarURL());
     }
+
     // new selectProfilePicture() 3.41 Seconds to load
     @FXML
     private void selectProfilePicture() {
@@ -105,65 +139,75 @@ public class CreateAvatarController {
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg"));
 
         File selectedFile = fileChooser.showOpenDialog(null);
-        if(selectedFile != null){
+        if (selectedFile != null) {
             String filePath = selectedFile.toURI().toString();
             Image profileImage = new Image(filePath);
-            if(profileImage.isError()){
+            if (profileImage.isError()) {
                 System.err.println("error loading profile image " + filePath);
-            }else{
+            } else {
                 avatarImageView.setImage(new Image(filePath));
                 dbInstance.getCurrentUser().setAvatarURL(filePath);
                 System.out.println("profile picture set: " + filePath);
             }
         }
     }
-//       old selectProfilePicture
-//    @FXML
-//    private void selectProfilePicture(){
-//        FileChooser fileChooser = new FileChooser();
-//        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg"));
-//
-//        File selectedFile = fileChooser.showOpenDialog(null);
-//        if(selectedFile != null){
-//            String filePath = selectedFile.toURI().toString();
-//            Image profileImage = new Image(filePath);
-//            if(profileImage.isError()){
-//                System.err.println("error loading profile image " + filePath);
-//            }else{
-//                avatarImageView.setImage(new Image(filePath));
-//                dbInstance.getCurrentUser().setAvatarURL(filePath);
-//                System.out.println("profile picture set: " + filePath);
-//            }
-//
-//        }
-//    }
-    //populates tile tilePane with customization options
-    private void populateAvatarTilePane(){
+
+
+    //populates tile tilePane with customization options [dicebearAPI limit how many images you can load in a specified time frame so this should make the system less laggy by slowing down how many can be loaded]
+    private void populateAvatarTilePane() {
         avatarStyleTP.getChildren().clear();
         List<String> availableStyles = diceBearAPI.getAvailableStyles();
-        System.out.println("loading available styles: " + availableStyles);
+        System.out.println("Loading available styles: " + availableStyles);
 
-        for(String style : availableStyles){
-            System.out.println("fetching avatar preview for style: " + style);
-            Image avatarImage = diceBearAPI.fetchAvatar(style);
-            if(avatarImage == null || avatarImage.isError()){
-                System.err.println("Error fetching avatar preview for style: " + style + " |Error: " + avatarImage.isError());
-                continue;
-            }
+        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
-            ImageView imageView = new ImageView(avatarImage);
-            imageView.setFitHeight(150);
-            imageView.setFitWidth(150);
-            imageView.setPreserveRatio(true);
-            imageView.setCache(true);
-            imageView.setSmooth(true);
+        for (int i = 0; i < availableStyles.size(); i++) {
+            String style = availableStyles.get(i);
+            int delay = i * 200; // 200ms between each request
 
-            Button button = new Button();
-            button.setGraphic(imageView);
-            button.setOnAction(event -> updateAvatar(style));
+            scheduler.schedule(() -> {
+                Task<Image> fetchAvatarTask = new Task<>() {
+                    @Override
+                    protected Image call() {
+                        System.out.println("Fetching avatar preview for style: " + style);
+                        return diceBearAPI.fetchAvatar(style);
+                    }
+                };
 
-            avatarStyleTP.getChildren().add(button);
+                fetchAvatarTask.setOnSucceeded(event -> {
+                    Image avatarImage = fetchAvatarTask.getValue();
+                    if (avatarImage == null || avatarImage.isError()) {
+                        System.err.println("Error fetching avatar for style: " + style);
+                        return;
+                    }
+
+                    ImageView imageView = new ImageView(avatarImage);
+                    imageView.setFitHeight(150);
+                    imageView.setFitWidth(150);
+                    imageView.setPreserveRatio(true);
+                    imageView.setCache(true);
+                    imageView.setSmooth(true);
+
+                    Button button = new Button();
+                    button.setGraphic(imageView);
+                    button.setOnAction(e -> updateAvatar(style));
+
+                    Platform.runLater(() -> avatarStyleTP.getChildren().add(button));
+                });
+
+                fetchAvatarTask.setOnFailed(event -> {
+                    Throwable ex = fetchAvatarTask.getException();
+                    System.err.println("Failed to load avatar for style " + style + ": " + ex.getMessage());
+                });
+
+                Thread thread = new Thread(fetchAvatarTask);
+                thread.setDaemon(true);
+                thread.start();
+            }, delay, TimeUnit.MILLISECONDS);
         }
+
+        // Optional: Shutdown the scheduler after all tasks are scheduled
+        scheduler.schedule(scheduler::shutdown, availableStyles.size() * 200 + 1000, TimeUnit.MILLISECONDS);
     }
 
     //updates avatar preview
@@ -171,7 +215,7 @@ public class CreateAvatarController {
         avatar = new Avatar(style, diceBearAPI);
         Image avatarImage = diceBearAPI.fetchAvatar(style);
 
-        if(avatarImage == null || avatarImage.isError()){
+        if (avatarImage == null || avatarImage.isError()) {
             System.err.println("Error fetching avatar preview for style: " + style);
             return;
         }
@@ -227,12 +271,12 @@ public class CreateAvatarController {
 
         //if no profile, check avatar
         String finalURL = dbInstance.getCurrentAvatar().getAvatarURL();
-        if(finalURL == null || finalURL.isEmpty()){
-            finalURL = (dbInstance.getCurrentUser().getAvatarURL() != null) ? dbInstance.getCurrentAvatar().getAvatarURL(): null;
+        if (finalURL == null || finalURL.isEmpty()) {
+            finalURL = (dbInstance.getCurrentUser().getAvatarURL() != null) ? dbInstance.getCurrentAvatar().getAvatarURL() : null;
         }
 
         //ensure at least one image is seleced before saving
-        if(finalURL == null || finalURL.isEmpty()){
+        if (finalURL == null || finalURL.isEmpty()) {
             showAlert(Alert.AlertType.ERROR, "Error", "Please select an avatar or upload a profile picture");
         }
 
@@ -251,8 +295,8 @@ public class CreateAvatarController {
         System.out.println("pronouns: " + user.getPronouns());
 
         //verify before proceeding
-        if(user.getFirstName().isEmpty() || user.getLastName().isEmpty() || user.getEmail().isEmpty() || user.getPhoneNumber().isEmpty()
-        || user.getDob().isEmpty() || user.getGender().isEmpty() || user.getPronouns().isEmpty() || user.getUsername().isEmpty() || user.getPasswordHash().isEmpty()){
+        if (user.getFirstName().isEmpty() || user.getLastName().isEmpty() || user.getEmail().isEmpty() || user.getPhoneNumber().isEmpty()
+                || user.getDob().isEmpty() || user.getGender().isEmpty() || user.getPronouns().isEmpty() || user.getUsername().isEmpty() || user.getPasswordHash().isEmpty()) {
             showAlert(Alert.AlertType.ERROR, "Registration Error", "All required fields must be filled.");
             return;
         }
@@ -274,42 +318,42 @@ public class CreateAvatarController {
             stmt.setString(11, finalURL);
 
             int rowsAffected = stmt.executeUpdate();
-            if(rowsAffected == 0){
+            if (rowsAffected == 0) {
                 showAlert(Alert.AlertType.ERROR, "Registration Failed", "User was not saved");
                 return;
             }
 
             //get generated user id
             int userID = -1;
-            try(var generatedKeys = stmt.getGeneratedKeys()) {
-                if(generatedKeys.next()){
+            try (var generatedKeys = stmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
                     userID = generatedKeys.getInt(1);
                     System.out.println("user registered with id: " + userID);
                 }
             }
 
-            if(userID == -1){
+            if (userID == -1) {
                 showAlert(Alert.AlertType.ERROR, "Registration Failed", "User was not saved");
                 return;
             }
 
             //insert avatar into avatar table
-            if(dbInstance.getCurrentAvatar() != null){
+            if (dbInstance.getCurrentAvatar() != null) {
                 String avatarSQL = "INSERT INTO Avatars (user_id, style, avatar_url, created_at) VALUES (?, ?, ?, NOW())";
                 PreparedStatement avatarStmt = conn.prepareStatement(avatarSQL, PreparedStatement.RETURN_GENERATED_KEYS);
                 avatarStmt.setInt(1, userID);
                 avatarStmt.setString(2, avatar.getStyle());
                 avatarStmt.setString(3, avatar.getAvatarURL());
                 int avatarRows = avatarStmt.executeUpdate();
-                if(avatarRows == 0){
+                if (avatarRows == 0) {
                     showAlert(Alert.AlertType.ERROR, "Avatar Error", "Avatar was not saved");
                     return;
                 }
 
                 //generate avatar id
                 int avatarID = -1;
-                try(var generatedKeys = avatarStmt.getGeneratedKeys()) {
-                    if(generatedKeys.next()){
+                try (var generatedKeys = avatarStmt.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
                         avatarID = generatedKeys.getInt(1);
                         System.out.println("avatar registered with id: " + avatarID);
                     }
@@ -322,7 +366,7 @@ public class CreateAvatarController {
 
 
                 int updateRows = updateUserStmt.executeUpdate();
-                if(updateRows > 0){
+                if (updateRows > 0) {
                     showAlert(Alert.AlertType.INFORMATION, "Registration Complete", "Account Created! Please log in!");
                     navigateToEntranceScreen();
                 }
@@ -341,13 +385,13 @@ public class CreateAvatarController {
         System.out.println("reset avatar preview");
     }
 
-    private void navigateToEntranceScreen(){
+    private void navigateToEntranceScreen() {
         System.out.println("navigating to entrance screen from create avatar");
         UIUtilities.navigateToScreen("/views/entranceScreen.fxml", root.getScene(), false);
     }
 
     @FXML
-    private void navigateToRegistrationScreen(){
+    private void navigateToRegistrationScreen() {
         System.out.println("navigating back to registration screen");
         UIUtilities.navigateToScreen("/views/registrationScreen.fxml", root.getScene(), false);
     }
