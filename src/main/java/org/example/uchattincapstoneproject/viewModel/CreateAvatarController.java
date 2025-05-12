@@ -266,14 +266,15 @@ public class CreateAvatarController {
 
     @FXML
     private void registerUser() {
-
+        user = dbInstance.getCurrentUser();
+        avatar = dbInstance.getCurrentAvatar();
         if (user == null || avatar == null) {
             System.err.println("user or avatar object is null");
             showAlert(Alert.AlertType.ERROR, "Registration Error", "All required fields must be filled.");
             return;
         }
 
-        user = dbInstance.getCurrentUser();
+
 
         //if no profile, check avatar
         String finalURL = dbInstance.getCurrentAvatar().getAvatarURL();
