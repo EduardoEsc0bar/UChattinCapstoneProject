@@ -1,11 +1,8 @@
 package org.example.uchattincapstoneproject.viewModel;
 
-import javafx.animation.FadeTransition;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -14,8 +11,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.TilePane;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
-import javafx.util.Duration;
 import org.example.uchattincapstoneproject.model.Avatar;
 import org.example.uchattincapstoneproject.model.DB;
 import org.example.uchattincapstoneproject.model.DiceBearAPI;
@@ -23,7 +18,6 @@ import org.example.uchattincapstoneproject.model.User;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.io.File;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -85,7 +79,9 @@ public class CreateAvatarController {
         }
 
         //set button actions for categories
-        avatarStyleButton.setOnAction(event -> populateAvatarTilePane()); //load avatar images on tile pane
+        avatarStyleButton.setOnAction(event -> {
+            populateAvatarTilePane();
+        }); //load avatar images on tile pane
 
         //set button actions for avatar modification
         saveAvatarButton.setOnAction(event -> registerUser());
@@ -126,32 +122,46 @@ public class CreateAvatarController {
     }
 
     public void setAvatar(Avatar avatar) {
-        this.avatar = avatar;
-        dbInstance.setCurrentAvatar(avatar);
-        dbInstance.getCurrentUser().setAvatarURL(avatar.getAvatarURL());
-        avatarImageView.setImage(new Image(avatar.getAvatarURL()));
+        if(avatar != null){
+            this.avatar = avatar;
+            dbInstance.setCurrentAvatar(avatar);
+            dbInstance.getCurrentUser().setAvatarURL(avatar.getAvatarURL());
+            avatarImageView.setImage(new Image(avatar.getAvatarURL()));
 
-        System.out.println("avatar set successfully");
-        System.out.println("style: " + avatar.getStyle());
-        System.out.println("avatar url: " + avatar.getAvatarURL());
+            System.out.println("avatar set successfully");
+            System.out.println("style: " + avatar.getStyle());
+            System.out.println("avatar url: " + avatar.getAvatarURL());
+        }else{
+            System.err.println("error, avatar object is null");
+        }
+
     }
 
     @FXML
     private void selectProfilePicture(){
         FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Choose Profile Picture");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg"));
 
         File selectedFile = fileChooser.showOpenDialog(null);
         if(selectedFile != null){
-            String filePath = selectedFile.toURI().toString();
-            Image profileImage = new Image(filePath);
-            if(profileImage.isError()){
-                System.err.println("error loading profile image " + filePath);
-            }else{
-                avatarImageView.setImage(new Image(filePath));
-                dbInstance.getCurrentUser().setAvatarURL(filePath);
-                System.out.println("profile picture set: " + filePath);
+            try{
+                String filePath = selectedFile.getAbsolutePath();
+                String formattedPath = "file:" + filePath.replace("\\", "/");
+
+                Image profileImage = new Image(formattedPath);
+                if(profileImage.isError()){
+                    System.err.println("error loading profile image " + formattedPath);
+                }else{
+                    avatarImageView.setImage(new Image(formattedPath));
+                    dbInstance.getCurrentUser().setAvatarURL(formattedPath);
+                    System.out.println("profile picture set: " + formattedPath);
+                }
+            }catch (Exception e){
+                System.err.println("error handling profile image: " + e.getMessage());
+                e.printStackTrace();
             }
+
 
         }
     }
@@ -224,8 +234,12 @@ public class CreateAvatarController {
             return;
         }
 
+        dbInstance.setCurrentAvatar(avatar);
+        dbInstance.getCurrentUser().setAvatarURL(avatar.getAvatarURL());
+
         avatarImageView.setImage(avatarImage);
         avatarImageView.setVisible(true);
+        System.out.println("avatar set successfully: " + avatar.getAvatarURL());
     }
 
 
@@ -267,23 +281,29 @@ public class CreateAvatarController {
     @FXML
     private void registerUser() {
         user = dbInstance.getCurrentUser();
-        avatar = dbInstance.getCurrentAvatar();
-        if (user == null || avatar == null) {
-            System.err.println("user or avatar object is null");
+        Avatar avatar = dbInstance.getCurrentAvatar();
+
+        System.out.println("user = " + (user != null ? user.getUsername() : "null"));
+        System.out.println("avatar = " + (avatar != null ? avatar.getAvatarURL() : "null"));
+
+        if (user == null) {
+            System.err.println("user object is null");
             showAlert(Alert.AlertType.ERROR, "Registration Error", "All required fields must be filled.");
             return;
         }
 
+        //use profile picture if no avatar is selected
+        String finalImageSource = user.getAvatarURL();
+        boolean isProfilePicture = (finalImageSource != null && !finalImageSource.isEmpty() && finalImageSource.startsWith("file:"));
 
-
-        //if no profile, check avatar
-        String finalURL = dbInstance.getCurrentAvatar().getAvatarURL();
-        if(finalURL == null || finalURL.isEmpty()){
-            finalURL = (dbInstance.getCurrentUser().getAvatarURL() != null) ? dbInstance.getCurrentAvatar().getAvatarURL(): null;
+        if(!isProfilePicture && avatar != null) {
+            finalImageSource = avatar.getAvatarURL();
         }
 
+        System.out.println("finaAvatarURL = " + finalImageSource);
+
         //ensure at least one image is seleced before saving
-        if(finalURL == null || finalURL.isEmpty()){
+        if(finalImageSource == null || finalImageSource.isEmpty()){
             showAlert(Alert.AlertType.ERROR, "Error", "Please select an avatar or upload a profile picture");
             return;
         }
@@ -309,9 +329,8 @@ public class CreateAvatarController {
             return;
         }
 
-
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
-            String sql = "INSERT INTO Users (first_name, last_name, preferred_name, phone_number, email, dob, gender, specified_pronouns, username, password_hash, avatar_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
+            String sql = "INSERT INTO Users (first_name, last_name, preferred_name, phone_number, email, dob, gender, specified_pronouns, username, password_hash, avatar_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
             PreparedStatement stmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
             stmt.setString(1, user.getFirstName());
             stmt.setString(2, user.getLastName());
@@ -323,7 +342,7 @@ public class CreateAvatarController {
             stmt.setString(8, user.getPronouns().equals("Other") ? user.getSpecifiedPronouns() : user.getPronouns());
             stmt.setString(9, user.getUsername());
             stmt.setString(10, hashedPassword);
-            stmt.setString(11, finalURL);
+            stmt.setInt(11, 0); //temp value
 
             int rowsAffected = stmt.executeUpdate();
             if(rowsAffected == 0){
@@ -345,40 +364,52 @@ public class CreateAvatarController {
                 return;
             }
 
+            String avatarStyle;
+            if(isProfilePicture){
+                avatarStyle = "profile_picture";
+            }else{
+                avatarStyle = avatar.getStyle();
+            }
+
             //insert avatar into avatar table
-            if(dbInstance.getCurrentAvatar() != null){
-                String avatarSQL = "INSERT INTO Avatars (user_id, style, avatar_url, created_at) VALUES (?, ?, ?, NOW())";
-                PreparedStatement avatarStmt = conn.prepareStatement(avatarSQL, PreparedStatement.RETURN_GENERATED_KEYS);
-                avatarStmt.setInt(1, userID);
-                avatarStmt.setString(2, avatar.getStyle());
-                avatarStmt.setString(3, avatar.getAvatarURL());
-                int avatarRows = avatarStmt.executeUpdate();
-                if(avatarRows == 0){
-                    showAlert(Alert.AlertType.ERROR, "Avatar Error", "Avatar was not saved");
-                    return;
-                }
+            String avatarSQL = "INSERT INTO Avatars (user_id, style, avatar_url, created_at) VALUES (?, ?, ?, NOW())";
+            PreparedStatement avatarStmt = conn.prepareStatement(avatarSQL, PreparedStatement.RETURN_GENERATED_KEYS);
+            avatarStmt.setInt(1, userID);
+            avatarStmt.setString(2, avatarStyle);
+            avatarStmt.setString(3, finalImageSource);
+            int avatarRows = avatarStmt.executeUpdate();
+            if (avatarRows == 0) {
+                showAlert(Alert.AlertType.ERROR, "Avatar Error", "Avatar was not saved");
+                return;
+            }
 
-                //generate avatar id
-                int avatarID = -1;
-                try(var generatedKeys = avatarStmt.getGeneratedKeys()) {
-                    if(generatedKeys.next()){
-                        avatarID = generatedKeys.getInt(1);
-                        System.out.println("avatar registered with id: " + avatarID);
-                    }
-                }
-                //update user table with avatar
-                String updateUserSQL = "UPDATE Users SET avatar_id = ? WHERE id = ?";
-                PreparedStatement updateUserStmt = conn.prepareStatement(updateUserSQL);
-                updateUserStmt.setInt(1, avatarID);
-                updateUserStmt.setInt(2, userID);
-
-
-                int updateRows = updateUserStmt.executeUpdate();
-                if(updateRows > 0){
-                    showAlert(Alert.AlertType.INFORMATION, "Registration Complete", "Account Created! Please log in!");
-                    navigateToEntranceScreen();
+            //generate avatar id
+            int avatarID = -1;
+            try (var generatedKeys = avatarStmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    avatarID = generatedKeys.getInt(1);
+                    System.out.println("avatar registered with id: " + avatarID);
                 }
             }
+
+            if(avatarID == -1){
+                showAlert(Alert.AlertType.ERROR, "Avatar Error", "Avatar was not saved");
+                return;
+            }
+            //update user table with avatar
+            String updateUserSQL = "UPDATE Users SET avatar_id = ? WHERE id = ?";
+            PreparedStatement updateUserStmt = conn.prepareStatement(updateUserSQL);
+            updateUserStmt.setInt(1, avatarID);
+            updateUserStmt.setInt(2, userID);
+            int updateRows = updateUserStmt.executeUpdate();
+            if (updateRows > 0) {
+                showAlert(Alert.AlertType.INFORMATION, "Registration Complete", "Account Created! Please log in!");
+                navigateToEntranceScreen();
+            }else{
+                showAlert(Alert.AlertType.ERROR, "Registration Failed", "User was not saved");
+                return;
+            }
+
 
         } catch (SQLException e) {
             System.err.println("Database error: " + e.getMessage());
