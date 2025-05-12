@@ -56,6 +56,9 @@ public class CreateAvatarController {
     final String DB_USER = "commapp_db_user";
     final String DB_PASSWORD = "farm9786$";
 
+    private FileChooser fileChooser;
+    private Image profileImage;
+
     //initialize controller
     @FXML
     private void initialize() {
@@ -73,11 +76,11 @@ public class CreateAvatarController {
         User stored = dbInstance.getCurrentUser();
         Avatar storedAvatar = dbInstance.getCurrentAvatar();
 
-        if (stored != null) {
+        if(stored != null) {
             setUser(stored);
         }
 
-        if (storedAvatar != null) {
+        if(storedAvatar != null) {
             setAvatar(storedAvatar);
         }
 
@@ -126,29 +129,30 @@ public class CreateAvatarController {
         this.avatar = avatar;
         dbInstance.setCurrentAvatar(avatar);
         dbInstance.getCurrentUser().setAvatarURL(avatar.getAvatarURL());
-        loadAvatar(user.getUsername(), avatarImageView); // Use background loader with caching
+        avatarImageView.setImage(new Image(avatar.getAvatarURL()));
+
         System.out.println("avatar set successfully");
         System.out.println("style: " + avatar.getStyle());
         System.out.println("avatar url: " + avatar.getAvatarURL());
     }
 
-    // new selectProfilePicture() 3.41 Seconds to load
     @FXML
-    private void selectProfilePicture() {
+    private void selectProfilePicture(){
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg"));
 
         File selectedFile = fileChooser.showOpenDialog(null);
-        if (selectedFile != null) {
+        if(selectedFile != null){
             String filePath = selectedFile.toURI().toString();
             Image profileImage = new Image(filePath);
-            if (profileImage.isError()) {
+            if(profileImage.isError()){
                 System.err.println("error loading profile image " + filePath);
-            } else {
+            }else{
                 avatarImageView.setImage(new Image(filePath));
                 dbInstance.getCurrentUser().setAvatarURL(filePath);
                 System.out.println("profile picture set: " + filePath);
             }
+
         }
     }
 
@@ -215,7 +219,7 @@ public class CreateAvatarController {
         avatar = new Avatar(style, diceBearAPI);
         Image avatarImage = diceBearAPI.fetchAvatar(style);
 
-        if (avatarImage == null || avatarImage.isError()) {
+        if(avatarImage == null || avatarImage.isError()){
             System.err.println("Error fetching avatar preview for style: " + style);
             return;
         }
@@ -269,15 +273,18 @@ public class CreateAvatarController {
             return;
         }
 
+        user = dbInstance.getCurrentUser();
+
         //if no profile, check avatar
         String finalURL = dbInstance.getCurrentAvatar().getAvatarURL();
-        if (finalURL == null || finalURL.isEmpty()) {
-            finalURL = (dbInstance.getCurrentUser().getAvatarURL() != null) ? dbInstance.getCurrentAvatar().getAvatarURL() : null;
+        if(finalURL == null || finalURL.isEmpty()){
+            finalURL = (dbInstance.getCurrentUser().getAvatarURL() != null) ? dbInstance.getCurrentAvatar().getAvatarURL(): null;
         }
 
         //ensure at least one image is seleced before saving
-        if (finalURL == null || finalURL.isEmpty()) {
+        if(finalURL == null || finalURL.isEmpty()){
             showAlert(Alert.AlertType.ERROR, "Error", "Please select an avatar or upload a profile picture");
+            return;
         }
 
         // Hash the password before storing it
@@ -295,8 +302,8 @@ public class CreateAvatarController {
         System.out.println("pronouns: " + user.getPronouns());
 
         //verify before proceeding
-        if (user.getFirstName().isEmpty() || user.getLastName().isEmpty() || user.getEmail().isEmpty() || user.getPhoneNumber().isEmpty()
-                || user.getDob().isEmpty() || user.getGender().isEmpty() || user.getPronouns().isEmpty() || user.getUsername().isEmpty() || user.getPasswordHash().isEmpty()) {
+        if(user.getFirstName().isEmpty() || user.getLastName().isEmpty() || user.getEmail().isEmpty() || user.getPhoneNumber().isEmpty()
+        || user.getDob().isEmpty() || user.getGender().isEmpty() || user.getPronouns().isEmpty() || user.getUsername().isEmpty() || user.getPasswordHash().isEmpty()){
             showAlert(Alert.AlertType.ERROR, "Registration Error", "All required fields must be filled.");
             return;
         }
@@ -318,42 +325,42 @@ public class CreateAvatarController {
             stmt.setString(11, finalURL);
 
             int rowsAffected = stmt.executeUpdate();
-            if (rowsAffected == 0) {
+            if(rowsAffected == 0){
                 showAlert(Alert.AlertType.ERROR, "Registration Failed", "User was not saved");
                 return;
             }
 
             //get generated user id
             int userID = -1;
-            try (var generatedKeys = stmt.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
+            try(var generatedKeys = stmt.getGeneratedKeys()) {
+                if(generatedKeys.next()){
                     userID = generatedKeys.getInt(1);
                     System.out.println("user registered with id: " + userID);
                 }
             }
 
-            if (userID == -1) {
+            if(userID == -1){
                 showAlert(Alert.AlertType.ERROR, "Registration Failed", "User was not saved");
                 return;
             }
 
             //insert avatar into avatar table
-            if (dbInstance.getCurrentAvatar() != null) {
+            if(dbInstance.getCurrentAvatar() != null){
                 String avatarSQL = "INSERT INTO Avatars (user_id, style, avatar_url, created_at) VALUES (?, ?, ?, NOW())";
                 PreparedStatement avatarStmt = conn.prepareStatement(avatarSQL, PreparedStatement.RETURN_GENERATED_KEYS);
                 avatarStmt.setInt(1, userID);
                 avatarStmt.setString(2, avatar.getStyle());
                 avatarStmt.setString(3, avatar.getAvatarURL());
                 int avatarRows = avatarStmt.executeUpdate();
-                if (avatarRows == 0) {
+                if(avatarRows == 0){
                     showAlert(Alert.AlertType.ERROR, "Avatar Error", "Avatar was not saved");
                     return;
                 }
 
                 //generate avatar id
                 int avatarID = -1;
-                try (var generatedKeys = avatarStmt.getGeneratedKeys()) {
-                    if (generatedKeys.next()) {
+                try(var generatedKeys = avatarStmt.getGeneratedKeys()) {
+                    if(generatedKeys.next()){
                         avatarID = generatedKeys.getInt(1);
                         System.out.println("avatar registered with id: " + avatarID);
                     }
@@ -366,7 +373,7 @@ public class CreateAvatarController {
 
 
                 int updateRows = updateUserStmt.executeUpdate();
-                if (updateRows > 0) {
+                if(updateRows > 0){
                     showAlert(Alert.AlertType.INFORMATION, "Registration Complete", "Account Created! Please log in!");
                     navigateToEntranceScreen();
                 }
@@ -385,13 +392,13 @@ public class CreateAvatarController {
         System.out.println("reset avatar preview");
     }
 
-    private void navigateToEntranceScreen() {
+    private void navigateToEntranceScreen(){
         System.out.println("navigating to entrance screen from create avatar");
         UIUtilities.navigateToScreen("/views/entranceScreen.fxml", root.getScene(), false);
     }
 
     @FXML
-    private void navigateToRegistrationScreen() {
+    private void navigateToRegistrationScreen(){
         System.out.println("navigating back to registration screen");
         UIUtilities.navigateToScreen("/views/registrationScreen.fxml", root.getScene(), false);
     }
