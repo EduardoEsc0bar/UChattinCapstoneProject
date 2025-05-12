@@ -106,24 +106,4 @@ public class DiceBearAPI {
         return previewURL;
     }
 
-
-   /*
-    public boolean isCustomizable(String style){
-        try{
-            String schema = fetchAvatar(style);
-            Map<String, List<String>> validOptions = parseOptions(schema);
-            return !validOptions.isEmpty();
-        }catch(Exception e){
-            System.err.println("API request failed: " + e.getMessage());
-            return false;
-        }
-
-    }
-
-//    */
-//   //wrapper method that will wrap the fetchAvatar() and call in an asynchronous compleableFuture:
-//   public CompletableFuture<Image> fetchAvatarAsync(String style) {
-//       return CompletableFuture.supplyAsync(() -> fetchAvatar(style));
-//   }
-
 }
