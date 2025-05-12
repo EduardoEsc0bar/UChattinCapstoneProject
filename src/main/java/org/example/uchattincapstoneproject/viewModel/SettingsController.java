@@ -4,14 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ColorPicker;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.Slider;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -23,7 +16,7 @@ import org.example.uchattincapstoneproject.model.User;
 import java.io.File;
 
 public class SettingsController {
-    DB db = DB.getInstance();
+    DB db;
     User currentUser;
 
     //---------------------Edit Profile Tab---------------------------------\\
@@ -49,6 +42,7 @@ public class SettingsController {
     void saveAllChangesBtnClicked(ActionEvent event) {
         String username = eUsernameTF.getText();
         String displayName = eProfileName.getText();
+        DB db = DB.getInstance();
         db.updateUserDisplayName(username, displayName);
     }
     /**
@@ -224,10 +218,19 @@ public class SettingsController {
 //            if (currentUser.getAvatarImage() != null) {
 //                currentAvatarImageView.setImage(currentUser.getAvatarImage());
 //            }
+
         }
     }
+        //---------------------Delete Tab---------------------------------\\
         @FXML
-        private Tab integrationsTab;
+        private TextArea feedbackTA;
+        @FXML
+        private Tab deleteTab;
+        @FXML
+        void deleteBtnClicked(ActionEvent event) {
+
+        }
+
         @FXML
         private Button saveAllChangesButton;
 
