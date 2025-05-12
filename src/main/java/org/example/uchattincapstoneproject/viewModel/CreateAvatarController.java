@@ -98,9 +98,9 @@ public class CreateAvatarController {
         System.out.println("style: " + avatar.getStyle());
         System.out.println("avatar url: " + avatar.getAvatarURL());
     }
-
+    // new selectProfilePicture() 3.41 Seconds to load
     @FXML
-    private void selectProfilePicture(){
+    private void selectProfilePicture() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg"));
 
@@ -115,9 +115,28 @@ public class CreateAvatarController {
                 dbInstance.getCurrentUser().setAvatarURL(filePath);
                 System.out.println("profile picture set: " + filePath);
             }
-
         }
     }
+//       old selectProfilePicture
+//    @FXML
+//    private void selectProfilePicture(){
+//        FileChooser fileChooser = new FileChooser();
+//        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg"));
+//
+//        File selectedFile = fileChooser.showOpenDialog(null);
+//        if(selectedFile != null){
+//            String filePath = selectedFile.toURI().toString();
+//            Image profileImage = new Image(filePath);
+//            if(profileImage.isError()){
+//                System.err.println("error loading profile image " + filePath);
+//            }else{
+//                avatarImageView.setImage(new Image(filePath));
+//                dbInstance.getCurrentUser().setAvatarURL(filePath);
+//                System.out.println("profile picture set: " + filePath);
+//            }
+//
+//        }
+//    }
     //populates tile tilePane with customization options
     private void populateAvatarTilePane(){
         avatarStyleTP.getChildren().clear();

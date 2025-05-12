@@ -14,6 +14,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.uchattincapstoneproject.viewModel.SettingsController">
@@ -39,7 +40,10 @@
                                           <Font name="Monospaced Regular" size="13.0" />
                                        </font>
                                     </Button>
-                                    <ImageView fx:id="currentAvatarImageView" fitHeight="177.0" fitWidth="155.0" layoutX="21.0" layoutY="18.0" pickOnBounds="true" preserveRatio="true" />
+                                    <ImageView fx:id="currentAvatarImageView" fitHeight="177.0" fitWidth="155.0" layoutX="21.0" layoutY="18.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../imagesIcon/defaultProfileImage.png" />
+                                       </image></ImageView>
                                     <Label fx:id="editUsernameLabel" layoutX="185.0" layoutY="17.0" text="Edit Username">
                                        <font>
                                           <Font name="Monospaced Regular" size="15.0" />
@@ -87,36 +91,25 @@
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="314.0" prefWidth="593.0">
                            <children>
-                              <ImageView fx:id="garbageIV" fitHeight="79.0" fitWidth="72.0" layoutX="514.0" layoutY="233.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../imagesIcon/garbage-icon.jpeg" />
-                                 </image>
-                              </ImageView>
-                              <Label layoutX="527.0" layoutY="297.0" text="Remove">
-                                 <font>
-                                    <Font name="Monospaced Regular" size="13.0" />
-                                 </font>
-                              </Label>
-                              <Button fx:id="clearFavotitesButton" layoutX="39.0" layoutY="280.0" mnemonicParsing="false" onAction="#clearFavoriteBtnClicked" text="Clear Favorites">
-                                 <font>
-                                    <Font name="Monospaced Bold" size="13.0" />
-                                 </font>
-                              </Button>
-                              <Button fx:id="favoritePhraseBtn" layoutX="24.0" layoutY="64.0" mnemonicParsing="false" onAction="#favoritePhraseBtnClicked" text="Favorite Phrases">
-                                 <font>
-                                    <Font name="Monospaced Bold" size="15.0" />
-                                 </font>
-                              </Button>
-                              <Button fx:id="favoritePicturesButton" layoutX="24.0" layoutY="107.0" mnemonicParsing="false" onAction="#favoritePicBtnClicked" text="Favorite Pictures">
-                                 <font>
-                                    <Font name="Monospaced Bold" size="15.0" />
-                                 </font>
-                              </Button>
-                              <Button fx:id="saveManageFavoritesSettingButton" layoutX="204.0" layoutY="280.0" mnemonicParsing="false" onAction="#saveChangesBtnClicked" text="Save Changes">
-                                 <font>
-                                    <Font name="Monospaced Bold" size="13.0" />
-                                 </font>
-                              </Button>
+                              <VBox alignment="CENTER" layoutX="2.0" layoutY="-7.0" prefHeight="330.0" prefWidth="600.0" spacing="40.0">
+                                 <children>
+                                    <Button fx:id="favoritePhraseBtn" mnemonicParsing="false" onAction="#favoritePhraseBtnClicked" prefHeight="70.0" prefWidth="370.0" text="Favorite Phrases">
+                                       <font>
+                                          <Font name="Monospaced Bold" size="24.0" />
+                                       </font>
+                                    </Button>
+                                    <Button fx:id="clearFavotitesButton" mnemonicParsing="false" onAction="#clearFavoriteBtnClicked" prefHeight="70.0" prefWidth="370.0" text="Clear Favorites">
+                                       <font>
+                                          <Font name="Monospaced Bold" size="24.0" />
+                                       </font>
+                                    </Button>
+                                    <Button fx:id="saveManageFavoritesSettingButton" mnemonicParsing="false" onAction="#saveChangesBtnClicked" prefHeight="70.0" prefWidth="370.0" text="Save Changes">
+                                       <font>
+                                          <Font name="Monospaced Bold" size="24.0" />
+                                       </font>
+                                    </Button>
+                                 </children>
+                              </VBox>
                            </children>
                         </AnchorPane>
                   </content>

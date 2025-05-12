@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import javafx.scene.image.Image;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
 public class DiceBearAPI {
     private final HttpClient httpClient = HttpClient.newHttpClient();
@@ -105,6 +106,7 @@ public class DiceBearAPI {
         return previewURL;
     }
 
+
    /*
     public boolean isCustomizable(String style){
         try{
@@ -118,7 +120,10 @@ public class DiceBearAPI {
 
     }
 
-    */
-
+//    */
+//   //wrapper method that will wrap the fetchAvatar() and call in an asynchronous compleableFuture:
+//   public CompletableFuture<Image> fetchAvatarAsync(String style) {
+//       return CompletableFuture.supplyAsync(() -> fetchAvatar(style));
+//   }
 
 }
