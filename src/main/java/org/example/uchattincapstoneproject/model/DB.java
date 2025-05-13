@@ -582,6 +582,23 @@ public class DB {
         }
     }
 
+    public boolean insertExitFeedback(String feedbackMessage) {
+        if(feedbackMessage == null || feedbackMessage.trim().isEmpty()){
+            return false;
+        }
+        try(Connection conn = DriverManager.getConnection(DB_URL + SSL_PARAMS, USERNAME, PASSWORD);
+            PreparedStatement statement = conn.prepareStatement("INSERT INTO exit_feedback (message) VALUES (?)")){
+            statement.setString(1, feedbackMessage.trim());
+            int RowsAffected = statement.executeUpdate();
+            System.out.println("Feedback saved " + (RowsAffected>0));
+            return RowsAffected > 0;
+        }catch (SQLException e) {
+            System.err.println("SQL Query Error: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 //    public boolean DeleteUserbyusername(String username) {
 //        try (Connection conn = DriverManager.getConnection(DB_URL + SSL_PARAMS, USERNAME, PASSWORD)){
 //            String sql = "DELETE FROM Users WHERE username = ?";
