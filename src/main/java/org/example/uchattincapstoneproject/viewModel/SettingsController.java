@@ -243,9 +243,18 @@ public class SettingsController {
         String username = utilities.getCurrentUser().getUsername();
         if (username != null) {
             try {
+                String feedbackMsg = feedbackTA.getText();
+                if(feedbackMsg != null && !feedbackMsg.trim().isEmpty()) {
+                    boolean Savedfeedback = DB.getInstance().insertExitFeedback(feedbackMsg);
+                    if (Savedfeedback) {
+                        System.out.println("Feedback saved.");
+                    }else{
+                        System.out.println("Feedback not saved.");
+                    }
+                }
                 boolean isDeleted = DB.getInstance().deleteUserByUsername(username);
                 utilities.setCurrentUser(null);
-                if (!isDeleted) {
+                if (isDeleted) {
                     System.out.println("Delete Confirmed for: " + username);
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setTitle("Account: " + username + " has been deleted");
@@ -253,8 +262,22 @@ public class SettingsController {
                     alert.setContentText("The account was successfully deleted. The application will close.");
                     alert.showAndWait();
                     Platform.exit();
+                }else{
+                    System.out.println("Delete failed for: " + username);
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("delete unsuccessful");
+                    alert.setHeaderText(null);
+                    alert.setContentText("The account deletion was unsuccessful. The application will close.");
+                    alert.showAndWait();
+                    Platform.exit();
                 }
             } catch (Exception e) {
+                System.err.println("Error deleting account: " + e.getMessage());
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText(null);
+                alert.setContentText("An error occured: " + e.getMessage());
+                alert.showAndWait();
                 throw new RuntimeException(e);
             }
         } else {
