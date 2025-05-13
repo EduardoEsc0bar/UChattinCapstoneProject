@@ -22,10 +22,6 @@ public class TestApp extends Application {
     }
 
     public static void main(String[] args) {
-        DB db = DB.getInstance();
-        User u = db.queryUserByName("ANDREW");
-        Util.getInstance().setCurrentUser(u);
-
         launch(args);
     }
 }
