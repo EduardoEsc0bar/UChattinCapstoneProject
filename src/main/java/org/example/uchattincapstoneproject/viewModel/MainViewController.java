@@ -34,7 +34,7 @@ public class MainViewController {
     private TextArea sentenceBuilderTextArea;
     @FXML
     private Button saveSentenceButton, readOutLoudButton, toggleThemeQuickAccessButton, goToProfileQuickAccessButton,
-    backToDirectoryPaneButton, backToDirectoryButton2,resetSentenceButton;
+    backToDirectoryPaneButton, backToDirectoryButton2, backToDirectoryPane3;
     @FXML
     private ImageView feelings, food, animals, activities, colors, shapes, pronouns, emergency, vehicles
             ,social, places, weather, time, verbs;
@@ -51,6 +51,12 @@ public class MainViewController {
     private final ArasaacService arasaacService = new ArasaacService();
     private SpeechService speechService;
     private int userID;
+
+    //keyboard
+    private static final double KEYBOARD_FULL = 1.0;
+    private static final double KEYBOARD_DIM = 0.3;
+    private boolean isKeyBoardFull = false;
+
 
     @FXML
     private void initialize() {
@@ -85,6 +91,12 @@ public class MainViewController {
         quickAccessIV.setOnMouseClicked(event -> showPane(quickAccessPane));
         backToDirectoryPaneButton.setOnAction(even -> showPane(directoryPane));
         backToDirectoryButton2.setOnAction(even -> showPane(directoryPane));
+        backToDirectoryPane3.setOnAction(even -> showPane(directoryPane));
+
+        keyboardIV.setOpacity(KEYBOARD_FULL);
+        keyboardIV.setOnMouseClicked(event -> toggleKeyboard());
+
+
 
         feelings.setOnMouseClicked(event -> fetchCategoryData("Feelings"));
         activities.setOnMouseClicked(event -> fetchCategoryData("Things to do"));
@@ -101,6 +113,8 @@ public class MainViewController {
         time.setOnMouseClicked(event -> fetchCategoryData("Time"));
         verbs.setOnMouseClicked(event -> fetchCategoryData("Verbs"));
         readOutLoudButton.setOnAction(event -> speakPhrase());
+
+        sentenceBuilderTextArea.setWrapText(true);
     }
 
     public void setUsername(String username){
@@ -118,6 +132,7 @@ public class MainViewController {
         quickAccessPane.setVisible(pane == quickAccessPane);
         backToDirectoryPaneButton.setVisible(pane == categoriesPane);
         backToDirectoryButton2.setVisible(pane == quickAccessPane);
+        backToDirectoryPane3.setVisible(pane == favoritesPane);
 
         //bring pane to front
         pane.toFront();
@@ -230,6 +245,23 @@ public class MainViewController {
         if (!sentence.isEmpty()) {
             System.out.println("speaking " + sentence);
             speechService.synthesizeText(sentence); // Read phrase aloud
+        }
+    }
+
+    //toggle keyboard
+    private void toggleKeyboard(){
+        isKeyBoardFull = !isKeyBoardFull;
+        double targetOpacity = isKeyBoardFull ? KEYBOARD_FULL: KEYBOARD_DIM;
+        FadeTransition fade = new FadeTransition(Duration.millis(300), keyboardIV);
+        fade.setFromValue(keyboardIV.getOpacity());
+        fade.setToValue(targetOpacity);
+        fade.play();
+
+        //enable keyboard
+        sentenceBuilderTextArea.setEditable(isKeyBoardFull);
+        //request focus when toggled on
+        if(isKeyBoardFull){
+            sentenceBuilderTextArea.requestFocus();
         }
     }
 
