@@ -107,7 +107,6 @@ public class DB {
             PreparedStatement preparedStatement = conn.prepareStatement(sql);
             preparedStatement.setString(1, username);
             ResultSet resultSet = preparedStatement.executeQuery();
-
             User user = null;
             if (resultSet.next()) {
                 int id = resultSet.getInt("id");
@@ -120,10 +119,19 @@ public class DB {
                 String gender = resultSet.getString("gender");
                 String pronouns = resultSet.getString("specified_pronouns");
                 String preferredName = resultSet.getString("preferred_name");
-                user = new User(firstName,lastName,preferredName,phoneNumber,email,dob,gender," ",pronouns," ",username,passwordHash);
-
+                user = new User(firstName, lastName, preferredName, phoneNumber, email, dob, gender, " ", pronouns, " ", username, passwordHash);
+//                user.setBio(resultSet.getString("bio"));
 
                 System.out.println("Found user: ID: " + id + ", Name: " + username + ", Email: " + email);
+                String avatarSql = "SELECT avatar_url, style FROM Avatars WHERE user_id = ?";
+                PreparedStatement avatarStatement = conn.prepareStatement(avatarSql);
+                avatarStatement.setInt(1, id);
+                ResultSet avatarResult = avatarStatement.executeQuery();
+                if (avatarResult.next()) {
+                    String avatarUrl = avatarResult.getString("avatar_url");
+                    user.setAvatarURL(avatarUrl);
+                }
+                avatarStatement.close();
             }
             preparedStatement.close();
             conn.close();
@@ -134,6 +142,15 @@ public class DB {
             return null;
         }
     }
+//            preparedStatement.close();
+//            conn.close();
+//            return user;
+//        } catch (SQLException e) {
+//            System.err.println("Error querying user: " + e.getMessage());
+//            e.printStackTrace();
+//            return null;
+//        }
+//    }
 
     /**
      * Retrieves and prints all users in the Users table.
@@ -143,9 +160,7 @@ public class DB {
             Connection conn = DriverManager.getConnection(DB_URL + SSL_PARAMS, USERNAME, PASSWORD);
             String sql = "SELECT * FROM Users";
             PreparedStatement preparedStatement = conn.prepareStatement(sql);
-
             ResultSet resultSet = preparedStatement.executeQuery();
-
             while (resultSet.next()) {
                 int id = resultSet.getInt("id");
                 String name = resultSet.getString("username");
@@ -153,12 +168,32 @@ public class DB {
                 String preferredName = resultSet.getString("preferred_name");
                 System.out.println("ID: " + id + ", Name: " + name + ", Email: " + email + ", Preferred Name: " + preferredName);
             }
-
             preparedStatement.close();
             conn.close();
         } catch (SQLException e) {
             System.err.println("Error listing users: " + e.getMessage());
             e.printStackTrace();
+        }
+    }
+
+    public void insertBio(User user) {
+        Connection conn = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            conn = DriverManager.getConnection(DB_URL + SSL_PARAMS, USERNAME, PASSWORD);
+            String sql = "UPDATE Users SET bio = ? WHERE username = ?";
+            preparedStatement = conn.prepareStatement(sql);
+            preparedStatement.setString(1, user.getBio());
+            preparedStatement.setString(2, user.getUsername());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if (preparedStatement != null) preparedStatement.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                System.err.println("Error closing resources: " + e.getMessage());
+            }
         }
     }
 
@@ -172,14 +207,12 @@ public class DB {
         try {
             // Format the date correctly for MySQL
             String dobFormatted = user.getDob();
-
             // Check if the date is in MM/DD/YYYY format and convert it
             if (dobFormatted.matches("\\d{2}/\\d{2}/\\d{4}")) {
                 String[] parts = dobFormatted.split("/");
                 // Convert from MM/DD/YYYY to YYYY-MM-DD
                 dobFormatted = parts[2] + "-" + parts[0] + "-" + parts[1];
             }
-
             Connection conn = DriverManager.getConnection(DB_URL + SSL_PARAMS, USERNAME, PASSWORD);
             String sql = "INSERT INTO Users (username, email, password_hash, first_name, last_name, " +
                     "dob, phone_number, gender, specified_pronouns, preferred_name) " +
@@ -284,9 +317,9 @@ public class DB {
             // Optional settings - convert to strings/numbers as needed
             String colorString = user.getThemeColor() != null ?
                     String.format("#%02X%02X%02X",
-                            (int)(user.getThemeColor().getRed() * 255),
-                            (int)(user.getThemeColor().getGreen() * 255),
-                            (int)(user.getThemeColor().getBlue() * 255)) :
+                            (int) (user.getThemeColor().getRed() * 255),
+                            (int) (user.getThemeColor().getGreen() * 255),
+                            (int) (user.getThemeColor().getBlue() * 255)) :
                     null;
 
             preparedStatement.setString(9, colorString);
@@ -321,8 +354,8 @@ public class DB {
      * Saves an avatar for a user
      *
      * @param username Username of the user
-     * @param style Avatar style
-     * @param url Avatar URL
+     * @param style    Avatar style
+     * @param url      Avatar URL
      * @return true if avatar was saved successfully, false otherwise
      */
     public boolean saveAvatar(String username, String style, String url) {
@@ -498,7 +531,7 @@ public class DB {
     /**
      * Verifies a plaintext password against a hashed password.
      *
-     * @param password The plaintext password.
+     * @param password       The plaintext password.
      * @param hashedPassword The hashed password.
      * @return true if the password matches the hash, false otherwise.
      */
@@ -549,14 +582,13 @@ public class DB {
 
             ResultSet resultSet = stmt.executeQuery();
 
-            if(!resultSet.next()){
+            if (!resultSet.next()) {
                 System.out.println("no user found with username: " + username);
-            }
-            else{
-                do{
+            } else {
+                do {
                     System.out.println("user found: " + resultSet.getString("username"));
                     System.out.println("stored password: " + resultSet.getString("password_hash"));
-                }  while (resultSet.next());
+                } while (resultSet.next());
             }
             resultSet.close();
             stmt.close();
@@ -564,6 +596,7 @@ public class DB {
             System.err.println("SQL Query Error: " + e.getMessage());
         }
     }
+
     public boolean deleteUserByUsername(String userName) {
         System.out.println("Trying to delete user: [" + userName + "]");
         try (Connection conn = DriverManager.getConnection(DB_URL + SSL_PARAMS, USERNAME, PASSWORD);) {
@@ -583,16 +616,16 @@ public class DB {
     }
 
     public boolean insertExitFeedback(String feedbackMessage) {
-        if(feedbackMessage == null || feedbackMessage.trim().isEmpty()){
+        if (feedbackMessage == null || feedbackMessage.trim().isEmpty()) {
             return false;
         }
-        try(Connection conn = DriverManager.getConnection(DB_URL + SSL_PARAMS, USERNAME, PASSWORD);
-            PreparedStatement statement = conn.prepareStatement("INSERT INTO exit_feedback (message) VALUES (?)")){
+        try (Connection conn = DriverManager.getConnection(DB_URL + SSL_PARAMS, USERNAME, PASSWORD);
+             PreparedStatement statement = conn.prepareStatement("INSERT INTO exit_feedback (message) VALUES (?)")) {
             statement.setString(1, feedbackMessage.trim());
             int RowsAffected = statement.executeUpdate();
-            System.out.println("Feedback saved " + (RowsAffected>0));
+            System.out.println("Feedback saved " + (RowsAffected > 0));
             return RowsAffected > 0;
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             System.err.println("SQL Query Error: " + e.getMessage());
             e.printStackTrace();
             return false;
