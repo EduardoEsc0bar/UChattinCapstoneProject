@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.TilePane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="root" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.uchattincapstoneproject.viewModel.MainViewController">
+   <children>
+      <BorderPane fx:id="contentPane" layoutY="-2.0" prefHeight="800.0" prefWidth="1000.0">
+         <top>
+            <Pane fx:id="speechBuilderPane" prefHeight="94.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
+               <children>
+                  <TextArea fx:id="sentenceBuilderTextArea" editable="false" layoutX="14.0" layoutY="13.0" prefHeight="76.0" prefWidth="813.0" />
+                  <Button fx:id="saveSentenceButton" layoutX="849.0" layoutY="24.0" mnemonicParsing="false" text="Save Phrase">
+                     <font>
+                        <Font name="Monospaced Bold" size="12.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="readOutLoudButton" layoutX="849.0" layoutY="51.0" mnemonicParsing="false" text="Read out Loud">
+                     <font>
+                        <Font name="Monospaced Bold" size="12.0" />
+                     </font>
+                  </Button>
+               </children>
+            </Pane>
+         </top>
+         <center>
+            <StackPane prefHeight="317.0" prefWidth="887.0" BorderPane.alignment="CENTER">
+               <children>
+                  <ScrollPane fx:id="communicationScrollPane" prefHeight="317.0" prefWidth="889.0">
+                     <content>
+                        <TilePane fx:id="communicationTilePane" hgap="5.0" prefHeight="468.0" prefWidth="997.0" vgap="5.0" />
+                     </content>
+                  </ScrollPane>
+               </children>
+            </StackPane>
+         </center>
+         <bottom>
+            <StackPane prefHeight="238.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Pane fx:id="directoryPane" prefHeight="181.0" prefWidth="800.0">
+                     <children>
+                        <ImageView fx:id="categoriesIV" fitHeight="120.0" fitWidth="120.0" layoutX="31.0" layoutY="33.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../imagesIcon/category.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="favoritesIV" fitHeight="120.0" fitWidth="120.0" layoutX="244.0" layoutY="33.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../imagesIcon/favorite.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="keyboardIV" fitHeight="120.0" fitWidth="120.0" layoutX="440.0" layoutY="33.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../imagesIcon/keyboard.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="quickAccessIV" fitHeight="120.0" fitWidth="120.0" layoutX="640.0" layoutY="33.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../imagesIcon/quick-access.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="settingsIV" fitHeight="120.0" fitWidth="120.0" layoutX="852.0" layoutY="33.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../imagesIcon/settings.png" />
+                           </image>
+                        </ImageView>
+                        <Label layoutX="43.0" layoutY="163.0" text="Categories">
+                           <font>
+                              <Font name="Monospaced Bold" size="16.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="277.0" layoutY="163.0" text="Favorites">
+                           <font>
+                              <Font name="Monospaced Bold" size="16.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="469.0" layoutY="163.0" text="Keyboard">
+                           <font>
+                              <Font name="Monospaced Bold" size="16.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="653.0" layoutY="163.0" text="Quick Access">
+                           <font>
+                              <Font name="Monospaced Bold" size="16.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="881.0" layoutY="163.0" text="Settings">
+                           <font>
+                              <Font name="Monospaced Bold" size="16.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </Pane>
+                  <Pane fx:id="quickAccessPane" prefHeight="200.0" prefWidth="200.0" visible="false">
+                     <children>
+                        <Label layoutX="23.0" layoutY="28.0" text="Volume">
+                           <font>
+                              <Font name="Monospaced Bold" size="20.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="23.0" layoutY="79.0" text="Toggle Theme">
+                           <font>
+                              <Font name="Monospaced Bold" size="20.0" />
+                           </font>
+                        </Label>
+                        <Slider fx:id="volumeQuickAccessSlider" layoutX="186.0" layoutY="33.0" />
+                        <Button fx:id="toggleThemeQuickAccessButton" layoutX="197.0" layoutY="79.0" mnemonicParsing="false" text="Light/Dark Theme">
+                           <font>
+                              <Font name="Monospaced Regular" size="15.0" />
+                           </font>
+                        </Button>
+                        <Label layoutX="23.0" layoutY="139.0" text="Go to my Profile">
+                           <font>
+                              <Font name="Monospaced Bold" size="20.0" />
+                           </font>
+                        </Label>
+                        <Button fx:id="goToProfileQuickAccessButton" layoutX="256.0" layoutY="137.0" mnemonicParsing="false" text="Go To Profile">
+                           <font>
+                              <Font name="Monospaced Regular" size="15.0" />
+                           </font>
+                        </Button>
+                        <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="825.0" layoutY="16.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../imagesIcon/thatWasQuick.jpeg" />
+                           </image>
+                        </ImageView>
+                        <Button fx:id="backToDirectoryButton2" layoutX="855.0" layoutY="180.0" mnemonicParsing="false" text="Go Back">
+                           <font>
+                              <Font name="Monospaced Bold" size="16.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </Pane>
+                  <Pane fx:id="favoritesPane" prefHeight="200.0" prefWidth="200.0" visible="false">
+                     <children>
+                        <ImageView fx:id="favoritePhrasesIV" fitHeight="115.0" fitWidth="129.0" layoutX="442.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../imagesIcon/heart.png" />
+                           </image>
+                        </ImageView>
+                        <Label layoutX="432.0" layoutY="152.0" text="Favoite Phrases">
+                           <font>
+                              <Font name="Monospaced Bold" size="15.0" />
+                           </font>
+                        </Label>
+                        <Button fx:id="backToDirectoryPane3" layoutX="904.0" layoutY="183.0" mnemonicParsing="false" text="Back">
+                           <font>
+                              <Font name="Monospaced Regular" size="13.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </Pane>
+                  <Pane fx:id="categoriesPane" prefHeight="238.0" prefWidth="986.0" visible="false">
+                     <children>
+                        <ImageView fx:id="verbs" fitHeight="110.0" fitWidth="118.0" layoutX="263.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../imagesIcon/verbs.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="places" fitHeight="110.0" fitWidth="118.0" layoutX="384.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../imagesIcon/places.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="time" fitHeight="110.0" fitWidth="118.0" layoutX="384.0" layoutY="124.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../imagesIcon/time.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="weather" fitHeight="110.0" fitWidth="118.0" layoutX="623.0" layoutY="124.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../imagesIcon/weather.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="social" fitHeight="110.0" fitWidth="118.0" layoutX="742.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../imagesIcon/social.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="vehicles" fitHeight="110.0" fitWidth="118.0" layoutX="623.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../imagesIcon/vehicles.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="emergency" fitHeight="110.0" fitWidth="118.0" layoutX="263.0" layoutY="124.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../imagesIcon/emergency.png" />
+                           </image>
+                        </ImageView>
+                        <Button fx:id="backToDirectoryPaneButton" layoutX="884.0" layoutY="179.0" mnemonicParsing="false" prefHeight="15.0" prefWidth="98.0" text="Go Back">
+                           <font>
+                              <Font name="Monospaced Bold" size="16.0" />
+                           </font>
+                        </Button>
+                        <ImageView fx:id="pronouns" fitHeight="110.0" fitWidth="118.0" layoutX="133.0" layoutY="119.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../imagesIcon/pronouns.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="colors" fitHeight="110.0" fitWidth="118.0" layoutX="13.0" layoutY="116.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../imagesIcon/colors.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="activities" fitHeight="110.0" fitWidth="118.0" layoutX="500.0" layoutY="124.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../imagesIcon/activities.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="animals" fitHeight="110.0" fitWidth="118.0" layoutX="500.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../imagesIcon/animals.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="food" fitHeight="110.0" fitWidth="118.0" layoutX="133.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../imagesIcon/food.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="feelings" fitHeight="110.0" fitWidth="118.0" layoutX="8.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../imagesIcon/emotions.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="shapes" fitHeight="110.0" fitWidth="118.0" layoutX="742.0" layoutY="119.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../imagesIcon/shapes.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </Pane>
+               </children>
+            </StackPane>
+         </bottom>
+      </BorderPane>
+   </children>
+</AnchorPane>
