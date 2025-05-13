@@ -21,17 +21,12 @@
             <Pane fx:id="speechBuilderPane" prefHeight="94.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
                <children>
                   <TextArea fx:id="sentenceBuilderTextArea" editable="false" layoutX="14.0" layoutY="13.0" prefHeight="76.0" prefWidth="813.0" />
-                  <Button fx:id="saveSentenceButton" layoutX="865.0" layoutY="14.0" mnemonicParsing="false" text="Save Phrase">
+                  <Button fx:id="saveSentenceButton" layoutX="849.0" layoutY="24.0" mnemonicParsing="false" text="Save Phrase">
                      <font>
                         <Font name="Monospaced Bold" size="12.0" />
                      </font>
                   </Button>
-                  <Button fx:id="readOutLoudButton" layoutX="865.0" layoutY="39.0" mnemonicParsing="false" text="Read out Loud">
-                     <font>
-                        <Font name="Monospaced Bold" size="12.0" />
-                     </font>
-                  </Button>
-                  <Button fx:id="resetSentenceButton" layoutX="865.0" layoutY="64.0" mnemonicParsing="false" text="Reset">
+                  <Button fx:id="readOutLoudButton" layoutX="849.0" layoutY="51.0" mnemonicParsing="false" text="Read out Loud">
                      <font>
                         <Font name="Monospaced Bold" size="12.0" />
                      </font>
@@ -53,7 +48,7 @@
          <bottom>
             <StackPane prefHeight="238.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
                <children>
-                  <Pane fx:id="directoryPane" prefHeight="181.0" prefWidth="800.0" visible="false">
+                  <Pane fx:id="directoryPane" prefHeight="181.0" prefWidth="800.0">
                      <children>
                         <ImageView fx:id="categoriesIV" fitHeight="120.0" fitWidth="120.0" layoutX="31.0" layoutY="33.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -147,7 +142,7 @@
                         </Button>
                      </children>
                   </Pane>
-                  <Pane fx:id="favoritesPane" prefHeight="200.0" prefWidth="200.0">
+                  <Pane fx:id="favoritesPane" prefHeight="200.0" prefWidth="200.0" visible="false">
                      <children>
                         <ImageView fx:id="favoritePhrasesIV" fitHeight="115.0" fitWidth="129.0" layoutX="442.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -159,6 +154,11 @@
                               <Font name="Monospaced Bold" size="15.0" />
                            </font>
                         </Label>
+                        <Button fx:id="backToDirectoryPane3" layoutX="904.0" layoutY="183.0" mnemonicParsing="false" text="Back">
+                           <font>
+                              <Font name="Monospaced Regular" size="13.0" />
+                           </font>
+                        </Button>
                      </children>
                   </Pane>
                   <Pane fx:id="categoriesPane" prefHeight="238.0" prefWidth="986.0" visible="false">
