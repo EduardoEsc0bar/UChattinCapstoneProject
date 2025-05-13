@@ -26,15 +26,16 @@ public class SettingsController {
     @FXML
     private Tab editProfileTab;
     @FXML
-    private TextField eProfileName, eUsernameTF, otherGenderSettingsTF,otherPronounsSettingsTF;
+    private TextField eProfileName, eUsernameTF, otherGenderSettingsTF, otherPronounsSettingsTF;
     @FXML
-    private Label editUsernameLabel, editUsernameLabel1, editUsernameLabel11,editUsernameLabel12,editUsernameLabel121;
+    private Label editUsernameLabel, editUsernameLabel1, editUsernameLabel11, editUsernameLabel12, editUsernameLabel121;
     @FXML
     private ComboBox<String> editGenderSettingsCB, editPronounsSettingsCB;
     @FXML
     private ColorPicker profileThemeColorPicker;
     @FXML
     private Button updateAvatarButton;
+
     /**
      * Called when the "Save All Changes" button in the Edit Profile tab is clicked.
      * Updates the current user's display name in the database based on the input fields.
@@ -47,6 +48,7 @@ public class SettingsController {
         String displayName = eProfileName.getText();
         db.updateUserDisplayName(username, displayName);
     }
+
     /**
      * Called when the "Update Avatar" button is clicked.
      * Loads the Create Avatar screen and switches the current scene to it.
@@ -71,13 +73,15 @@ public class SettingsController {
             e.printStackTrace();
         }
     }
+
     //---------------------Manage Favorite Tab---------------------------------\\
     @FXML
     private Tab manageFavoritesTab;
     @FXML
     private ImageView garbageIV;
     @FXML
-    private Button favoritePhraseBtn,favoritePicturesButton,saveManageFavoritesSettingButton;
+    private Button favoritePhraseBtn, favoritePicturesButton, saveManageFavoritesSettingButton;
+
     /**
      * Called when the "Favorite Phrase" button is clicked.
      * This method is currently commented out, but would be used to set a favorite phrase for the user.
@@ -94,6 +98,7 @@ public class SettingsController {
 //            System.out.println("No phrase entered.");
 //        }
     }
+
     /**
      * Called when the "Clear Favorites" button is clicked.
      * This method is currently a placeholder for functionality to clear user's favorite items.
@@ -104,6 +109,7 @@ public class SettingsController {
     void clearFavoriteBtnClicked(ActionEvent event) {
 
     }
+
     /**
      * Called when the "Favorite Picture" button is clicked.
      * Opens a file chooser dialog to allow the user to select an image as their favorite picture.
@@ -125,6 +131,7 @@ public class SettingsController {
             System.out.println("No picture selected.");
         }
     }
+
     /**
      * Called when the "Save Changes" button is clicked in the application or accessibility tab.
      * Saves settings such as theme color, text size, volume, voice, theme, and notification preferences to the current user.
@@ -145,13 +152,14 @@ public class SettingsController {
 //        userDAO.save(currentUser); // Assuming you have a DAO class
         System.out.println("Changes saved.");
     }
+
     //---------------------Accessibility Options Tab---------------------------------\\
     @FXML
     private Pane accessibilityOptionsPane;
     @FXML
     private Tab accessibilityTab;
     @FXML
-    private Slider adjustTextSizeSlider,adjustVolumeSlider;
+    private Slider adjustTextSizeSlider, adjustVolumeSlider;
     @FXML
     private ComboBox<String> chooseVoiceCB;
     @FXML
@@ -172,7 +180,7 @@ public class SettingsController {
     @FXML
     private Button saveApplicationSettingsButton;
     @FXML
-    private RadioButton notificationOnRadioButton,notificationsOffRadioButton;
+    private RadioButton notificationOnRadioButton, notificationsOffRadioButton;
 
     /**
      * Initializes the controller. Loads the current user's data and populates the Edit Profile UI fields.
@@ -223,20 +231,24 @@ public class SettingsController {
 
         }
     }
-        //---------------------Delete Tab---------------------------------\\
-        @FXML
-        private TextArea feedbackTA;
-        @FXML
-        private Tab deleteTab;
-        @FXML
-        void deleteBtnClicked(ActionEvent event) {
-            String username = utilities.getCurrentUser().getUsername();
+
+    //---------------------Delete Tab---------------------------------\\
+    @FXML
+    private TextArea feedbackTA;
+    @FXML
+    private Tab deleteTab;
+
+    @FXML
+    void deleteBtnClicked(ActionEvent event) {
+        String username = utilities.getCurrentUser().getUsername();
+        if (username != null) {
             try {
-                boolean isDeleted = DB.getInstance().deleteUser(username);
+                boolean isDeleted = DB.getInstance().deleteUserByUsername(username);
+                utilities.setCurrentUser(null);
                 if (!isDeleted) {
                     System.out.println("Delete Confirmed for: " + username);
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Account has been deleted");
+                    alert.setTitle("Account: " + username + " has been deleted");
                     alert.setHeaderText(null);
                     alert.setContentText("The account was successfully deleted. The application will close.");
                     alert.showAndWait();
@@ -245,8 +257,17 @@ public class SettingsController {
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
+        } else {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Account was not deleted");
+            alert.setHeaderText(null);
+            alert.setContentText("The account was not successfully deleted. The application will close.");
+            alert.showAndWait();
+            Platform.exit();
         }
-        @FXML
-        private Button saveAllChangesButton;
+    }
+
+    @FXML
+    private Button saveAllChangesButton;
 
 }

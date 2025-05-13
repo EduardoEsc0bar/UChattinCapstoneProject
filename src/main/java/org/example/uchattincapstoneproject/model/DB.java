@@ -69,31 +69,31 @@ public class DB {
      *
      * @return true if there are registered users in the Users table, false otherwise.
      */
-    public boolean connectToDatabase() {
-        boolean hasRegistredUsers = false;
-
-        try {
-            // Connect to the database with SSL parameters
-            Connection conn = DriverManager.getConnection(DB_URL + SSL_PARAMS, USERNAME, PASSWORD);
-            Statement statement = conn.createStatement();
-
-            // Check if we have users in the table Users
-            ResultSet resultSet = statement.executeQuery("SELECT COUNT(*) FROM Users");
-            if (resultSet.next()) {
-                int numUsers = resultSet.getInt(1);
-                if (numUsers > 0) {
-                    hasRegistredUsers = true;
-                }
-            }
-            statement.close();
-            conn.close();
-        } catch (Exception e) {
-            System.err.println("Database connection error: " + e.getMessage());
-            e.printStackTrace();
-        }
-
-        return hasRegistredUsers;
-    }
+//    public boolean connectToDatabase() {
+//        boolean hasRegistredUsers = false;
+//
+//        try {
+//            // Connect to the database with SSL parameters
+//            Connection conn = DriverManager.getConnection(DB_URL + SSL_PARAMS, USERNAME, PASSWORD);
+//            Statement statement = conn.createStatement();
+//
+//            // Check if we have users in the table Users
+//            ResultSet resultSet = statement.executeQuery("SELECT COUNT(*) FROM Users");
+//            if (resultSet.next()) {
+//                int numUsers = resultSet.getInt(1);
+//                if (numUsers > 0) {
+//                    hasRegistredUsers = true;
+//                }
+//            }
+//            statement.close();
+//            conn.close();
+//        } catch (Exception e) {
+//            System.err.println("Database connection error: " + e.getMessage());
+//            e.printStackTrace();
+//        }
+//
+//        return hasRegistredUsers;
+//    }
 
     /**
      * Queries and prints information of a user by their username.
@@ -106,7 +106,6 @@ public class DB {
             String sql = "SELECT * FROM Users WHERE username = ?";
             PreparedStatement preparedStatement = conn.prepareStatement(sql);
             preparedStatement.setString(1, username);
-
             ResultSet resultSet = preparedStatement.executeQuery();
 
             User user = null;
@@ -121,25 +120,11 @@ public class DB {
                 String gender = resultSet.getString("gender");
                 String pronouns = resultSet.getString("specified_pronouns");
                 String preferredName = resultSet.getString("preferred_name");
+                user = new User(firstName,lastName,preferredName,phoneNumber,email,dob,gender," ",pronouns," ",username,passwordHash);
 
-                user = new User(
-                        username,
-                        passwordHash,
-                        firstName,
-                        lastName,
-                        dob,
-                        email,
-                        phoneNumber,
-                        pronouns,
-                        gender,
-                        "",
-                        "",
-                        preferredName
-                );
 
                 System.out.println("Found user: ID: " + id + ", Name: " + username + ", Email: " + email);
             }
-
             preparedStatement.close();
             conn.close();
             return user;
@@ -579,31 +564,61 @@ public class DB {
             System.err.println("SQL Query Error: " + e.getMessage());
         }
     }
+    public boolean deleteUserByUsername(String userName) {
+        System.out.println("Trying to delete user: [" + userName + "]");
+        try (Connection conn = DriverManager.getConnection(DB_URL + SSL_PARAMS, USERNAME, PASSWORD);) {
+            String sql = "DELETE FROM Users WHERE username = ?";
+            try (PreparedStatement statement = conn.prepareStatement(sql)) {
+                statement.setString(1, userName.trim());
+                int rowsAffected = statement.executeUpdate();
+                System.out.println("Rows affected: " + rowsAffected);
+                return rowsAffected > 0;
 
-    public boolean deleteUser(String username) {
-        try(Connection conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD)){
-            String sql = "DELETE FROM users WHERE username = ?";
-            try(PreparedStatement stmt = conn.prepareStatement(sql)){
-                stmt.setString(1, username);
-
-                int Rowsaffected = stmt.executeUpdate();
-                System.out.println("Rowaffected: " + Rowsaffected);
-                if(Rowsaffected == 0) {
-                    System.out.println("No user deleted. It may not exist: " + username);
-                }
-                return Rowsaffected > 0;
             }
-        }catch(SQLException e){
-            System.err.println("fallback deleting user(SQL error): " + e.getMessage());
+        } catch (SQLException e) {
+            System.err.println("SQL Query Error: " + e.getMessage());
             e.printStackTrace();
             return false;
         }
     }
 
+//    public boolean DeleteUserbyusername(String username) {
+//        try (Connection conn = DriverManager.getConnection(DB_URL + SSL_PARAMS, USERNAME, PASSWORD)){
+//            String sql = "DELETE FROM Users WHERE username = ?";
+//            try(PreparedStatement statement = conn.prepareStatement(sql)){
+//                statement.setString(1, username);
+//                int Rowsaffected = statement.executeUpdate();
+//                return Rowsaffected > 0;
+//            }
+//        }catch (SQLException e){
+//            System.err.println("SQL Query Error: " + e.getMessage());
+//            e.printStackTrace();
+//            return false;
+//        }
+//
+//    }
 
-    public static void main(String[] args){
-        DB db = DB.getInstance();
+    public void listAllUsernames() {
+        String sql = "SELECT username FROM Users";
+        try (Connection conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
 
-        db.testSQLQuery("anniep8");
+            System.out.println("Current usernames in database:");
+            int count = 0;
+            while (rs.next()) {
+                String username = rs.getString("username");
+                System.out.println(" - " + username);
+                count++;
+            }
+
+            if (count == 0) {
+                System.out.println("(No users found in database.)");
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error listing usernames: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 }
