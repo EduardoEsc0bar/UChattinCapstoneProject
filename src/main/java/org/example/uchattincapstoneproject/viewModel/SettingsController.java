@@ -22,6 +22,8 @@ public class SettingsController {
     Util utilities = Util.getInstance();
     User currentUser;
 
+
+
     //---------------------Edit Profile Tab---------------------------------\\
     @FXML
     private Tab editProfileTab;

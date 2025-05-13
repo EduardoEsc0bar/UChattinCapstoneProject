@@ -22,6 +22,7 @@ public class User {
     private String username;
     private String passwordHash;
     private String avatarURL;
+    private String bio;
 
     //UPDATES TO ACCOMODATE NEW FUNCTIONS!!!!
     private Color themeColor;            // From ColorPicker
@@ -193,7 +194,12 @@ public class User {
     public void setFavoritePicture(String favoritePicture) {
         this.favoritePicture = favoritePicture;
     }
-
+    public String getBio() {
+        return bio;
+    }
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
     /**
      * Validates required user fields
      * @return true if all required fields are valid, false otherwise

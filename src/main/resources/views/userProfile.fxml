@@ -13,47 +13,33 @@
 
 <AnchorPane prefHeight="491.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.uchattincapstoneproject.viewModel.UserProfileController">
    <children>
-      <Pane layoutX="-1.0" prefHeight="493.0" prefWidth="800.0">
+      <Pane layoutX="-1.0" prefHeight="493.0" prefWidth="800.0" style="-fx-background-color: #f4f8fb;">
          <children>
-            <ImageView fx:id="profileAvatarIV" fitHeight="144.0" fitWidth="164.0" layoutX="68.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="profileAvatarIV" fitHeight="194.0" fitWidth="202.0" layoutX="59.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../imagesIcon/defaultProfileImage.png" />
                </image></ImageView>
-            <Label fx:id="userNameLbl" layoutX="23.0" layoutY="178.0" prefHeight="20.0" prefWidth="202.0" text="Hello User">
+            <Label fx:id="userNameLbl" alignment="CENTER" layoutX="6.0" layoutY="224.0" prefHeight="20.0" prefWidth="270.0" text="Hello User" textAlignment="CENTER">
                <font>
-                  <Font name="Monospaced Bold" size="17.0" />
+                  <Font name="Monospaced Bold" size="14.0" />
                </font>
             </Label>
-            <TextArea fx:id="bioTextArea" layoutX="280.0" layoutY="254.0" prefHeight="218.0" prefWidth="474.0" promptText="Tell us about yourself" />
-            <Label fx:id="profileUserLabel1" layoutX="280.0" layoutY="214.0" prefHeight="20.0" prefWidth="164.0" text="Bio:">
+            <TextArea fx:id="bioTextArea" layoutX="236.0" layoutY="287.0" prefHeight="185.0" prefWidth="542.0" promptText="Tell us about yourself" />
+            <Label fx:id="bioLbl" layoutX="236.0" layoutY="264.0" prefHeight="20.0" prefWidth="164.0" text="Bio:">
                <font>
-                  <Font name="Monospaced Bold" size="17.0" />
+                  <Font name="Monospaced Bold" size="18.0" />
                </font>
             </Label>
-            <VBox layoutX="288.0" layoutY="14.0" prefHeight="174.0" prefWidth="482.0">
+            <VBox layoutX="304.0" layoutY="14.0" prefHeight="175.0" prefWidth="474.0" style="-fx-background-color: #f4f8fb;">
                <children>
                   <HBox prefHeight="34.0" prefWidth="482.0">
                      <children>
-                        <Label prefHeight="34.0" prefWidth="159.0" text="First Name:">
+                        <Label alignment="CENTER" prefHeight="34.0" prefWidth="200.0" text="First Name:" textAlignment="CENTER">
                            <font>
-                              <Font size="18.0" />
+                              <Font name="System Bold" size="18.0" />
                            </font>
                         </Label>
-                        <Label fx:id="fNameLbl" prefHeight="34.0" prefWidth="389.0">
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                        </Label>
-                     </children>
-                  </HBox>
-                  <HBox prefHeight="34.0" prefWidth="482.0">
-                     <children>
-                        <Label prefHeight="34.0" prefWidth="166.0" text="Last Name:">
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="lNameLbl" prefHeight="34.0" prefWidth="391.0">
+                        <Label fx:id="fNameLbl" prefHeight="34.0" prefWidth="389.0" style="-fx-font-weight: medium; -fx-padding: 4px; -fx-background-color: #f4f8fb; -fx-border-radius: 6px;" textFill="#333333">
                            <font>
                               <Font size="18.0" />
                            </font>
@@ -62,26 +48,12 @@
                   </HBox>
                   <HBox prefHeight="34.0" prefWidth="482.0">
                      <children>
-                        <Label prefHeight="34.0" prefWidth="168.0" text="Gender:">
+                        <Label alignment="CENTER" prefHeight="34.0" prefWidth="200.0" text="Last Name:">
                            <font>
-                              <Font size="18.0" />
+                              <Font name="System Bold" size="18.0" />
                            </font>
                         </Label>
-                        <Label fx:id="genderLbl" prefHeight="34.0" prefWidth="385.0">
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                        </Label>
-                     </children>
-                  </HBox>
-                  <HBox prefHeight="34.0" prefWidth="482.0">
-                     <children>
-                        <Label prefHeight="34.0" prefWidth="129.0" text="Pronouns: ">
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="pronounsLbl" prefHeight="34.0" prefWidth="353.0">
+                        <Label fx:id="lNameLbl" prefHeight="34.0" prefWidth="389.0" style="-fx-font-weight: medium; -fx-padding: 4px; -fx-background-color: #f4f8fb; -fx-border-radius: 6px;" textFill="#333333">
                            <font>
                               <Font size="18.0" />
                            </font>
@@ -90,12 +62,40 @@
                   </HBox>
                   <HBox prefHeight="34.0" prefWidth="482.0">
                      <children>
-                        <Label prefHeight="34.0" prefWidth="174.0" text="Preffered Name:">
+                        <Label alignment="CENTER" prefHeight="34.0" prefWidth="200.0" text="Gender:">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="genderLbl" prefHeight="34.0" prefWidth="389.0" style="-fx-font-weight: medium; -fx-padding: 4px; -fx-background-color: #f4f8fb; -fx-border-radius: 6px;" textFill="#333333">
                            <font>
                               <Font size="18.0" />
                            </font>
                         </Label>
-                        <Label fx:id="pNameLbl" prefHeight="34.0" prefWidth="389.0">
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="34.0" prefWidth="482.0">
+                     <children>
+                        <Label alignment="CENTER" prefHeight="34.0" prefWidth="200.0" text="Pronouns: ">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="pronounsLbl" prefHeight="34.0" prefWidth="389.0" style="-fx-font-weight: medium; -fx-padding: 4px; -fx-background-color: #f4f8fb; -fx-border-radius: 6px;" textFill="#333333">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox fx:id="pNameHbox" prefHeight="34.0" prefWidth="482.0">
+                     <children>
+                        <Label alignment="CENTER" prefHeight="34.0" prefWidth="200.0" text="Preffered Name:">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="pNameLbl" prefHeight="35.0" prefWidth="389.0" style="-fx-font-weight: medium; -fx-padding: 4px; -fx-background-color: #f4f8fb; -fx-border-radius: 6px;" textFill="#333333">
                            <font>
                               <Font size="18.0" />
                            </font>
@@ -104,45 +104,51 @@
                   </HBox>
                </children>
             </VBox>
-            <VBox alignment="CENTER" layoutX="86.0" layoutY="254.0" prefHeight="218.0" prefWidth="94.0" spacing="40.0">
+            <VBox alignment="CENTER" layoutX="70.0" layoutY="261.0" prefHeight="217.0" prefWidth="142.0" spacing="40.0">
                <children>
-                  <Button mnemonicParsing="false" onAction="#homeBtnClicked" prefHeight="80.0" prefWidth="121.0" style="-fx-background-radius: 0;">
+                  <Button mnemonicParsing="false" onAction="#homeBtnClicked" prefHeight="100.0" prefWidth="150.0" style="-fx-background-radius: 0; -fx-background-color: transparent;">
                      <font>
                         <Font name="Monospaced Regular" size="14.0" />
                      </font>
                      <graphic>
-                        <VBox alignment="TOP_CENTER" prefHeight="80.0" prefWidth="115.0" style="-fx-background-color: #FFFFFF;">
+                        <VBox alignment="TOP_CENTER" prefHeight="80.0" prefWidth="115.0" style="-fx-background-color: #f4f8fb;">
                            <children>
-                              <ImageView fitHeight="52.0" fitWidth="118.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fitHeight="68.0" fitWidth="69.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@../imagesIcon/HomeIcon.png" />
                                  </image>
                               </ImageView>
-                              <Label alignment="CENTER" prefHeight="17.0" prefWidth="124.0" text="Home" />
+                              <Label alignment="CENTER" prefHeight="17.0" prefWidth="124.0" text="Home">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font></Label>
                            </children>
                         </VBox>
                      </graphic>
                   </Button>
-                  <Button mnemonicParsing="false" onAction="#homeBtnClicked" prefHeight="80.0" prefWidth="133.0" style="-fx-background-radius: 0; -fx-background-color: #FFFFFF;">
+                  <Button mnemonicParsing="false" onAction="#saveBtnClicked" prefHeight="100.0" prefWidth="114.0" style="-fx-background-radius: 0; -fx-background-color: transparent;">
                      <font>
                         <Font name="Monospaced Regular" size="14.0" />
                      </font>
                      <graphic>
-                        <VBox alignment="TOP_CENTER" prefHeight="70.0" prefWidth="97.0" style="-fx-background-color: #FFFFFF;">
+                        <VBox alignment="TOP_CENTER" prefHeight="70.0" prefWidth="97.0" style="-fx-background-color: #f4f8fb;">
                            <children>
-                              <ImageView fitHeight="52.0" fitWidth="76.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fx:id="saveImgView" fitHeight="72.0" fitWidth="74.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../imagesIcon/SettingsIcon.png" />
+                                    <Image url="@../imagesIcon/floppy-disk-star-arrow-right.195x256.png" />
                                  </image>
                               </ImageView>
-                              <Label alignment="CENTER" prefHeight="17.0" prefWidth="124.0" text="Settings" />
+                              <Label fx:id="saveBioLbl" alignment="CENTER" prefHeight="17.0" prefWidth="124.0" text="Save Bio">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Label>
                            </children>
                         </VBox>
                      </graphic>
                   </Button>
                </children>
             </VBox>
-            <Button layoutX="657.0" layoutY="211.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="97.0" text="Save Bio" />
          </children>
       </Pane>
    </children>
