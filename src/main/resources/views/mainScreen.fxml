@@ -12,44 +12,34 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.TilePane?>
-<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="root" prefHeight="800.0" prefWidth="1020.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.uchattincapstoneproject.viewModel.MainViewController">
+<AnchorPane fx:id="root" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.uchattincapstoneproject.viewModel.MainViewController">
    <children>
-      <BorderPane fx:id="contentPane" layoutY="-2.0" prefHeight="800.0" prefWidth="1020.0">
+      <BorderPane fx:id="contentPane" layoutY="-2.0" prefHeight="800.0" prefWidth="1000.0">
          <top>
             <Pane fx:id="speechBuilderPane" prefHeight="94.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
                <children>
                   <TextArea fx:id="sentenceBuilderTextArea" editable="false" layoutX="14.0" layoutY="13.0" prefHeight="76.0" prefWidth="813.0" />
-                  <VBox alignment="TOP_CENTER" layoutX="826.0" layoutY="10.0" prefHeight="82.0" prefWidth="195.0">
-                     <children>
-                        <Button fx:id="readOutLoudButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="115.0" text="Read out Loud">
-                           <font>
-                              <Font name="Monospaced Bold" size="12.0" />
-                           </font>
-                        </Button>
-                        <Button fx:id="saveSentenceButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="115.0" text="Save Phrase">
-                           <font>
-                              <Font name="Monospaced Bold" size="12.0" />
-                           </font>
-                        </Button>
-                        <Button fx:id="resetSentenceButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="115.0" text="Reset">
-                           <font>
-                              <Font name="Monospaced Bold" size="12.0" />
-                           </font>
-                        </Button>
-                     </children>
-                  </VBox>
+                  <Button fx:id="saveSentenceButton" layoutX="849.0" layoutY="24.0" mnemonicParsing="false" text="Save Phrase">
+                     <font>
+                        <Font name="Monospaced Bold" size="12.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="readOutLoudButton" layoutX="849.0" layoutY="51.0" mnemonicParsing="false" text="Read out Loud">
+                     <font>
+                        <Font name="Monospaced Bold" size="12.0" />
+                     </font>
+                  </Button>
                </children>
             </Pane>
          </top>
          <center>
-            <StackPane prefHeight="467.0" prefWidth="1022.0" BorderPane.alignment="CENTER">
+            <StackPane prefHeight="317.0" prefWidth="887.0" BorderPane.alignment="CENTER">
                <children>
-                  <ScrollPane fx:id="communicationScrollPane" hbarPolicy="NEVER" prefHeight="467.0" prefWidth="1024.0">
+                  <ScrollPane fx:id="communicationScrollPane" prefHeight="317.0" prefWidth="889.0">
                      <content>
-                        <TilePane fx:id="communicationTilePane" alignment="TOP_CENTER" hgap="5.0" prefHeight="468.0" prefWidth="1020.0" vgap="5.0" />
+                        <TilePane fx:id="communicationTilePane" hgap="5.0" prefHeight="468.0" prefWidth="997.0" vgap="5.0" />
                      </content>
                   </ScrollPane>
                </children>
@@ -58,7 +48,7 @@
          <bottom>
             <StackPane prefHeight="238.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
                <children>
-                  <Pane fx:id="directoryPane" prefHeight="181.0" prefWidth="800.0" visible="false">
+                  <Pane fx:id="directoryPane" prefHeight="181.0" prefWidth="800.0">
                      <children>
                         <ImageView fx:id="categoriesIV" fitHeight="120.0" fitWidth="120.0" layoutX="31.0" layoutY="33.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -152,7 +142,7 @@
                         </Button>
                      </children>
                   </Pane>
-                  <Pane fx:id="favoritesPane" prefHeight="200.0" prefWidth="200.0">
+                  <Pane fx:id="favoritesPane" prefHeight="200.0" prefWidth="200.0" visible="false">
                      <children>
                         <ImageView fx:id="favoritePhrasesIV" fitHeight="115.0" fitWidth="129.0" layoutX="442.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -164,6 +154,11 @@
                               <Font name="Monospaced Bold" size="15.0" />
                            </font>
                         </Label>
+                        <Button fx:id="backToDirectoryPane3" layoutX="904.0" layoutY="183.0" mnemonicParsing="false" text="Back">
+                           <font>
+                              <Font name="Monospaced Regular" size="13.0" />
+                           </font>
+                        </Button>
                      </children>
                   </Pane>
                   <Pane fx:id="categoriesPane" prefHeight="238.0" prefWidth="986.0" visible="false">
