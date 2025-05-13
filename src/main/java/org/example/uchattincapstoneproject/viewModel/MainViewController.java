@@ -86,7 +86,22 @@ public class MainViewController {
         }
 
         categoriesIV.setOnMouseClicked(event -> showPane(categoriesPane));
-        settingsIV.setOnMouseClicked(event -> UIUtilities.navigateToScreen("/views/settingsScreen.fxml", root.getScene(), true));
+        settingsIV.setOnMouseClicked(event -> {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/settingsScreen.fxml"));
+                Parent settingsRoot = loader.load();
+                Stage currentStage = (Stage) root.getScene().getWindow();
+
+                // Create a new scene with the correct dimensions
+                Scene settingsScene = new Scene(settingsRoot, 1000, 800);
+                currentStage.setScene(settingsScene);
+                currentStage.setTitle("Settings");
+                currentStage.show();
+            } catch (IOException e) {
+                System.err.println("Error loading settings screen.");
+                e.printStackTrace();
+            }
+        });
         favoritesIV.setOnMouseClicked(event -> showPane(favoritesPane));
         quickAccessIV.setOnMouseClicked(event -> showPane(quickAccessPane));
         backToDirectoryPaneButton.setOnAction(even -> showPane(directoryPane));
