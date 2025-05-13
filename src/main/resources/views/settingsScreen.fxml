@@ -17,7 +17,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="root" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.uchattincapstoneproject.viewModel.SettingsController">
+<AnchorPane prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.uchattincapstoneproject.viewModel.SettingsController">
    <children>
       <StackPane prefHeight="800.0" prefWidth="1000.0" />
       <Pane prefHeight="802.0" prefWidth="1000.0">
@@ -64,29 +64,39 @@
                                        <font>
                                           <Font size="20.0" />
                                        </font></TextField>
-                                    <Label fx:id="editUsernameLabel11" layoutX="199.0" layoutY="450.0" text="Profile Theme Color">
+                                    <Label fx:id="editUsernameLabel11" layoutX="199.0" layoutY="466.0" text="Profile Theme Color">
                                        <font>
                                           <Font name="Monospaced Regular" size="26.0" />
                                        </font>
                                     </Label>
-                                    <ColorPicker fx:id="profileThemeColorPicker" layoutX="548.0" layoutY="445.0" prefHeight="39.0" prefWidth="185.0" />
+                                    <ColorPicker fx:id="profileThemeColorPicker" layoutX="546.0" layoutY="463.0" prefHeight="39.0" prefWidth="185.0" />
                                     <Label fx:id="editUsernameLabel12" layoutX="199.0" layoutY="280.0" text="Edit Gender">
                                        <font>
                                           <Font name="Monospaced Regular" size="26.0" />
                                        </font>
                                     </Label>
-                                    <TextField fx:id="otherGenderSettingsTF" layoutX="750.0" layoutY="112.0" prefHeight="25.0" prefWidth="118.0" promptText="specify">
+                                    <TextField fx:id="emailTF" layoutX="548.0" layoutY="394.0" prefHeight="25" prefWidth="185">
                                        <font>
                                           <Font size="20.0" />
-                                       </font></TextField>
-                                    <ComboBox fx:id="editGenderSettingsCB" layoutX="548.0" layoutY="276.0" prefHeight="39.0" prefWidth="185.0" promptText="Choose your gender" />
-                                    <Label fx:id="editUsernameLabel121" layoutX="199.0" layoutY="361.0" text="Edit pronoun">
+                                       </font>
+                                    </TextField>
+                                    <Label layoutX="199.0" layoutY="400.0" text="Email">
                                        <font>
                                           <Font name="Monospaced Regular" size="26.0" />
                                        </font>
                                     </Label>
-                                    <ComboBox fx:id="editPronounsSettingsCB" layoutX="548.0" layoutY="356.0" prefHeight="39.0" prefWidth="183.0" promptText="Choose your pronouns" />
-                                    <TextField fx:id="otherPronounsSettingsTF" layoutX="750.0" layoutY="199.0" prefHeight="25.0" prefWidth="118.0" promptText="specify">
+                                    <TextField fx:id="otherGenderSettingsTF" layoutX="761.0" layoutY="276.0" prefHeight="25.0" prefWidth="118.0" promptText="specify">
+                                       <font>
+                                          <Font size="20.0" />
+                                       </font></TextField>
+                                    <ComboBox fx:id="editGenderSettingsCB" layoutX="548.0" layoutY="276.0" prefHeight="39.0" prefWidth="185.0" promptText="Choose your gender" />
+                                    <Label fx:id="editUsernameLabel121" layoutX="199.0" layoutY="342.0" prefHeight="31.0" prefWidth="212.0" text="Edit pronouns">
+                                       <font>
+                                          <Font name="Monospaced Regular" size="26.0" />
+                                       </font>
+                                    </Label>
+                                    <ComboBox fx:id="editPronounsSettingsCB" layoutX="548.0" layoutY="338.0" prefHeight="39.0" prefWidth="183.0" promptText="Choose your pronouns" />
+                                    <TextField fx:id="otherPronounsSettingsTF" layoutX="760.0" layoutY="337.0" prefHeight="25.0" prefWidth="118.0" promptText="specify">
                                        <font>
                                           <Font size="20.0" />
                                        </font></TextField>

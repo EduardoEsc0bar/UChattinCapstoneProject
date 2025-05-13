@@ -15,6 +15,7 @@ import org.example.uchattincapstoneproject.model.Avatar;
 import org.example.uchattincapstoneproject.model.DB;
 import org.example.uchattincapstoneproject.model.DiceBearAPI;
 import org.example.uchattincapstoneproject.model.User;
+import org.example.uchattincapstoneproject.model.Util;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.io.File;
@@ -45,6 +46,13 @@ public class CreateAvatarController {
     private Avatar avatar;
     private User user;
     private DB dbInstance;
+    private Util utilities;
+
+    // Flag to determine if we're updating an existing user
+    private boolean isUpdatingExistingUser = false;
+
+    // For custom profile pictures (not from DiceBear)
+    private String customProfilePictureUrl = null;
 
     final String DB_URL = "jdbc:mysql://commapp.mysql.database.azure.com:3306/communication_app";
     final String DB_USER = "commapp_db_user";
@@ -65,15 +73,23 @@ public class CreateAvatarController {
             root.heightProperty().addListener((observable, oldValue, newValue) -> UIUtilities.centerContent(root, createAvatarPane));
         });
 
-        // Get DB instance
+        // Get DB instance and Util instance
         dbInstance = DB.getInstance();
-        User stored = dbInstance.getCurrentUser();
-        Avatar storedAvatar = dbInstance.getCurrentAvatar();
+        utilities = Util.getInstance();
 
-        if(stored != null) {
-            setUser(stored);
+        // Try to get current user from both sources
+        user = utilities.getCurrentUser();
+        if (user == null) {
+            user = dbInstance.getCurrentUser();
         }
 
+        // Determine if we're updating an existing user (already logged in)
+        isUpdatingExistingUser = (user != null && user.getUsername() != null);
+
+        System.out.println("Create Avatar mode: " + (isUpdatingExistingUser ? "UPDATE EXISTING USER" : "NEW USER REGISTRATION"));
+
+        // Get avatar if available
+        Avatar storedAvatar = dbInstance.getCurrentAvatar();
         if(storedAvatar != null) {
             setAvatar(storedAvatar);
         }
@@ -84,13 +100,27 @@ public class CreateAvatarController {
         }); //load avatar images on tile pane
 
         //set button actions for avatar modification
-        saveAvatarButton.setOnAction(event -> registerUser());
+        saveAvatarButton.setOnAction(event -> saveAvatarChanges());
         resetAvatarButton.setOnAction(event -> resetAvatar());
-        backToRegistrationButton.setOnAction(event -> navigateToRegistrationScreen());
+
+        // Set back button behavior based on context
+        if (isUpdatingExistingUser) {
+            // Rename button if necessary
+            if (backToRegistrationButton.getText().equals("Back to Registration")) {
+                backToRegistrationButton.setText("Back to Settings");
+            }
+
+            backToRegistrationButton.setOnAction(event -> navigateToSettingsScreen());
+        } else {
+            backToRegistrationButton.setOnAction(event -> navigateToRegistrationScreen());
+        }
+
         profilePicButton.setOnAction(event -> selectProfilePicture());
 
         //load avatar preview (default)
-        //resetAvatar();
+        if (avatar == null) {
+            resetAvatar();
+        }
     }
 
     public void loadAvatar(String userId, ImageView avatarImageView) {
@@ -125,16 +155,21 @@ public class CreateAvatarController {
         if(avatar != null){
             this.avatar = avatar;
             dbInstance.setCurrentAvatar(avatar);
-            dbInstance.getCurrentUser().setAvatarURL(avatar.getAvatarURL());
-            avatarImageView.setImage(new Image(avatar.getAvatarURL()));
+
+            if (dbInstance.getCurrentUser() != null) {
+                String avatarUrl = avatar.getAvatarURL();
+                dbInstance.getCurrentUser().setAvatarURL(avatarUrl);
+
+                // Update the avatar image view
+                avatarImageView.setImage(new Image(avatarUrl));
+            }
 
             System.out.println("avatar set successfully");
             System.out.println("style: " + avatar.getStyle());
             System.out.println("avatar url: " + avatar.getAvatarURL());
-        }else{
+        } else {
             System.err.println("error, avatar object is null");
         }
-
     }
 
     @FXML
@@ -152,22 +187,29 @@ public class CreateAvatarController {
                 Image profileImage = new Image(formattedPath);
                 if(profileImage.isError()){
                     System.err.println("error loading profile image " + formattedPath);
-                }else{
-                    avatarImageView.setImage(new Image(formattedPath));
-                    dbInstance.getCurrentUser().setAvatarURL(formattedPath);
+                } else {
+                    avatarImageView.setImage(profileImage);
+
+                    // Store the custom profile picture URL
+                    customProfilePictureUrl = formattedPath;
+
+                    // Clear the avatar to indicate we're using a custom profile picture
+                    avatar = null;
+
+                    if (dbInstance.getCurrentUser() != null) {
+                        dbInstance.getCurrentUser().setAvatarURL(formattedPath);
+                    }
+
                     System.out.println("profile picture set: " + formattedPath);
                 }
-            }catch (Exception e){
+            } catch (Exception e){
                 System.err.println("error handling profile image: " + e.getMessage());
                 e.printStackTrace();
             }
-
-
         }
     }
 
-
-    //populates tile tilePane with customization options [dicebearAPI limit how many images you can load in a specified time frame so this should make the system less laggy by slowing down how many can be loaded]
+    //populates tile tilePane with customization options
     private void populateAvatarTilePane() {
         avatarStyleTP.getChildren().clear();
         List<String> availableStyles = diceBearAPI.getAvailableStyles();
@@ -235,56 +277,98 @@ public class CreateAvatarController {
         }
 
         dbInstance.setCurrentAvatar(avatar);
-        dbInstance.getCurrentUser().setAvatarURL(avatar.getAvatarURL());
+
+        // Clear custom profile picture since we're using a DiceBear avatar
+        customProfilePictureUrl = null;
+
+        if (dbInstance.getCurrentUser() != null) {
+            dbInstance.getCurrentUser().setAvatarURL(avatar.getAvatarURL());
+        }
 
         avatarImageView.setImage(avatarImage);
         avatarImageView.setVisible(true);
         System.out.println("avatar set successfully: " + avatar.getAvatarURL());
     }
 
+    /**
+     * Main method to save avatar changes - decides whether to update existing user or register new user
+     */
+    private void saveAvatarChanges() {
+        // Check if we have either an avatar or a custom profile picture
+        if (avatar == null && customProfilePictureUrl == null) {
+            showAlert(Alert.AlertType.WARNING, "No Avatar Selected", "Please select an avatar style or upload a profile picture.");
+            return;
+        }
 
-    //saves avatar settings and navigates to main screen
-    private void saveAvatar() {
-        try {
-            if (avatar == null) {
-                showAlert(Alert.AlertType.WARNING, "No Avatar Selected", "Please select an avatar style first.");
-                return;
-            }
-
-            String avatarURL = avatar.getAvatarURL();
-            System.out.println("saved avatar URL: " + avatarURL);
-
-            // Update user with avatar information
-            if (user != null) {
-                user.setAvatar(avatar);
-                dbInstance.setCurrentUser(user);
-            } else {
-                // If user is null, try to get from DB
-                user = dbInstance.getCurrentUser();
-                if (user != null) {
-                    user.setAvatar(avatar);
-                }
-            }
-
-            showAlert(Alert.AlertType.INFORMATION, "Avatar Saved",
-                    "Your avatar has been saved. Please log in!");
-
-            // Navigate to main screen after saving
-            UIUtilities.navigateToScreen("/views/entranceScreen.fxml", avatarStyleButton.getScene(), false);
-        } catch (Exception e) {
-            e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Error Saving Avatar",
-                    "An error occurred while saving your avatar: " + e.getMessage());
+        // Check if we're updating an existing user or registering a new one
+        if (isUpdatingExistingUser) {
+            updateExistingUserAvatar();
+        } else {
+            registerUser();
         }
     }
 
+    /**
+     * Updates avatar for an existing user
+     */
+    private void updateExistingUserAvatar() {
+        try {
+            if (user == null || user.getUsername() == null || user.getUsername().isEmpty()) {
+                showAlert(Alert.AlertType.ERROR, "Error", "Unable to identify current user.");
+                return;
+            }
+
+            String avatarUrl;
+            String style;
+
+            // Determine if we're using a custom profile picture or a DiceBear avatar
+            if (customProfilePictureUrl != null) {
+                avatarUrl = customProfilePictureUrl;
+                style = "profile_picture";
+            } else if (avatar != null) {
+                avatarUrl = avatar.getAvatarURL();
+                style = avatar.getStyle();
+            } else {
+                showAlert(Alert.AlertType.ERROR, "Error", "No avatar selected.");
+                return;
+            }
+
+            // Update avatar in the database
+            boolean success = dbInstance.saveAvatar(user.getUsername(), style, avatarUrl);
+
+            if (success) {
+                // Update user object
+                user.setAvatarURL(avatarUrl);
+
+                // If using DiceBear avatar, set the avatar object
+                if (avatar != null) {
+                    user.setAvatar(avatar);
+                }
+
+                // Update in singletons
+                dbInstance.setCurrentUser(user);
+                utilities.setCurrentUser(user);
+
+                showAlert(Alert.AlertType.INFORMATION, "Success", "Avatar updated successfully!");
+
+                // Navigate back to settings screen
+                navigateToSettingsScreen();
+            } else {
+                showAlert(Alert.AlertType.ERROR, "Error", "Failed to save avatar changes.");
+            }
+        } catch (Exception e) {
+            System.err.println("Error updating avatar: " + e.getMessage());
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Error", "Failed to update avatar: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Registers a new user with the selected avatar
+     */
     @FXML
     private void registerUser() {
         user = dbInstance.getCurrentUser();
-        Avatar avatar = dbInstance.getCurrentAvatar();
-
-        System.out.println("user = " + (user != null ? user.getUsername() : "null"));
-        System.out.println("avatar = " + (avatar != null ? avatar.getAvatarURL() : "null"));
 
         if (user == null) {
             System.err.println("user object is null");
@@ -292,21 +376,22 @@ public class CreateAvatarController {
             return;
         }
 
-        //use profile picture if no avatar is selected
-        String finalImageSource = user.getAvatarURL();
-        boolean isProfilePicture = (finalImageSource != null && !finalImageSource.isEmpty() && finalImageSource.startsWith("file:"));
+        // Determine image source - prefer custom profile picture if set
+        String finalImageSource;
+        boolean isProfilePicture;
 
-        if(!isProfilePicture && avatar != null) {
+        if (customProfilePictureUrl != null) {
+            finalImageSource = customProfilePictureUrl;
+            isProfilePicture = true;
+        } else if (avatar != null) {
             finalImageSource = avatar.getAvatarURL();
-        }
-
-        System.out.println("finaAvatarURL = " + finalImageSource);
-
-        //ensure at least one image is seleced before saving
-        if(finalImageSource == null || finalImageSource.isEmpty()){
+            isProfilePicture = false;
+        } else {
             showAlert(Alert.AlertType.ERROR, "Error", "Please select an avatar or upload a profile picture");
             return;
         }
+
+        System.out.println("finalAvatarURL = " + finalImageSource);
 
         // Hash the password before storing it
         String hashedPassword = BCrypt.hashpw(user.getPasswordHash().trim(), BCrypt.gensalt());
@@ -324,7 +409,7 @@ public class CreateAvatarController {
 
         //verify before proceeding
         if(user.getFirstName().isEmpty() || user.getLastName().isEmpty() || user.getEmail().isEmpty() || user.getPhoneNumber().isEmpty()
-        || user.getDob().isEmpty() || user.getGender().isEmpty() || user.getPronouns().isEmpty() || user.getUsername().isEmpty() || user.getPasswordHash().isEmpty()){
+                || user.getDob().isEmpty() || user.getGender().isEmpty() || user.getPronouns().isEmpty() || user.getUsername().isEmpty() || user.getPasswordHash().isEmpty()){
             showAlert(Alert.AlertType.ERROR, "Registration Error", "All required fields must be filled.");
             return;
         }
@@ -409,12 +494,10 @@ public class CreateAvatarController {
                 showAlert(Alert.AlertType.ERROR, "Registration Failed", "User was not saved");
                 return;
             }
-
-
         } catch (SQLException e) {
             System.err.println("Database error: " + e.getMessage());
             e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Database Error", "Failed to register user.");
+            showAlert(Alert.AlertType.ERROR, "Database Error", "Failed to register user: " + e.getMessage());
         }
     }
 
@@ -429,12 +512,16 @@ public class CreateAvatarController {
         UIUtilities.navigateToScreen("/views/entranceScreen.fxml", root.getScene(), false);
     }
 
+    private void navigateToSettingsScreen(){
+        System.out.println("navigating to settings screen from create avatar");
+        UIUtilities.navigateToScreen("/views/settingsScreen.fxml", root.getScene(), false);
+    }
+
     @FXML
     private void navigateToRegistrationScreen(){
         System.out.println("navigating back to registration screen");
         UIUtilities.navigateToScreen("/views/registrationScreen.fxml", root.getScene(), false);
     }
-
 
     // Display alert
     private void showAlert(Alert.AlertType alertType, String title, String message) {
