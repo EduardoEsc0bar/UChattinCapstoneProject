@@ -30,6 +30,7 @@ public class entranceController {
     @FXML private ImageView communicationIV, visibilityOn, visibilityOff;
     @FXML private Pane contentPane;
 
+
     Util utilities = Util.getInstance();
     private DB dbInstance;
     final String DB_URL = "jdbc:mysql://commapp.mysql.database.azure.com:3306/communication_app";
@@ -67,6 +68,7 @@ public class entranceController {
 
         });
         verifySceneInitialization();
+
     }
 
     private void verifySceneInitialization(){
@@ -93,10 +95,10 @@ public class entranceController {
 
         // Use the same authentication method that worked in DBTest
         User authenticatedUser = dbInstance.authenticateUser(username, password);
-
         if(authenticatedUser != null) {
+            User u = dbInstance.queryUserByName(username);
             showAlert(Alert.AlertType.INFORMATION, "Login Successful", "Welcome " + username + "!");
-            utilities.setCurrentUser(authenticatedUser);
+            Util.getInstance().setCurrentUser(u);
             navigateToMainScreen();
         }else{
             System.out.println("authentication failed");

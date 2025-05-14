@@ -1,0 +1,62 @@
+.root {
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-background-color: linear-gradient(to bottom right, #2e3b4e, #3e4f61);
+    -fx-text-fill: #e0e6ed;
+}
+
+.button {
+    -fx-background-color: linear-gradient(to bottom, #5a6e8c, #4a5a71);
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: bold;
+    -fx-padding: 10 20;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 4, 0.5, 0, 2);
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: linear-gradient(to bottom, #6b7f9c, #5b6e84);
+}
+
+.button:pressed {
+    -fx-background-color: linear-gradient(to bottom, #3e4f61, #2e3b4e);
+}
+
+.label {
+    -fx-text-fill: #dce3ea;
+    -fx-font-size: 14px;
+}
+
+.text-field {
+    -fx-background-color: #3a4659;
+    -fx-text-fill: #ffffff;
+    -fx-prompt-text-fill: #a0aab7;
+    -fx-background-radius: 6;
+    -fx-border-color: #59697d;
+    -fx-border-radius: 6;
+    -fx-padding: 8;
+}
+
+.tile {
+    -fx-background-color: linear-gradient(to bottom, #3e4f61, #2e3b4e);
+    -fx-background-radius: 12;
+    -fx-padding: 16;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 6, 0.3, 0, 2);
+}
+
+.image-view {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 4, 0.3, 0, 2);
+    -fx-background-radius: 10;
+}
+
+.scroll-pane {
+    -fx-background: #2e3b4e;
+    -fx-border-color: #4a5a71;
+}
+
+.scroll-bar:vertical .thumb,
+.scroll-bar:horizontal .thumb {
+    -fx-background-color: #5a6e8c;
+    -fx-background-radius: 4;
+}

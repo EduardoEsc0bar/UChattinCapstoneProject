@@ -5,6 +5,7 @@ import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -40,6 +41,8 @@ public class CreateAvatarController {
     private AnchorPane root;
     @FXML
     private Pane createAvatarPane;
+    @FXML
+    private Label welcomeLbl;
     private Map<String, Image> avatarCache = new HashMap<>();
     private DiceBearAPI diceBearAPI = new DiceBearAPI();
     private Avatar avatar;
@@ -91,6 +94,8 @@ public class CreateAvatarController {
 
         //load avatar preview (default)
         //resetAvatar();
+        user = dbInstance.getCurrentUser();
+        welcomeLbl.setText("Welcome to UChattin" + user.getFirstName());
     }
 
     public void loadAvatar(String userId, ImageView avatarImageView) {

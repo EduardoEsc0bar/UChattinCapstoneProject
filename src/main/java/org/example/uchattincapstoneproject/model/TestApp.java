@@ -10,7 +10,7 @@ public class TestApp extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/userProfile.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/createAvatarScreen.fxml"));
         Parent root = loader.load();
         Scene scene = new Scene(root);
         primaryStage.setTitle("registration screen");
@@ -19,8 +19,8 @@ public class TestApp extends Application {
     }
 
     public static void main(String[] args) {
-        Util.getInstance().setCurrentUser(DB.getInstance().queryUserByName("joenunez@farmingdale.edu"));
-        Util.getInstance().getCurrentUser().setPreferredName(null);
+        DB.getInstance().setCurrentUser(DB.getInstance().queryUserByName("joenunez@farmingdale.edu"));
+
         launch(args);
     }
 }

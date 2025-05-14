@@ -151,8 +151,7 @@ public class DB {
             preparedStatement = conn.prepareStatement(sql);
             preparedStatement.setString(1, user.getBio());
             preparedStatement.setString(2, user.getUsername());
-
-            int rowsAffected = preparedStatement.executeUpdate();  // ✅ THIS LINE WAS MISSING
+            int rowsAffected = preparedStatement.executeUpdate();
             System.out.println("Updated rows: " + rowsAffected);
         } catch (Exception e) {
             throw new RuntimeException(e);
