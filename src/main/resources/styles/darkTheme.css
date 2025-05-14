@@ -1,0 +1,41 @@
+/* General Background */
+.root {
+    -fx-background-color: #3E2605; /* Rich dark brown */
+    -fx-text-fill: #F5E3C3; /* Warm beige text */
+}
+
+/* Pane Styling */
+.pane, .login-pane, .main-pane, .profile-pane, .settings-pane {
+    -fx-background-color: linear-gradient(to bottom, #3E2605, #5D3A00);
+}
+
+/* Button Styling */
+.button {
+    -fx-background-color: #6D3F1C; /* Warm cocoa */
+    -fx-border-color: #402307; /* Dark brown */
+    -fx-text-fill: #FFD700; /* Golden anime-style text */
+    -fx-font-weight: bold;
+    -fx-padding: 10px;
+}
+
+/* Hover Glow Effect */
+.button:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.3);
+    -fx-effect: dropshadow(gaussian, #FFD700, 10, 0.3, 0, 0);
+    -fx-scale-x: 1.1;
+    -fx-scale-y: 1.1;
+}
+
+/* Text Field & Password Field Styling */
+.text-field, .password-field {
+    -fx-background-color: #402307;
+    -fx-border-color: #8B5A2B;
+    -fx-text-fill: #F5E3C3;
+    -fx-font-size: 14px;
+}
+
+/* Avatar Elements */
+.avatar {
+    -fx-background-color: #5D3A00;
+    -fx-border-color: #FFD700; /* Anime glow */
+}

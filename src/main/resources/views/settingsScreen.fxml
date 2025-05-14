@@ -35,7 +35,7 @@
                            <children>
                               <Pane fx:id="editProfilePane" prefHeight="326.0" prefWidth="600.0">
                                  <children>
-                                    <Button fx:id="updateAvatarButton" layoutX="39.0" layoutY="230.0" mnemonicParsing="false" onAction="#updateAvatarBtnClicked" text="Update Avatar">
+                                    <Button fx:id="updateAvatarButton" layoutX="31.0" layoutY="227.0" mnemonicParsing="false" onAction="#updateAvatarBtnClicked" text="Update Avatar">
                                        <font>
                                           <Font name="Monospaced Regular" size="13.0" />
                                        </font>
@@ -88,9 +88,9 @@
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="314.0" prefWidth="593.0">
                            <children>
-                              <ImageView fx:id="garbageIV" fitHeight="79.0" fitWidth="72.0" layoutX="514.0" layoutY="233.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fx:id="garbageIV" fitHeight="79.0" fitWidth="72.0" layoutX="515.0" layoutY="225.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../imagesIcon/garbage-icon.jpeg" />
+                                    <Image url="@../imagesIcon/garbage.png" />
                                  </image>
                               </ImageView>
                               <Label layoutX="527.0" layoutY="297.0" text="Remove">

@@ -1,0 +1,41 @@
+/* General Background */
+.root {
+    -fx-background-color: #B8E986; /* Soft pastel green */
+    -fx-text-fill: #3E5B37; /* Deep forest green */
+}
+
+/* Pane Styling */
+.pane, .login-pane, .main-pane, .profile-pane, .settings-pane {
+    -fx-background-color: linear-gradient(to bottom, #B8E986, #4CAF50);
+}
+
+/* Button Styling */
+.button {
+    -fx-background-color: #4CAF50; /* Vibrant green */
+    -fx-border-color: #3E5B37; /* Forest green border */
+    -fx-text-fill: #00FFD1; /* Neon anime glow */
+    -fx-font-weight: bold;
+    -fx-padding: 10px;
+}
+
+/* Hover Glow Effect */
+.button:hover {
+    -fx-background-color: rgba(0, 255, 209, 0.3);
+    -fx-effect: dropshadow(gaussian, #00FFD1, 10, 0.3, 0, 0);
+    -fx-scale-x: 1.1;
+    -fx-scale-y: 1.1;
+}
+
+/* Text Field & Password Field Styling */
+.text-field, .password-field {
+    -fx-background-color: #6D8A5B;
+    -fx-border-color: #C2B490;
+    -fx-text-fill: #FFF6E3;
+    -fx-font-size: 14px;
+}
+
+/* Avatar Elements */
+.avatar {
+    -fx-background-color: #4CAF50;
+    -fx-border-color: #00FFD1; /* Futuristic anime glow */
+}

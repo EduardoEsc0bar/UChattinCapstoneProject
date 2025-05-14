@@ -68,4 +68,16 @@ public class UIUtilities {
         }
     }
 
+    public static void changeTheme(Scene scene, String theme) {
+        if (scene != null) {
+            scene.getStylesheets().clear();
+
+            if ("dark".equals(theme)) {
+                scene.getStylesheets().add(UIUtilities.class.getResource("darkTheme.css").toExternalForm());
+            } else if ("light".equals(theme)) {
+                scene.getStylesheets().add(UIUtilities.class.getResource("lightTheme.css").toExternalForm());
+            }
+        }
+    }
 }
+

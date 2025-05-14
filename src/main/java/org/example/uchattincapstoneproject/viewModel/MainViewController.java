@@ -1,15 +1,14 @@
 package org.example.uchattincapstoneproject.viewModel;
 
+import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
+import javafx.animation.RotateTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -19,11 +18,17 @@ import javafx.scene.layout.TilePane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.example.uchattincapstoneproject.model.ArasaacService;
+import org.example.uchattincapstoneproject.model.FavoritePhrase;
+import org.example.uchattincapstoneproject.model.FavoritePhraseStorage;
 import org.example.uchattincapstoneproject.model.SpeechService;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainViewController {
     @FXML
@@ -39,15 +44,14 @@ public class MainViewController {
     backToDirectoryPaneButton, backToDirectoryButton2, backToDirectoryPane3;
     @FXML
     private ImageView feelings, food, animals, activities, colors, shapes, pronouns, emergency, vehicles
-            ,social, places, weather, time, verbs;
+            ,social, places, weather, time, verbs, loadingIV;
     @FXML
     private ImageView categoriesIV, favoritesIV, keyboardIV, quickAccessIV, settingsIV;
     @FXML
-    private Pane directoryPane, quickAccessPane, favoritesPane, categoriesPane;
+    private Pane directoryPane, quickAccessPane, favoritesPane, categoriesPane, splashPane;
     @FXML
     private Slider volumeQuickAccessSlider;
     private String username;
-
 
     private final ArasaacService arasaacService = new ArasaacService();
     private SpeechService speechService;
@@ -88,7 +92,10 @@ public class MainViewController {
 
         categoriesIV.setOnMouseClicked(event -> showPane(categoriesPane));
         settingsIV.setOnMouseClicked(event -> UIUtilities.navigateToScreen("/views/settingsScreen.fxml", root.getScene(), true));
-        favoritesIV.setOnMouseClicked(event -> showPane(favoritesPane));
+        favoritesIV.setOnMouseClicked(event -> {
+            loadFavorites();
+            showPane(favoritesPane);
+        });
         quickAccessIV.setOnMouseClicked(event -> showPane(quickAccessPane));
         backToDirectoryPaneButton.setOnAction(even -> showPane(directoryPane));
         backToDirectoryButton2.setOnAction(even -> showPane(directoryPane));
@@ -96,8 +103,6 @@ public class MainViewController {
 
         keyboardIV.setOpacity(KEYBOARD_FULL);
         keyboardIV.setOnMouseClicked(event -> toggleKeyboard());
-
-
 
         feelings.setOnMouseClicked(event -> fetchCategoryData("Feelings"));
         activities.setOnMouseClicked(event -> fetchCategoryData("Things to do"));
@@ -113,9 +118,20 @@ public class MainViewController {
         weather.setOnMouseClicked(event -> fetchCategoryData("Weather"));
         time.setOnMouseClicked(event -> fetchCategoryData("Time"));
         verbs.setOnMouseClicked(event -> fetchCategoryData("Verbs"));
+
         readOutLoudButton.setOnAction(event -> speakPhrase());
 
+        saveSentenceButton.setOnAction(event -> saveCurrentPhraseAsFavorite());
         sentenceBuilderTextArea.setWrapText(true);
+
+        goToProfileQuickAccessButton.setOnAction(event -> UIUtilities.navigateToScreen("/views/userProfile.fxml", root.getScene(), false));
+
+        if(splashPane != null){
+            splashPane.setVisible(false);
+            splashPane.toFront();
+        }else{
+            System.out.println("splash pane is null");
+        }
     }
 
     public void setUsername(String username){
@@ -127,19 +143,30 @@ public class MainViewController {
         this.userID = userID;
     }
 
+    private void showSplashScreen(){
+
+        Platform.runLater(()->{
+            splashPane.setVisible(true);
+            splashPane.toFront();
+            System.out.println("splash screen should be visible");
+        });
+
+        RotateTransition rotate = new RotateTransition(Duration.millis(200), loadingIV);
+        rotate.setByAngle(360);
+        rotate.setCycleCount(Animation.INDEFINITE);
+        rotate.play();
+    }
+
     private void showPane(Pane pane) {
         directoryPane.setVisible(pane == directoryPane);
         categoriesPane.setVisible(pane == categoriesPane);
         quickAccessPane.setVisible(pane == quickAccessPane);
-        backToDirectoryPaneButton.setVisible(pane == categoriesPane);
-        backToDirectoryButton2.setVisible(pane == quickAccessPane);
-        backToDirectoryPane3.setVisible(pane == favoritesPane);
+        favoritesPane.setVisible(pane == favoritesPane);
 
         //bring pane to front
         pane.toFront();
 
     }
-
 
     private void navigateToSettingsScreen() {
         try {
@@ -170,10 +197,16 @@ public class MainViewController {
 
 
     private void fetchCategoryData(String category) {
+        showSplashScreen();
         String pictogramResponse = arasaacService.fetchPictograms(category); //Fetch phrases & images
         System.out.println("api response for category: " + category);
-        populateTilePane(pictogramResponse);
+        Platform.runLater(()->{
+            populateTilePane(pictogramResponse);
+            splashPane.setVisible(false);
+        });
+
     }
+
     private void populateTilePane(String pictograms) {
         communicationTilePane.getChildren().clear();
         System.out.println("Updating TilePane with pictograms...");
@@ -192,7 +225,9 @@ public class MainViewController {
             if (imageUrl.isEmpty() || !imageUrl.startsWith("https://static.arasaac.org/pictograms/")) continue;
 
             Button pictogramButton = new Button(phrase);
-            pictogramButton.setPrefSize(120, 120);
+            pictogramButton.setPrefSize(120, 140);
+            pictogramButton.setWrapText(true);
+            pictogramButton.setContentDisplay(ContentDisplay.TOP);
 
             try {
                 Image pictoImage = new Image(imageUrl, 120, 120, true, true, false);
@@ -215,10 +250,8 @@ public class MainViewController {
                 System.out.println("Failed to load pictogram: " + phrase);
             }
         }
-
         System.out.println("Loaded " + loadedCount + " pictograms into the TilePane.");
     }
-
 
     private void addWordToSentence(String phrase) {
         sentenceBuilderTextArea.appendText(phrase + " ");
@@ -247,6 +280,119 @@ public class MainViewController {
         if(isKeyBoardFull){
             sentenceBuilderTextArea.requestFocus();
         }
+    }
+
+    private void saveCurrentPhraseAsFavorite() {
+        String currentPhrase = sentenceBuilderTextArea.getText().trim();
+
+        if (currentPhrase.isEmpty()) {
+            return; // No phrase to save, silently exit.
+        }
+
+        // Fetch ONE pictogram related to this phrase.
+        String imageUrl = fetchPictogramForPhrase(currentPhrase);
+
+        // Store the favorite with the phrase and one matching pictogram.
+        FavoritePhrase fav = new FavoritePhrase(currentPhrase, imageUrl);
+        FavoritePhraseStorage.getInstance().addFavoritePhrase(userID, fav);
+    }
+
+    private String fetchPictogramForPhrase(String phrase) {
+        //Try fetching a pictogram for the full phrase first.
+        String encodedPhrase = URLEncoder.encode(phrase, StandardCharsets.UTF_8);
+        String pictograms = arasaacService.fetchPictograms(encodedPhrase);
+
+        if (pictograms != null && !pictograms.isEmpty()) {
+            String[] pictogramList = pictograms.split("\n");
+            for (String item : pictogramList) {
+                String[] parts = item.split(":", 2);
+                if (parts.length < 2) continue;
+
+                String imageUrl = parts[1].trim();
+                if (imageUrl.startsWith("https://static.arasaac.org/pictograms/")) {
+                    return imageUrl; // Return first valid pictogram found
+                }
+            }
+        }
+
+        //If no full phrase pictogram found, search for individual words separately.
+        String[] words = phrase.split("\\s+");
+        for (String word : words) {
+            String encodedWord = URLEncoder.encode(word, StandardCharsets.UTF_8);
+            String wordPictograms = arasaacService.fetchPictograms(encodedWord);
+
+            if (wordPictograms != null && !wordPictograms.isEmpty()) {
+                String[] pictogramList = wordPictograms.split("\n");
+                for (String item : pictogramList) {
+                    String[] parts = item.split(":", 2);
+                    if (parts.length < 2) continue;
+
+                    String imageUrl = parts[1].trim();
+                    if (imageUrl.startsWith("https://static.arasaac.org/pictograms/")) {
+                        return imageUrl; // Return the first valid pictogram
+                    }
+                }
+            }
+        }
+
+        return ""; // No valid pictogram found, return empty string instead of null
+    }
+
+
+    //load favorite phrases into pane
+    private void loadFavorites() {
+        communicationTilePane.getChildren().clear(); // Clear previous content
+
+        List<FavoritePhrase> favorites = FavoritePhraseStorage.getInstance().getFavoritePhrases(userID);
+        if (favorites.isEmpty()) {
+            System.out.println("No favorites found for user: " + userID);
+            splashPane.setVisible(false);
+            return;
+        }
+
+        for (FavoritePhrase fav : favorites) {
+            // Create a button for the phrase itself.
+            Button favButton = new Button(fav.getPhrase());
+            favButton.setPrefSize(120, 140);
+            favButton.setWrapText(true);
+            favButton.setContentDisplay(javafx.scene.control.ContentDisplay.TOP);
+
+            try {
+                // Display a pictogram next to the phrase, if available.
+                if (!fav.getImageURL().isEmpty()) {
+                    Image pictoImage = new Image(fav.getImageURL(), 120, 120, true, true, false);
+                    ImageView pictoView = new ImageView(pictoImage);
+                    pictoView.setFitHeight(120);
+                    pictoView.setFitWidth(120);
+                    favButton.setGraphic(pictoView);
+
+                    pictoView.setOnMouseClicked(event -> {
+                        sentenceBuilderTextArea.appendText(fav.getPhrase() + " ");
+                        speechService.synthesizeText(fav.getPhrase());
+                    });
+
+                    communicationTilePane.getChildren().add(pictoView); // Add pictogram to tile pane
+                }
+            } catch (Exception e) {
+                System.out.println("Error loading pictogram for favorite: " + fav.getPhrase());
+            }
+
+            // Clicking the phrase button adds it to the sentence builder and speaks it aloud.
+            favButton.setOnAction(event -> {
+                sentenceBuilderTextArea.appendText(fav.getPhrase() + " ");
+                speechService.synthesizeText(fav.getPhrase());
+            });
+
+            // Add both phrase button and pictogram to the tile pane.
+            communicationTilePane.getChildren().add(favButton);
+        }
+    }
+
+    private void showAlert(Alert.AlertType alertType, String title, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     public static void main(String[] args) {

@@ -24,7 +24,10 @@
                   <Font name="Monospaced Bold" size="17.0" />
                </font>
             </Label>
-            <TextArea fx:id="bioTextArea" layoutX="280.0" layoutY="254.0" prefHeight="218.0" prefWidth="474.0" promptText="Tell us about yourself" />
+            <TextArea fx:id="bioTextArea" layoutX="280.0" layoutY="254.0" prefHeight="218.0" prefWidth="474.0" promptText="Tell us about yourself" wrapText="true">
+               <font>
+                  <Font name="Monospaced Regular" size="12.0" />
+               </font></TextArea>
             <Label fx:id="profileUserLabel1" layoutX="280.0" layoutY="214.0" prefHeight="20.0" prefWidth="164.0" text="Bio:">
                <font>
                   <Font name="Monospaced Bold" size="17.0" />
@@ -36,7 +39,7 @@
                      <children>
                         <Label prefHeight="34.0" prefWidth="159.0" text="First Name:">
                            <font>
-                              <Font size="18.0" />
+                              <Font name="Monospaced Regular" size="18.0" />
                            </font>
                         </Label>
                         <Label fx:id="fNameLbl" prefHeight="34.0" prefWidth="389.0">
@@ -50,7 +53,7 @@
                      <children>
                         <Label prefHeight="34.0" prefWidth="166.0" text="Last Name:">
                            <font>
-                              <Font size="18.0" />
+                              <Font name="Monospaced Regular" size="18.0" />
                            </font>
                         </Label>
                         <Label fx:id="lNameLbl" prefHeight="34.0" prefWidth="391.0">
@@ -64,7 +67,7 @@
                      <children>
                         <Label prefHeight="34.0" prefWidth="168.0" text="Gender:">
                            <font>
-                              <Font size="18.0" />
+                              <Font name="Monospaced Regular" size="18.0" />
                            </font>
                         </Label>
                         <Label fx:id="genderLbl" prefHeight="34.0" prefWidth="385.0">
@@ -78,7 +81,7 @@
                      <children>
                         <Label prefHeight="34.0" prefWidth="129.0" text="Pronouns: ">
                            <font>
-                              <Font size="18.0" />
+                              <Font name="Monospaced Regular" size="18.0" />
                            </font>
                         </Label>
                         <Label fx:id="pronounsLbl" prefHeight="34.0" prefWidth="353.0">
@@ -90,9 +93,9 @@
                   </HBox>
                   <HBox prefHeight="34.0" prefWidth="482.0">
                      <children>
-                        <Label prefHeight="34.0" prefWidth="174.0" text="Preffered Name:">
+                        <Label prefHeight="34.0" prefWidth="241.0" text="Preferred Name:">
                            <font>
-                              <Font size="18.0" />
+                              <Font name="Monospaced Regular" size="18.0" />
                            </font>
                         </Label>
                         <Label fx:id="pNameLbl" prefHeight="34.0" prefWidth="389.0">
@@ -118,7 +121,10 @@
                                     <Image url="@../imagesIcon/HomeIcon.png" />
                                  </image>
                               </ImageView>
-                              <Label alignment="CENTER" prefHeight="17.0" prefWidth="124.0" text="Home" />
+                              <Label alignment="CENTER" prefHeight="17.0" prefWidth="124.0" text="Home">
+                                 <font>
+                                    <Font name="Monospaced Regular" size="12.0" />
+                                 </font></Label>
                            </children>
                         </VBox>
                      </graphic>
@@ -135,14 +141,20 @@
                                     <Image url="@../imagesIcon/SettingsIcon.png" />
                                  </image>
                               </ImageView>
-                              <Label alignment="CENTER" prefHeight="17.0" prefWidth="124.0" text="Settings" />
+                              <Label alignment="CENTER" prefHeight="17.0" prefWidth="124.0" text="Settings">
+                                 <font>
+                                    <Font name="Monospaced Regular" size="12.0" />
+                                 </font></Label>
                            </children>
                         </VBox>
                      </graphic>
                   </Button>
                </children>
             </VBox>
-            <Button layoutX="657.0" layoutY="211.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="97.0" text="Save Bio" />
+            <Button layoutX="657.0" layoutY="211.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="97.0" text="Save Bio">
+               <font>
+                  <Font name="Monospaced Regular" size="13.0" />
+               </font></Button>
          </children>
       </Pane>
    </children>
