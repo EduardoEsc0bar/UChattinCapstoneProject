@@ -138,7 +138,7 @@
                            <children>
                               <ImageView fitHeight="52.0" fitWidth="76.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../imagesIcon/SettingsIcon.png" />
+                                    <Image url="@../imagesIcon/settings.png" />
                                  </image>
                               </ImageView>
                               <Label alignment="CENTER" prefHeight="17.0" prefWidth="124.0" text="Settings">

@@ -42,14 +42,14 @@
                         <TilePane fx:id="communicationTilePane" hgap="5.0" prefHeight="468.0" prefWidth="997.0" vgap="5.0" />
                      </content>
                   </ScrollPane>
-                  <Pane fx:id="splashPane" prefHeight="200.0" prefWidth="200.0" visible="false">
+                  <Pane fx:id="splashPane" prefHeight="200.0" prefWidth="200.0">
                      <children>
-                        <Label layoutX="355.0" layoutY="41.0" text="Loading.....">
+                        <Label layoutX="427.0" layoutY="34.0" text="Loading....">
                            <font>
-                              <Font name="Monospaced Bold" size="30.0" />
+                              <Font name="Monospaced Bold" size="22.0" />
                            </font>
                         </Label>
-                        <ImageView fx:id="loadingIV" fitHeight="332.0" fitWidth="408.0" layoutX="297.0" layoutY="77.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="loadingIV" fitHeight="352.0" fitWidth="471.0" layoutX="324.0" layoutY="58.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../imagesIcon/loading.png" />
                            </image>
@@ -139,7 +139,7 @@
                               <Font name="Monospaced Bold" size="20.0" />
                            </font>
                         </Label>
-                        <Button fx:id="goToProfileQuickAccessButton" layoutX="256.0" layoutY="137.0" mnemonicParsing="false" text="Go To Profile">
+                        <Button fx:id="goToProfileQuickAccessButton" layoutX="256.0" layoutY="137.0" mnemonicParsing="false" onAction="#goToProfileQuickAccessButtonBtnClicked" text="Go To Profile">
                            <font>
                               <Font name="Monospaced Regular" size="15.0" />
                            </font>
@@ -158,12 +158,12 @@
                   </Pane>
                   <Pane fx:id="favoritesPane" prefHeight="200.0" prefWidth="200.0" visible="false">
                      <children>
-                        <ImageView fx:id="favoritePhrasesIV" fitHeight="115.0" fitWidth="129.0" layoutX="31.0" layoutY="49.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="favoritePhrasesIV" fitHeight="115.0" fitWidth="129.0" layoutX="442.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../imagesIcon/heart.png" />
                            </image>
                         </ImageView>
-                        <Label layoutX="21.0" layoutY="164.0" text="Favoite Phrases">
+                        <Label layoutX="432.0" layoutY="152.0" text="Favoite Phrases">
                            <font>
                               <Font name="Monospaced Bold" size="15.0" />
                            </font>

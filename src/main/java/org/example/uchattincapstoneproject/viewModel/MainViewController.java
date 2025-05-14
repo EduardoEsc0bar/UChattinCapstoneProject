@@ -4,17 +4,18 @@ import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
 import javafx.animation.RotateTransition;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.TilePane;
+import javafx.scene.layout.*;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.example.uchattincapstoneproject.model.ArasaacService;
@@ -23,12 +24,10 @@ import org.example.uchattincapstoneproject.model.FavoritePhraseStorage;
 import org.example.uchattincapstoneproject.model.SpeechService;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class MainViewController {
     @FXML
@@ -43,7 +42,8 @@ public class MainViewController {
     private Button saveSentenceButton, readOutLoudButton, toggleThemeQuickAccessButton, goToProfileQuickAccessButton,
             backToDirectoryPaneButton, backToDirectoryButton2, backToDirectoryPane3;
     @FXML
-    private ImageView feelings, food, animals, activities, colors, shapes, pronouns, emergency, vehicles, social, places, weather, time, verbs, loadingIV;
+    private ImageView feelings, food, animals, activities, colors, shapes, pronouns, emergency, vehicles
+            ,social, places, weather, time, verbs, loadingIV;
     @FXML
     private ImageView categoriesIV, favoritesIV, keyboardIV, quickAccessIV, settingsIV;
     @FXML
@@ -51,16 +51,17 @@ public class MainViewController {
     @FXML
     private Slider volumeQuickAccessSlider;
     private String username;
+    private static final int MAX_CONCURRENT_LOADS = 3;
+    private int activeLoads = 0;
 
     private final ArasaacService arasaacService = new ArasaacService();
     private SpeechService speechService;
-    private int userID;
 
     //keyboard
     private static final double KEYBOARD_FULL = 1.0;
     private static final double KEYBOARD_DIM = 0.3;
     private boolean isKeyBoardFull = false;
-
+    private int userID;
 
     @FXML
     private void initialize() {
@@ -90,7 +91,22 @@ public class MainViewController {
         }
 
         categoriesIV.setOnMouseClicked(event -> showPane(categoriesPane));
-        settingsIV.setOnMouseClicked(event -> UIUtilities.navigateToScreen("/views/settingsScreen.fxml", root.getScene(), true));
+        settingsIV.setOnMouseClicked(event -> {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/settingsScreen.fxml"));
+                Parent settingsRoot = loader.load();
+                Stage currentStage = (Stage) root.getScene().getWindow();
+
+                // Create a new scene with the correct dimensions
+                Scene settingsScene = new Scene(settingsRoot, 600, 400);
+                currentStage.setScene(settingsScene);
+                currentStage.setTitle("Settings");
+                currentStage.show();
+            } catch (IOException e) {
+                System.err.println("Error loading settings screen.");
+                e.printStackTrace();
+            }
+        });
         favoritesIV.setOnMouseClicked(event -> {
             loadFavorites();
             showPane(favoritesPane);
@@ -123,7 +139,7 @@ public class MainViewController {
         saveSentenceButton.setOnAction(event -> saveCurrentPhraseAsFavorite());
         sentenceBuilderTextArea.setWrapText(true);
 
-        goToProfileQuickAccessButton.setOnAction(event -> UIUtilities.navigateToScreen("/views/userProfile.fxml", root.getScene(), false));
+        goToProfileQuickAccessButton.setOnAction(event -> goToProfileQuickAccessButtonBtnClicked(event));
 
         if (splashPane != null) {
             splashPane.setVisible(false);
@@ -140,6 +156,19 @@ public class MainViewController {
 
     public void setUserID(int userID) {
         this.userID = userID;
+    }
+
+    @FXML
+    private void goToProfileQuickAccessButtonBtnClicked(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/userProfile.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void showSplashScreen() {
@@ -209,47 +238,61 @@ public class MainViewController {
     private void populateTilePane(String pictograms) {
         communicationTilePane.getChildren().clear();
         System.out.println("Updating TilePane with pictograms...");
-
-        String[] pictogramList = pictograms.split("\n");
-        int loadedCount = 0;
-
-        for (String item : pictogramList) {
-            String[] parts = item.split(":", 2);
-
-            if (parts.length < 2) continue;
-
-            String phrase = parts[0].trim();
-            String imageUrl = parts[1].trim();
-
-            if (imageUrl.isEmpty() || !imageUrl.startsWith("https://static.arasaac.org/pictograms/")) continue;
-
-            Button pictogramButton = new Button(phrase);
-            pictogramButton.setPrefSize(120, 140);
-            pictogramButton.setWrapText(true);
-            pictogramButton.setContentDisplay(ContentDisplay.TOP);
-
-            try {
-                Image pictoImage = new Image(imageUrl, 120, 120, true, true, false);
-                if (pictoImage.isError()) continue;
-
-                ImageView imageView = new ImageView(pictoImage);
-                imageView.setFitHeight(120);
-                imageView.setFitWidth(120);
-
-                pictogramButton.setGraphic(imageView);
-                pictogramButton.setOnAction(event -> {
-                    addWordToSentence(phrase);
-                    speechService.synthesizeText(phrase);
-                });
-
-                communicationTilePane.getChildren().add(pictogramButton);
-                loadedCount++;
-
-            } catch (Exception e) {
-                System.out.println("Failed to load pictogram: " + phrase);
-            }
+        List<String> sortedPictograms = Arrays.stream(pictograms.split("\n"))
+                .map(line -> new AbstractMap.SimpleEntry<>(
+                        line.split(":", 2)[0].trim().toLowerCase(), line))
+                .sorted(Comparator.comparing(Map.Entry::getKey))
+                .map(Map.Entry::getValue) // return the original line
+                .collect(Collectors.toList());
+        Queue<String> queue = new LinkedList<>(sortedPictograms);
+        for (int i = 0; i < MAX_CONCURRENT_LOADS; i++) {
+            loadNextPictogram(queue);
         }
-        System.out.println("Loaded " + loadedCount + " pictograms into the TilePane.");
+    }
+
+    private void loadNextPictogram(Queue<String> queue){
+        if (queue.isEmpty()) return;
+        String item = queue.poll();
+        if (item == null || !item.contains(":")) {
+            loadNextPictogram(queue);
+            return;
+        }
+        String[] parts = item.split(":", 2);
+        String phrase = parts[0].trim();
+        String imageUrl = parts[1].trim();
+        if (imageUrl.isEmpty() || !imageUrl.startsWith("https://static.arasaac.org/pictograms/")) {
+            loadNextPictogram(queue);
+            return;
+        }
+        activeLoads++;
+        Image image = new Image(imageUrl, 120, 120, true, true, true);
+        image.progressProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal.doubleValue() == 1.0) {
+                Platform.runLater(() -> {
+                    ImageView imageView = new ImageView(image);
+                    imageView.setFitHeight(90);
+                    imageView.setFitWidth(90);
+                    Label label = new Label(phrase);
+                    label.setWrapText(true);
+                    label.setTextAlignment(TextAlignment.CENTER);
+                    label.setMaxWidth(100);
+                    label.setAlignment(Pos.CENTER);
+                    VBox vBox = new VBox(5, imageView, label);
+                    vBox.setAlignment(Pos.CENTER);
+                    Button button = new Button();
+                    button.setPrefSize(120, 120);
+                    button.setGraphic(vBox);
+                    button.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+                    button.setOnAction(event -> {
+                        addWordToSentence(phrase);
+                        speechService.synthesizeText(phrase);
+                    });
+                    communicationTilePane.getChildren().add(button);
+                    activeLoads--;
+                    loadNextPictogram(queue); // Continue loading next
+                });
+            }
+        });
     }
 
     private void addWordToSentence(String phrase) {
@@ -281,7 +324,7 @@ public class MainViewController {
         }
     }
 
-    private void saveCurrentPhraseAsFavorite() {
+    private void saveCurrentPhraseAsFavorite(){
         String currentPhrase = sentenceBuilderTextArea.getText().trim();
 
         if (currentPhrase.isEmpty()) {
@@ -295,6 +338,7 @@ public class MainViewController {
         FavoritePhrase fav = new FavoritePhrase(currentPhrase, imageUrl);
         FavoritePhraseStorage.getInstance().addFavoritePhrase(userID, fav);
     }
+
 
     private String fetchPictogramForPhrase(String phrase) {
         //Try fetching a pictogram for the full phrase first.
@@ -393,55 +437,9 @@ public class MainViewController {
         alert.setContentText(message);
         alert.showAndWait();
     }
-
-    public static void main(String[] args) {
-        try {
-            // Initialize services
-            ArasaacService arasaacService = new ArasaacService();
-            SpeechService service = new SpeechService();
-
-            // Fetch test pictograms
-            String testPictogramData = arasaacService.fetchPictograms("feelings");
-            System.out.println("Test Pictogram Response: \n" + testPictogramData);
-
-            // Check if response is valid
-            if (testPictogramData == null || testPictogramData.isEmpty()) {
-                System.out.println("No pictograms found for the category.");
-                return;
-            }
-
-            // Process pictogram data
-            String[] pictogramList = testPictogramData.split("\n");
-
-            if (pictogramList.length == 0) {
-                System.out.println("No pictograms available after parsing.");
-                return;
-            }
-
-            // Extract first pictogram's phrase
-            String firstPictogram = pictogramList[0];
-            String[] parts = firstPictogram.split(":");
-
-            if (parts.length < 2) {
-                System.out.println("Invalid pictogram format: " + firstPictogram);
-                return;
-            }
-
-            String label = parts[0];  // Extract associated word
-            String imageUrl = parts[1]; // Extract associated image
-
-            // Print extracted details
-            System.out.println("First Pictogram Phrase: " + label);
-            System.out.println("Image URL: " + imageUrl);
-
-            // Test Speech Synthesis
-            service.synthesizeText(label);
-        } catch (Exception e) {
-            System.err.println("Error during execution: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
 }
+
+
 
 
 

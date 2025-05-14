@@ -5,7 +5,6 @@ import javafx.scene.paint.Color;
 import java.io.*;
 import java.sql.*;
 import java.sql.Connection;
-import java.util.LinkedList;
 import java.util.regex.Pattern;
 
 public class User {
@@ -23,6 +22,7 @@ public class User {
     private String username;
     private String passwordHash;
     private String avatarURL;
+    private String bio;
 
     //UPDATES TO ACCOMODATE NEW FUNCTIONS!!!!
     private Color themeColor;            // From ColorPicker
@@ -42,7 +42,7 @@ public class User {
     private static final String DB_PASSWORD = "password"; // Replace with actual DB password
 
     public User(String firstName, String lastName, String preferredName,String phoneNumber, String email, String dob,
-                 String gender, String specifiedGender, String pronouns, String specifiedPronouns, String username, String passwordHash) {
+                String gender, String specifiedGender, String pronouns, String specifiedPronouns, String username, String passwordHash) {
         //this.userID = userID;
         this.username = username;
         this.passwordHash = passwordHash;
@@ -194,7 +194,12 @@ public class User {
     public void setFavoritePicture(String favoritePicture) {
         this.favoritePicture = favoritePicture;
     }
-
+    public String getBio() {
+        return bio;
+    }
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
     /**
      * Validates required user fields
      * @return true if all required fields are valid, false otherwise
