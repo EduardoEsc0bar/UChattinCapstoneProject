@@ -32,7 +32,7 @@ public class RegistrationController {
     private Pane createAccountPane;
     @FXML
     private Label fNameErrorLabel, lNameErrorLabel, emailErrorLabel, genderErrorLabel, pronounsErrorLabel, dobErrorLabel, pNumberErrorLabel,
-            usernameErrorLabel, passwordErrorLabel, specifiedPErrorLabel, specifiedGErrorLabel, preferredNameErrorLabel;
+            usernameErrorLabel, passwordErrorLabel, specifiedPErrorLabel, specifiedGErrorLabel, preferredNameErrorLabel,welcomeLbl;
     @FXML
     private DatePicker dateOfBirthDatePicker;
 
@@ -110,6 +110,8 @@ public class RegistrationController {
             root.heightProperty().addListener((obs, oldVal, newVal) -> UIUtilities.centerContent(root, createAccountPane));
         });
         PhoneNumberFormatter.formatPhoneNumber(phoneNumberTF);
+
+
     }
 
     //handles selection validation for CB

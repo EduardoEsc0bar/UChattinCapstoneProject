@@ -11,9 +11,9 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="root" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.uchattincapstoneproject.viewModel.RegistrationController">
+<AnchorPane fx:id="root" prefHeight="768.0" prefWidth="917.0" stylesheets="@css/registration-styleSheet.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.uchattincapstoneproject.viewModel.RegistrationController">
    <children>
-      <Pane fx:id="createAccountPane" layoutX="50.0" layoutY="25.0" prefHeight="750.0" prefWidth="900.0">
+      <Pane fx:id="createAccountPane" layoutX="38.0" layoutY="23.0" prefHeight="497.0" prefWidth="598.0">
          <children>
             <Label layoutX="300.0" layoutY="14.0" text="Create an Account">
                <font>

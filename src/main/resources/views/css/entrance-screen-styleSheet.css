@@ -1,0 +1,90 @@
+#root {
+    -fx-background-color: #f9f9f9;
+}
+
+/* Main content pane */
+#contentPane {
+    -fx-background-color: white;
+    -fx-background-radius: 16;
+    -fx-border-radius: 16;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 4);
+}
+
+/* Headings */
+.label {
+    -fx-text-fill: #333333;
+}
+
+.label[text="Welcome to UChattin"] {
+    -fx-font-family: "Monospaced";
+    -fx-font-size: 34px;
+    -fx-font-weight: bold;
+}
+
+.label[text="Log In"] {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #444;
+}
+
+/* Description text */
+.label[text*="an innovative communication"] {
+    -fx-font-size: 13px;
+    -fx-text-fill: #666666;
+}
+
+/* Field Labels */
+.label[text="Username"],
+.label[text="Password"] {
+    -fx-font-size: 12px;
+    -fx-text-fill: #666;
+}
+
+/* TextFields and PasswordField */
+.text-field, .password-field {
+    -fx-font-size: 16px;
+    -fx-background-color: #f1f1f1;
+    -fx-border-color: #cccccc;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-padding: 6 10 6 10;
+}
+
+/* Login and Create Account buttons */
+#logInBTN, #createAccountBTN {
+    -fx-background-color: #3f51b5;
+    -fx-text-fill: white;
+    -fx-background-radius: 8;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(one-pass-box, rgba(0, 0, 0, 0.1), 4, 0.5, 0, 2);
+    -fx-font-family: "Monospaced";
+}
+
+#logInBTN:hover, #createAccountBTN:hover {
+    -fx-background-color: #5c6bc0;
+}
+
+/* Forgot password hyperlink */
+#forgotPasswordBTN {
+    -fx-text-fill: #3f51b5;
+    -fx-font-size: 12px;
+    -fx-underline: true;
+    -fx-font-family: "Monospaced";
+}
+
+#forgotPasswordBTN:hover {
+    -fx-text-fill: #1a237e;
+}
+
+/* Password visibility icons */
+#visibilityOn, #visibilityOff {
+    -fx-cursor: hand;
+    -fx-opacity: 0.7;
+}
+
+#visibilityOn:hover, #visibilityOff:hover {
+    -fx-opacity: 1.0;
+}
