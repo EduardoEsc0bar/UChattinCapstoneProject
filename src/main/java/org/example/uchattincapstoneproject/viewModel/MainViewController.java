@@ -41,10 +41,9 @@ public class MainViewController {
     private TextArea sentenceBuilderTextArea;
     @FXML
     private Button saveSentenceButton, readOutLoudButton, toggleThemeQuickAccessButton, goToProfileQuickAccessButton,
-    backToDirectoryPaneButton, backToDirectoryButton2, backToDirectoryPane3;
+            backToDirectoryPaneButton, backToDirectoryButton2, backToDirectoryPane3;
     @FXML
-    private ImageView feelings, food, animals, activities, colors, shapes, pronouns, emergency, vehicles
-            ,social, places, weather, time, verbs, loadingIV;
+    private ImageView feelings, food, animals, activities, colors, shapes, pronouns, emergency, vehicles, social, places, weather, time, verbs, loadingIV;
     @FXML
     private ImageView categoriesIV, favoritesIV, keyboardIV, quickAccessIV, settingsIV;
     @FXML
@@ -66,17 +65,17 @@ public class MainViewController {
     @FXML
     private void initialize() {
         //bind content to center
-        Platform.runLater(()->{
+        Platform.runLater(() -> {
             UIUtilities.centerContent(root, contentPane); //force center in startup
             root.widthProperty().addListener((observable, oldValue, newValue) -> UIUtilities.centerContent(root, contentPane));
-            root.heightProperty().addListener((observable,oldValue, newValue) -> UIUtilities.centerContent(root, contentPane));
+            root.heightProperty().addListener((observable, oldValue, newValue) -> UIUtilities.centerContent(root, contentPane));
 
         });
 
         //initially show directory pane
         showPane(directoryPane);
 
-        Platform.runLater(()->{
+        Platform.runLater(() -> {
             backToDirectoryButton2.setVisible(true);
 
             System.out.println("backToDirectoryPaneButton is visible " + backToDirectoryPaneButton.isVisible());
@@ -114,7 +113,7 @@ public class MainViewController {
         vehicles.setOnMouseClicked(event -> fetchCategoryData("Vehicles"));
         animals.setOnMouseClicked(event -> fetchCategoryData("Animals"));
         social.setOnMouseClicked(event -> fetchCategoryData("Social"));
-        places .setOnMouseClicked(event -> fetchCategoryData("Places"));
+        places.setOnMouseClicked(event -> fetchCategoryData("Places"));
         weather.setOnMouseClicked(event -> fetchCategoryData("Weather"));
         time.setOnMouseClicked(event -> fetchCategoryData("Time"));
         verbs.setOnMouseClicked(event -> fetchCategoryData("Verbs"));
@@ -126,15 +125,15 @@ public class MainViewController {
 
         goToProfileQuickAccessButton.setOnAction(event -> UIUtilities.navigateToScreen("/views/userProfile.fxml", root.getScene(), false));
 
-        if(splashPane != null){
+        if (splashPane != null) {
             splashPane.setVisible(false);
             splashPane.toFront();
-        }else{
+        } else {
             System.out.println("splash pane is null");
         }
     }
 
-    public void setUsername(String username){
+    public void setUsername(String username) {
         this.username = username;
         Label welcomeLabel = new Label("Welcome " + username + "!");
     }
@@ -143,9 +142,9 @@ public class MainViewController {
         this.userID = userID;
     }
 
-    private void showSplashScreen(){
+    private void showSplashScreen() {
 
-        Platform.runLater(()->{
+        Platform.runLater(() -> {
             splashPane.setVisible(true);
             splashPane.toFront();
             System.out.println("splash screen should be visible");
@@ -200,7 +199,7 @@ public class MainViewController {
         showSplashScreen();
         String pictogramResponse = arasaacService.fetchPictograms(category); //Fetch phrases & images
         System.out.println("api response for category: " + category);
-        Platform.runLater(()->{
+        Platform.runLater(() -> {
             populateTilePane(pictogramResponse);
             splashPane.setVisible(false);
         });
@@ -266,9 +265,9 @@ public class MainViewController {
     }
 
     //toggle keyboard
-    private void toggleKeyboard(){
+    private void toggleKeyboard() {
         isKeyBoardFull = !isKeyBoardFull;
-        double targetOpacity = isKeyBoardFull ? KEYBOARD_FULL: KEYBOARD_DIM;
+        double targetOpacity = isKeyBoardFull ? KEYBOARD_FULL : KEYBOARD_DIM;
         FadeTransition fade = new FadeTransition(Duration.millis(300), keyboardIV);
         fade.setFromValue(keyboardIV.getOpacity());
         fade.setToValue(targetOpacity);
@@ -277,7 +276,7 @@ public class MainViewController {
         //enable keyboard
         sentenceBuilderTextArea.setEditable(isKeyBoardFull);
         //request focus when toggled on
-        if(isKeyBoardFull){
+        if (isKeyBoardFull) {
             sentenceBuilderTextArea.requestFocus();
         }
     }
@@ -443,6 +442,7 @@ public class MainViewController {
         }
     }
 }
+
 
 
 
