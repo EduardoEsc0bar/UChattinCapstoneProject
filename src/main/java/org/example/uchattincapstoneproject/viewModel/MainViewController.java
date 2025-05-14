@@ -2,9 +2,11 @@ package org.example.uchattincapstoneproject.viewModel;
 
 import javafx.animation.FadeTransition;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -18,8 +20,6 @@ import org.example.uchattincapstoneproject.model.ArasaacService;
 import org.example.uchattincapstoneproject.model.SpeechService;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -131,6 +131,19 @@ public class MainViewController {
         //bring pane to front
         pane.toFront();
 
+    }
+
+    @FXML
+    void goToProfileQuickAccessButtonBtnClicked(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/userProfile.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 

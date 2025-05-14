@@ -10,11 +10,8 @@ public class TestApp extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        // Load the FXML file for the avatar selection screen
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/userProfile.fxml"));
         Parent root = loader.load();
-
-        // Set the scene and show the window
         Scene scene = new Scene(root);
         primaryStage.setTitle("registration screen");
         primaryStage.setScene(scene);

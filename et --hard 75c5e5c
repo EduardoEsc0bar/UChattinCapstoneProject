@@ -1,0 +1,131 @@
+[33m71d6030[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m HEAD@{0}: checkout: moving from Nunez-revision to main
+[33m75c5e5c[m[33m ([m[1;32mNunez-revision[m[33m)[m HEAD@{1}: rebase (finish): returning to refs/heads/Nunez-revision
+[33m75c5e5c[m[33m ([m[1;32mNunez-revision[m[33m)[m HEAD@{2}: rebase (pick): New method added to attach Bio into User table on SQL database and on the DB class, and on query you can obtain the imageURL for your profile picture, animation added onto save bio button, User has a new field with getters and setters for bio, UserProfileController now has more life Css, and updates the card to cater to the users fields.
+[33m7d6b0a1[m HEAD@{3}: rebase (pick): New method added to attach Bio into User table on SQL database and on the DB class, and on query you can obtain the imageURL for your profile picture, animation added onto save bio button, User has a new field with getters and setters for bio, UserProfileController now has more life Css, and updates the card to cater to the users fields.
+[33m7cb28f9[m HEAD@{4}: rebase (pick): added feeback textArea functionality and established db connection for storing feedbacks. fixed the alert and closing application feature for the delete account button.
+[33md170835[m HEAD@{5}: rebase (continue): implemented keyboard toggleling
+[33me0e291a[m HEAD@{6}: rebase (pick): Delete account function now operational, in the DB class the queryUserByName(String username) contained a constructor with wrong data being implemented at the wrong spot, and it didn't get flagged due to the datatypes being the same ::String:: objects, The first name was getting set as the username.
+[33me1d34a0[m HEAD@{7}: rebase (pick): registration, forget password and log in, avatar selection/profile pic fully functional
+[33m215dc82[m HEAD@{8}: rebase (pick): Testing Failed for deleting user, going to re try with alternative method.
+[33m8bf7061[m HEAD@{9}: rebase (pick): Created a Util (short for Utilities) class in the model folder which utilizes a singleton so there is only one instance of this class, the Util class is responsible for keeping track of the "current user" post signin and authentication.
+[33md3a2b77[m HEAD@{10}: rebase (pick): Fixes on the mainScreen.fxml
+[33mdf10b6a[m HEAD@{11}: rebase (pick): images added
+[33m57cb54a[m HEAD@{12}: rebase (pick): edits to upload profile picture and added username field to forget password so db can get the user id and change the appropriate user's password. also added all images back
+[33m239aa80[m HEAD@{13}: rebase (pick): edits to upload profile picture and added username field to forget password so db can get the user id and change the appropriate user's password. also added all images back
+[33m371964b[m HEAD@{14}: rebase (pick): all FXML files vanished, went to previous commit to get the FXML files, updated SettingsController and UserProfileController
+[33m4a83b46[m HEAD@{15}: rebase (continue): turned the formatted classes into nested classes in the RegistrationController to implement formatting in the date picker and phonenumberTF
+[33mc1e26c5[m HEAD@{16}: rebase (pick): In the RegistrationController/FXML file a date picker was added instead of a textfield to automatically populate a date in the formatted needed
+[33m1259213[m HEAD@{17}: rebase (pick): in the CreateAvatarController, the tilepanes for the avatar load to the UI as they're made, there is a cap on the dice bear api on how many images can be loaded in a certain time frame, instead of waiting for all images to load instantly its set so that it'll display as they are generated.
+[33mef3c9aa[m HEAD@{18}: rebase (pick): in the CreateAvatarController, the tilepanes for the avatar load to the UI as they're made, there is a cap on the dice bear api on how many images can be loaded in a certain time frame, instead of waiting for all images to load instantly its set so that it'll display as they are generated.
+[33m0215c20[m HEAD@{19}: rebase (continue): Added new SelectProfilePicture() to speed up loading sequence
+[33m6722b1b[m HEAD@{20}: rebase (pick): registration and log in fully functinoal. included regex and listener, keeps users input in registration until user submits, user can add profile picture
+[33md11a33b[m HEAD@{21}: rebase (continue): more edits made for login, registration and avatar. user should fully register after selecting an avatar. still has bugs when registering user into database because of dob formatting for now.
+[33m51abb0e[m HEAD@{22}: rebase (continue): updated entrance, registration and forget password fxmls, implemented code to make sure content is always centered
+[33m2161f32[m HEAD@{23}: rebase (continue): updated entrance, registration and forget password fxmls, implemented code to make sure content is always centered
+[33m351663e[m HEAD@{24}: rebase (pick): fixed some things in main to navigate to different panes, still needs some touch ups for display
+[33me29be78[m HEAD@{25}: rebase (continue): Fully functioning register and login
+[33mc3cb381[m HEAD@{26}: rebase (pick): ArasaacService implemented. user can click category -> image which generates a word and adds to sentence area. reads each word outloud and the sentence built. kind of slow tho with generating images
+[33m0ca57d4[m HEAD@{27}: rebase (pick): Update README.md
+[33med651ee[m HEAD@{28}: rebase (continue): Created README.md
+[33m8ad27da[m HEAD@{29}: rebase (pick): ArasaacService implemented. user can click category -> image which generates a word and adds to sentence area. reads each word outloud and the sentence built. kind of slow tho with generating images
+[33me2b16c2[m HEAD@{30}: rebase (continue): ArasaacService implemented, changes to main controller implemented to display pictograms and read phrases outloud. still working on debugging and complete functionality of main view
+[33m330fa40[m HEAD@{31}: rebase (continue): Fixed some issues
+[33m91523c8[m HEAD@{32}: rebase (continue): RegistrationController, forgetPassword, db edtis, included dbtest, still needs edits with db
+[33md1d3ca3[m HEAD@{33}: rebase (continue): New Entrance Screen. Fully functioning screens up to Main Screen.
+[33me5976d9[m HEAD@{34}: rebase (continue): New Entrance Screen. Fully functioning screens up to Main Screen.
+[33md63be64[m HEAD@{35}: rebase (pick): functional create avatar, tested
+[33mfc2ee69[m HEAD@{36}: rebase (pick): splash screen that takes to registrationScreen fxml for now.
+[33m2a9d039[m HEAD@{37}: rebase (continue): DB class that creates a database connection.
+[33m2025666[m HEAD@{38}: rebase (pick): registration, login, and forget password controllers completed. just need database to test
+[33md908718[m HEAD@{39}: rebase (continue): separated log in fxml for easier coding
+[33m3b0ccaa[m HEAD@{40}: rebase (continue): fixed all fxml files
+[33m97d2cee[m HEAD@{41}: rebase (continue): Initial commit
+[33mcd5596a[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/ed-revision[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{42}: rebase (start): checkout refs/remotes/origin/main
+[33m71d6030[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m HEAD@{43}: rebase (finish): returning to refs/heads/Nunez-revision
+[33m71d6030[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m HEAD@{44}: rebase (start): checkout refs/heads/main
+[33m4b137d5[m[33m ([m[1;31morigin/Nunez-revision[m[33m, [m[1;32mMaster[m[33m)[m HEAD@{45}: checkout: moving from main to Nunez-revision
+[33m71d6030[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m HEAD@{46}: merge Master: Merge made by the 'ort' strategy.
+[33m90a1ee7[m HEAD@{47}: checkout: moving from Master to main
+[33m4b137d5[m[33m ([m[1;31morigin/Nunez-revision[m[33m, [m[1;32mMaster[m[33m)[m HEAD@{48}: checkout: moving from main to Master
+[33m90a1ee7[m HEAD@{49}: checkout: moving from Nunez-revision to main
+[33m4b137d5[m[33m ([m[1;31morigin/Nunez-revision[m[33m, [m[1;32mMaster[m[33m)[m HEAD@{50}: checkout: moving from main to Nunez-revision
+[33m90a1ee7[m HEAD@{51}: checkout: moving from Nunez-revision to main
+[33m4b137d5[m[33m ([m[1;31morigin/Nunez-revision[m[33m, [m[1;32mMaster[m[33m)[m HEAD@{52}: checkout: moving from main to Nunez-revision
+[33m90a1ee7[m HEAD@{53}: reset: moving to origin/main
+[33m90a1ee7[m HEAD@{54}: checkout: moving from Nunez-revision to main
+[33m4b137d5[m[33m ([m[1;31morigin/Nunez-revision[m[33m, [m[1;32mMaster[m[33m)[m HEAD@{55}: checkout: moving from main to Nunez-revision
+[33m90a1ee7[m HEAD@{56}: reset: moving to origin/main
+[33m90a1ee7[m HEAD@{57}: rebase (abort): returning to refs/heads/main
+[33mc3a4313[m HEAD@{58}: rebase (start): checkout origin/main
+[33m90a1ee7[m HEAD@{59}: checkout: moving from Nunez-revision to main
+[33m4b137d5[m[33m ([m[1;31morigin/Nunez-revision[m[33m, [m[1;32mMaster[m[33m)[m HEAD@{60}: checkout: moving from main to Nunez-revision
+[33m90a1ee7[m HEAD@{61}: commit: New method added to attach Bio into User table on SQL database and on the DB class, and on query you can obtain the imageURL for your profile picture, animation added onto save bio button, User has a new field with getters and setters for bio, UserProfileController now has more life Css, and updates the card to cater to the users fields.
+[33me8ddd3a[m HEAD@{62}: checkout: moving from main to main
+[33me8ddd3a[m HEAD@{63}: branch: Reset to origin/main
+[33m4b137d5[m[33m ([m[1;31morigin/Nunez-revision[m[33m, [m[1;32mMaster[m[33m)[m HEAD@{64}: merge Nunez-revision: Fast-forward
+[33me8ddd3a[m HEAD@{65}: checkout: moving from Nunez-revision to main
+[33m4b137d5[m[33m ([m[1;31morigin/Nunez-revision[m[33m, [m[1;32mMaster[m[33m)[m HEAD@{66}: commit: New method added to attach Bio into User table on SQL database and on the DB class, and on query you can obtain the imageURL for your profile picture, animation added onto save bio button, User has a new field with getters and setters for bio, UserProfileController now has more life Css, and updates the card to cater to the users fields.
+[33me8ddd3a[m HEAD@{67}: merge origin/main: Fast-forward
+[33m1aa05c0[m HEAD@{68}: checkout: moving from e8ddd3ac0c08724ced22fcb622dc1879543bb9f5 to Nunez-revision
+[33me8ddd3a[m HEAD@{69}: checkout: moving from main to e8ddd3ac0c08724ced22fcb622dc1879543bb9f5
+[33m1aa05c0[m HEAD@{70}: checkout: moving from main to main
+[33m1aa05c0[m HEAD@{71}: merge Nunez-revision: Fast-forward
+[33mcab9c3e[m HEAD@{72}: checkout: moving from 1aa05c0ba608107a1a8506780bd48929b7fc0649 to main
+[33m1aa05c0[m HEAD@{73}: checkout: moving from Nunez-revision to 1aa05c0ba608107a1a8506780bd48929b7fc0649
+[33m1aa05c0[m HEAD@{74}: checkout: moving from a17916bac757763297066a8f2ca9c5a0cc2e2a12 to Nunez-revision
+[33ma17916b[m HEAD@{75}: checkout: moving from Nunez-revision to a17916bac757763297066a8f2ca9c5a0cc2e2a12
+[33m1aa05c0[m HEAD@{76}: checkout: moving from main to Nunez-revision
+[33m2542af1[m HEAD@{77}: rebase (finish): returning to refs/heads/main
+[33m2542af1[m HEAD@{78}: rebase (pick): Delete account function now operational, in the DB class the queryUserByName(String username) contained a constructor with wrong data being implemented at the wrong spot, and it didn't get flagged due to the datatypes being the same ::String:: objects, The first name was getting set as the username.
+[33m7f28efd[m HEAD@{79}: rebase (pick): Testing Failed for deleting user, going to re try with alternative method.
+[33meffa1ba[m HEAD@{80}: rebase (pick): Created a Util (short for Utilities) class in the model folder which utilizes a singleton so there is only one instance of this class, the Util class is responsible for keeping track of the "current user" post signin and authentication.
+[33m2989742[m HEAD@{81}: rebase (continue): Fixes on the mainScreen.fxml
+[33mcab9c3e[m HEAD@{82}: rebase (start): checkout origin/main
+[33m1aa05c0[m HEAD@{83}: checkout: moving from main to Nunez-revision
+[33m1aa05c0[m HEAD@{84}: merge Nunez-revision: Fast-forward
+[33mcab9c3e[m HEAD@{85}: reset: moving to HEAD
+[33mcab9c3e[m HEAD@{86}: checkout: moving from Nunez-revision to main
+[33m1aa05c0[m HEAD@{87}: commit (merge): Merge branch 'main' of https://github.com/EduardoEsc0bar/UChattinCapstoneProject into Nunez-revision
+[33ma17916b[m HEAD@{88}: checkout: moving from main to Nunez-revision
+[33mcab9c3e[m HEAD@{89}: reset: moving to HEAD
+[33mcab9c3e[m HEAD@{90}: checkout: moving from main to main
+[33mcab9c3e[m HEAD@{91}: branch: Reset to origin/main
+[33m44f21e1[m HEAD@{92}: commit (merge): Merge branch 'Nunez-revision'
+[33mcab9c3e[m HEAD@{93}: checkout: moving from main to main
+[33mcab9c3e[m HEAD@{94}: branch: Reset to origin/main
+[33m053c954[m HEAD@{95}: commit (merge): Merge branch 'Nunez-revision'
+[33mcab9c3e[m HEAD@{96}: checkout: moving from main to main
+[33mcab9c3e[m HEAD@{97}: branch: Reset to origin/main
+[33m6ef57c6[m HEAD@{98}: reset: moving to HEAD
+[33m6ef57c6[m HEAD@{99}: commit (merge): Merge branch 'Nunez-revision'
+[33m2559e0d[m HEAD@{100}: rebase (finish): returning to refs/heads/main
+[33m2559e0d[m HEAD@{101}: rebase (pick): Fixes on the mainScreen.fxml
+[33m1ecb15e[m HEAD@{102}: rebase (start): checkout origin/main
+[33ma17916b[m HEAD@{103}: commit: Delete account function now operational, in the DB class the queryUserByName(String username) contained a constructor with wrong data being implemented at the wrong spot, and it didn't get flagged due to the datatypes being the same ::String:: objects, The first name was getting set as the username.
+[33m8d63a44[m HEAD@{104}: checkout: moving from 8d63a44f24e71af570c1350823748e37fbd19e86 to Nunez-revision
+[33m8d63a44[m HEAD@{105}: checkout: moving from Nunez-revision to 8d63a44f24e71af570c1350823748e37fbd19e86
+[33m8d63a44[m HEAD@{106}: merge origin/main: Merge made by the 'ort' strategy.
+[33mf1be015[m HEAD@{107}: checkout: moving from fea6a23237bef85f0baefaca54bc347515d53c9f to Nunez-revision
+[33mfea6a23[m HEAD@{108}: checkout: moving from Nunez-revision to fea6a23237bef85f0baefaca54bc347515d53c9f
+[33mf1be015[m HEAD@{109}: commit: Testing Failed for deleting user, going to re try with alternative method.
+[33mdc5745b[m HEAD@{110}: checkout: moving from fea6a23237bef85f0baefaca54bc347515d53c9f to Nunez-revision
+[33mfea6a23[m HEAD@{111}: checkout: moving from Nunez-revision to fea6a23237bef85f0baefaca54bc347515d53c9f
+[33mdc5745b[m HEAD@{112}: checkout: moving from fea6a23237bef85f0baefaca54bc347515d53c9f to Nunez-revision
+[33mfea6a23[m HEAD@{113}: checkout: moving from Nunez-revision to fea6a23237bef85f0baefaca54bc347515d53c9f
+[33mdc5745b[m HEAD@{114}: commit: Created a Util (short for Utilities) class in the model folder which utilizes a singleton so there is only one instance of this class, the Util class is responsible for keeping track of the "current user" post signin and authentication.
+[33m374c162[m HEAD@{115}: checkout: moving from main to Nunez-revision
+[33m374c162[m HEAD@{116}: merge Nunez-revision: Fast-forward
+[33mbba79bd[m HEAD@{117}: checkout: moving from Nunez-revision to main
+[33m374c162[m HEAD@{118}: commit: Fixes on the mainScreen.fxml
+[33mbba79bd[m HEAD@{119}: checkout: moving from Nunez-revision to Nunez-revision
+[33mbba79bd[m HEAD@{120}: branch: Reset to origin/main^0
+[33md4a6a4d[m HEAD@{121}: merge origin/main: updating HEAD
+[33md4a6a4d[m HEAD@{122}: checkout: moving from bba79bd24e96e653e1c3bc5e15ab85260105aaba to Nunez-revision
+[33mbba79bd[m HEAD@{123}: checkout: moving from main to bba79bd24e96e653e1c3bc5e15ab85260105aaba
+[33mbba79bd[m HEAD@{124}: checkout: moving from Nunez-revision to main
+[33md4a6a4d[m HEAD@{125}: checkout: moving from detached2 to Nunez-revision
+[33m96368cd[m[33m ([m[1;31morigin/detached2[m[33m, [m[1;32mdetached2[m[33m)[m HEAD@{126}: checkout: moving from Nunez-revision to detached2
+[33md4a6a4d[m HEAD@{127}: commit: Small change on buttons on registrationScreen.fxml and made an adjustment to not allow dates that exceed todays date in the DOB
+[33mbbdab08[m HEAD@{128}: checkout: moving from main to Nunez-revision
+[33mbbdab08[m HEAD@{129}: merge Nunez-revision: Fast-forward
+[33me3b3a7d[m[33m ([m[1;31morigin/Sindid[m[33m)[m HEAD@{130}: checkou

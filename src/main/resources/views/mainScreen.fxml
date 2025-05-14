@@ -125,7 +125,7 @@
                               <Font name="Monospaced Bold" size="20.0" />
                            </font>
                         </Label>
-                        <Button fx:id="goToProfileQuickAccessButton" layoutX="256.0" layoutY="137.0" mnemonicParsing="false" text="Go To Profile">
+                        <Button fx:id="goToProfileQuickAccessButton" layoutX="256.0" layoutY="137.0" mnemonicParsing="false" onAction="#goToProfileQuickAccessButtonBtnClicked" text="Go To Profile">
                            <font>
                               <Font name="Monospaced Regular" size="15.0" />
                            </font>

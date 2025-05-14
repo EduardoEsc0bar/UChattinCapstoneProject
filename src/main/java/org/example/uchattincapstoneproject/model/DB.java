@@ -7,7 +7,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 public class DB {
     private static DB instance;  // Singleton instance
@@ -43,7 +42,7 @@ public class DB {
      * Used to enforce the Singleton design pattern.
      */
     private DB() {
-        // Initialize DB connection or setup here if needed
+
     }
 
     /**
@@ -120,7 +119,7 @@ public class DB {
                 String pronouns = resultSet.getString("specified_pronouns");
                 String preferredName = resultSet.getString("preferred_name");
                 user = new User(firstName, lastName, preferredName, phoneNumber, email, dob, gender, " ", pronouns, " ", username, passwordHash);
-//                user.setBio(resultSet.getString("bio"));
+                user.setBio(resultSet.getString("bio"));
 
                 System.out.println("Found user: ID: " + id + ", Name: " + username + ", Email: " + email);
                 String avatarSql = "SELECT avatar_url, style FROM Avatars WHERE user_id = ?";
@@ -142,39 +141,6 @@ public class DB {
             return null;
         }
     }
-//            preparedStatement.close();
-//            conn.close();
-//            return user;
-//        } catch (SQLException e) {
-//            System.err.println("Error querying user: " + e.getMessage());
-//            e.printStackTrace();
-//            return null;
-//        }
-//    }
-
-    /**
-     * Retrieves and prints all users in the Users table.
-     */
-    public void listAllUsers() {
-        try {
-            Connection conn = DriverManager.getConnection(DB_URL + SSL_PARAMS, USERNAME, PASSWORD);
-            String sql = "SELECT * FROM Users";
-            PreparedStatement preparedStatement = conn.prepareStatement(sql);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                int id = resultSet.getInt("id");
-                String name = resultSet.getString("username");
-                String email = resultSet.getString("email");
-                String preferredName = resultSet.getString("preferred_name");
-                System.out.println("ID: " + id + ", Name: " + name + ", Email: " + email + ", Preferred Name: " + preferredName);
-            }
-            preparedStatement.close();
-            conn.close();
-        } catch (SQLException e) {
-            System.err.println("Error listing users: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
 
     public void insertBio(User user) {
         Connection conn = null;
@@ -185,6 +151,9 @@ public class DB {
             preparedStatement = conn.prepareStatement(sql);
             preparedStatement.setString(1, user.getBio());
             preparedStatement.setString(2, user.getUsername());
+
+            int rowsAffected = preparedStatement.executeUpdate();  // ✅ THIS LINE WAS MISSING
+            System.out.println("Updated rows: " + rowsAffected);
         } catch (Exception e) {
             throw new RuntimeException(e);
         } finally {
@@ -243,37 +212,6 @@ public class DB {
             }
         } catch (SQLException e) {
             System.err.println("Error inserting user: " + e.getMessage());
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    /**
-     * Removes a user from the Users table by their username.
-     *
-     * @param username The username of the user to remove.
-     */
-    public boolean removeUserByUsername(String username) {
-        try {
-            Connection conn = DriverManager.getConnection(DB_URL + SSL_PARAMS, USERNAME, PASSWORD);
-            String sql = "DELETE FROM Users WHERE username = ?";
-            PreparedStatement preparedStatement = conn.prepareStatement(sql);
-            preparedStatement.setString(1, username);
-
-            int rowsDeleted = preparedStatement.executeUpdate();
-
-            preparedStatement.close();
-            conn.close();
-
-            if (rowsDeleted > 0) {
-                System.out.println("User with username '" + username + "' was deleted successfully.");
-                return true;
-            } else {
-                System.out.println("No user found with username '" + username + "'.");
-                return false;
-            }
-        } catch (SQLException e) {
-            System.err.println("Error removing user: " + e.getMessage());
             e.printStackTrace();
             return false;
         }
@@ -632,43 +570,4 @@ public class DB {
         }
     }
 
-//    public boolean DeleteUserbyusername(String username) {
-//        try (Connection conn = DriverManager.getConnection(DB_URL + SSL_PARAMS, USERNAME, PASSWORD)){
-//            String sql = "DELETE FROM Users WHERE username = ?";
-//            try(PreparedStatement statement = conn.prepareStatement(sql)){
-//                statement.setString(1, username);
-//                int Rowsaffected = statement.executeUpdate();
-//                return Rowsaffected > 0;
-//            }
-//        }catch (SQLException e){
-//            System.err.println("SQL Query Error: " + e.getMessage());
-//            e.printStackTrace();
-//            return false;
-//        }
-//
-//    }
-
-    public void listAllUsernames() {
-        String sql = "SELECT username FROM Users";
-        try (Connection conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
-
-            System.out.println("Current usernames in database:");
-            int count = 0;
-            while (rs.next()) {
-                String username = rs.getString("username");
-                System.out.println(" - " + username);
-                count++;
-            }
-
-            if (count == 0) {
-                System.out.println("(No users found in database.)");
-            }
-
-        } catch (SQLException e) {
-            System.err.println("Error listing usernames: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
 }
