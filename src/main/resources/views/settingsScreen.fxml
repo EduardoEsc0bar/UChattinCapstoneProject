@@ -17,7 +17,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.uchattincapstoneproject.viewModel.SettingsController">
+<AnchorPane prefHeight="800.0" prefWidth="1000.0" stylesheets="@css/settings-screen-styleSheet.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.uchattincapstoneproject.viewModel.SettingsController">
    <children>
       <StackPane prefHeight="800.0" prefWidth="1000.0" />
       <Pane prefHeight="802.0" prefWidth="1000.0">
