@@ -1,0 +1,85 @@
+.root {
+    -fx-background-color: #1e1e1e;
+    -fx-font-family: "Monospaced";
+    -fx-text-fill: #ffffff;
+}
+
+/* TabPane and Tabs */
+.tab-pane {
+    -fx-background-color: #2b2b2b;
+}
+.tab {
+    -fx-background-color: #333;
+    -fx-text-base-color: white;
+}
+.tab:selected {
+    -fx-background-color: #3c3f41;
+}
+
+/* General Labels */
+.label {
+    -fx-text-fill: #ffffff;
+}
+
+/* TextFields and ComboBoxes */
+.text-field,
+.combo-box,
+.combo-box-base {
+    -fx-background-color: #2e2e2e;
+    -fx-text-fill: white;
+    -fx-border-color: #555;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+}
+
+/* Prompt text inside text fields */
+.text-field .text {
+    -fx-fill: gray;
+}
+
+/* ColorPicker */
+.color-picker {
+    -fx-background-color: #2e2e2e;
+    -fx-text-fill: white;
+}
+
+/* Buttons */
+.button {
+    -fx-background-color: linear-gradient(to bottom, #3a3a3a, #2e2e2e);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-border-color: #555;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+}
+.button:hover {
+    -fx-background-color: #4b6eaf;
+}
+.button:pressed {
+    -fx-background-color: #1c3a6e;
+}
+
+/* Sliders */
+.slider {
+    -fx-control-inner-background: #2e2e2e;
+    -fx-base: #4b6eaf;
+}
+.slider .track {
+    -fx-background-color: #444;
+}
+.slider .thumb {
+    -fx-background-color: #4b6eaf;
+}
+
+/* Radio Buttons */
+.radio-button {
+    -fx-text-fill: white;
+}
+.radio-button .radio {
+    -fx-mark-color: #4b6eaf;
+}
+
+/* ImageView - optional soft glow */
+.image-view {
+    -fx-effect: dropshadow(gaussian, #4b6eaf, 5, 0.5, 0, 0);
+}
